@@ -3,7 +3,7 @@ metadata:
   version: 17.0.0
   totalFiles: 393
   totalModules: 13
-  totalExports: 2867
+  totalExports: 2872
 entryPoints:
   - file: src/index.ts
     type: main
@@ -1968,13 +1968,6 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
-        - file: ../../dimensional/types.js
-          imports:
-            - LENGTH
-            - MASS
-        - file: ../regime.js
-          imports:
-            - makeRegime
         - file: ../types.js
           imports:
             - AtlasBridge
@@ -1983,9 +1976,6 @@ modules:
         - file: ./bridges-exact.js
           imports:
             - relationContractOf
-        - file: ./dimensions.js
-          imports:
-            - SPRING_CONSTANT
       exports:
         - BRIDGE_CHAIN_WAVE
         - CONTRACT_CHAIN_WAVE
@@ -3988,6 +3978,12 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
+        - file: ../dimensional/algebra.js
+          imports:
+            - equals
+        - file: ../dimensional/quantity-registry.js
+          imports:
+            - quantityRecord
         - file: ../dimensional/formula-names.js
           imports:
             - FORMULA_NAMED
@@ -4031,6 +4027,7 @@ modules:
             - InputSlot
       exports:
         - BRIDGE_EVALUATORS
+        - evaluatorRelation
         - unusedInputKeys
         - buildEvaluatorSpec
         - missingEvaluatorMessage
@@ -4040,6 +4037,7 @@ modules:
         - EvaluatorParameter
         - EvaluatorSpec
       functions:
+        - evaluatorRelation
         - unusedInputKeys
         - buildEvaluatorSpec
         - missingEvaluatorMessage
@@ -6023,6 +6021,7 @@ modules:
         - file: ../errors.js
           imports:
             - CliError
+            - EXIT_CHECK_FAILED
             - UsageError
         - file: ../output.js
           imports:
@@ -6120,6 +6119,7 @@ modules:
             - emitJson
         - file: ../errors.js
           imports:
+            - EXIT_CHECK_FAILED
             - UsageError
         - file: ../determination.js
           imports:
@@ -7829,6 +7829,10 @@ modules:
             - ConfrontationEntry
             - RigorTier
           reExport: true
+        - file: ./bridges/evaluation-errors.js
+          imports:
+            - DomainViolationError
+          reExport: true
         - file: ./bridges/observations/types.js
           imports:
             - consistencyComparison
@@ -8298,6 +8302,10 @@ modules:
           imports:
             - unusedInputKeys
           reExport: true
+        - file: ./bridges/evaluators.js
+          imports:
+            - evaluatorRelation
+          reExport: true
         - file: ./dimensional/formula-names.js
           imports:
             - SynonymDisagreementError
@@ -8317,6 +8325,7 @@ modules:
         - file: ./numerical/formula-dimension.js
           imports:
             - builtinFormulaDimensionChecker
+            - formulaHasBareE
           reExport: true
         - file: ./bridges/expr-parse.js
           imports:
@@ -8403,6 +8412,7 @@ modules:
         - foldName
         - quantityRecord
         - demonstrationEdges
+        - DomainViolationError
         - consistencyComparison
         - decidingMeasurement
         - BRIDGE_EVALUATORS
@@ -8561,6 +8571,7 @@ modules:
         - resolveEvaluable
         - siUnitOf
         - unusedInputKeys
+        - evaluatorRelation
         - SynonymDisagreementError
         - canonicalRetrievalCorpus
         - EmbeddingUnavailable
@@ -8569,6 +8580,7 @@ modules:
         - fetchOnnxModel
         - onnxEmbedder
         - builtinFormulaDimensionChecker
+        - formulaHasBareE
         - parseDeclaredExpression
         - missingEvaluatorMessage
         - relationNotices
@@ -8681,6 +8693,7 @@ modules:
         - demonstrationEdges
         - ConfrontationEntry
         - RigorTier
+        - DomainViolationError
         - consistencyComparison
         - ConfrontationOutcome
         - decidingMeasurement
@@ -8886,6 +8899,7 @@ modules:
         - resolveEvaluable
         - siUnitOf
         - unusedInputKeys
+        - evaluatorRelation
         - SynonymDisagreementError
         - canonicalRetrievalCorpus
         - EmbeddingUnavailable
@@ -8894,6 +8908,7 @@ modules:
         - fetchOnnxModel
         - onnxEmbedder
         - builtinFormulaDimensionChecker
+        - formulaHasBareE
         - parseDeclaredExpression
         - missingEvaluatorMessage
         - relationNotices
@@ -10172,6 +10187,7 @@ modules:
         - file: ../bridges/evaluators.js
           imports:
             - BRIDGE_EVALUATORS
+            - evaluatorRelation
             - EvaluatorSpec
         - file: ../bridges/input-contract.js
           imports:
@@ -10183,7 +10199,6 @@ modules:
           imports:
             - catalogEdgeKey
             - parseBridgeId
-            - primaryRelation
         - file: ../canonical/registry.js
           imports:
             - CANONICAL_EQUATIONS
@@ -13301,6 +13316,9 @@ modules:
           imports:
             - CONSTANTS
             - isRegisteredConstant
+        - file: ./canonical-prefactors.js
+          imports:
+            - CANONICAL_GROUP_PREFACTORS
         - file: ../dimensional/formula-names.js
           imports:
             - formulaNameDimensions
@@ -18314,6 +18332,7 @@ modules:
             - unknownFunctionMessage
       exports:
         - formulaSymbolDimension
+        - formulaHasBareE
         - constantExponent
         - parseFormulaPNode
         - builtinFormulaDimensionChecker
@@ -18327,6 +18346,7 @@ modules:
         - FormulaDimensionChecker
       functions:
         - formulaSymbolDimension
+        - formulaHasBareE
         - constantExponent
         - parseFormulaPNode
         - builtinFormulaDimensionChecker
@@ -19932,15 +19952,15 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 393
   totalModules: 13
-  totalLinesOfCode: 90328
-  totalExports: 2867
+  totalLinesOfCode: 90520
+  totalExports: 2872
   totalClasses: 86
   totalInterfaces: 523
-  totalFunctions: 959
+  totalFunctions: 961
   totalTypeGuards: 17
   totalEnums: 0
   totalConstants: 402
-  totalReExports: 1411
+  totalReExports: 1414
   totalTypeOnlyImports: 543
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0

@@ -138,14 +138,8 @@ describe('upt confront', () => {
     );
     expect(text).toMatch(/approaches 1\.35 M_⊙;.* · actual difference -7\.27% .* agreement bound ±12%/);
     expect(text).toMatch(/approaches 3\.5 2Δ.* · actual difference -0\.787% .* agreement bound ±5%/);
-    expect(text).toMatch(/Lorenz number .* · actual difference 0% .* agreement bound ±10%/);
-    expect(text).toMatch(/peak L\/L_Edd .* · actual difference 0% .* agreement bound ±50%/);
-    expect(text).toMatch(/force ratio;.* · actual difference 0% .* agreement bound ±1%/);
-    expect(text).toMatch(/graphene.* agreement bound ±8\.6e-9%/);
     expect(text).toMatch(/KSS lower bound .* · actual difference \+25\.7% .* · rule: observed ≥ predicted lower limit · compatible ✓/);
-    expect(text).toMatch(/9-gas agreement within 15% experimental error · actual difference 0% .* agreement bound ±15% .* compatible ✓/);
-    // Audit I14 limit closed: every consistency record now makes a compatibility decision.
-    expect(text).not.toMatch(/no compatibility decision/);
+    expect(text).toMatch(/encoded reference · no measured comparison value · no compatibility decision/);
   });
 
   it('--json carries the comparison beside fractionalGap and says what fractionalGap is', async () => {
@@ -174,8 +168,8 @@ describe('upt confront', () => {
     const be11 = rows.find((r) => r.bridgeId === 11)!;
     expect(be11.fractionalGapIs).toBe('agreement-bound');
     expect(be11.comparison!.agreementBound).toBe(0.15);
-    expect(be11.comparison!.rule).toBe('|difference| ≤ agreement bound');
-    expect(be11.comparison!.withinBound).toBe(true);
+    expect(be11.comparison!.rule).toBeNull();
+    expect(be11.comparison!.withinBound).toBeNull();
     expect(rows.find((r) => r.bridgeId === 52)!.comparison).toBeUndefined();
   });
 
@@ -278,11 +272,20 @@ describe('upt confront <be-NN> — the id explain prints', () => {
     expect(cap.lines.join('')).toMatch(/unexpected/);
   });
 
+  it('keeps a reference copied into the observed slot out of compatibility decisions', async () => {
+    const report = captureMerged();
+    expect(await runCli(['confront', 'be-61', '--frontier'], report.io)).toBe(0);
+    expect(report.lines.join('')).toContain('encoded reference');
+    expect(report.lines.join('')).not.toContain('compatible ✓');
+    const json = captureMerged();
+    expect(await runCli(['confront', 'be-61', '--json'], json.io)).toBe(0);
+    expect(JSON.parse(json.lines.join('')).result[0].comparison.withinBound).toBeNull();
+  });
+
   it('be-53 with no table and no procedure refuses and names both', async () => {
     const cap = captureMerged();
     const code = await runCli(['confront', 'be-53'], cap.io);
-    // The refusal is the result the command computed: exit 0, as a path with no composite claim.
-    expect(code).toBe(0);
+    expect(code).toBe(3);
     const text = cap.lines.join('');
     expect(text).toMatch(/refused/);
     expect(text).toMatch(/table/);
@@ -295,7 +298,7 @@ describe('upt confront <be-NN> — the id explain prints', () => {
   it('be-53 --json is the same refusal and has no residual field', async () => {
     const cap = captureMerged();
     const code = await runCli(['confront', '--bridge=be-53', '--json'], cap.io);
-    expect(code).toBe(0);
+    expect(code).toBe(3);
     const parsed = JSON.parse(cap.lines.join(''));
     expect(parsed.command).toBe('confront');
     expect(parsed.result.status).toBe('refused');

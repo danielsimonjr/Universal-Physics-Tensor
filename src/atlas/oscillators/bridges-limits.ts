@@ -303,7 +303,7 @@ export const AB_DAMPED_MASSLESS: AtlasBridge = {
     // the tolerance 0.06 sits 4.3% above the RK4 error 0.0574. No proof covers
     // finite ε.
     deltaAtBasis: 'numerically-supported',
-    norm: 'sup |x − x_reduced| for t ≥ 5 m/b',
+    norm: 'position error |x − x_reduced| for t ≥ 5 m/b, bounded by (m/b)(|v0| + k|x0|/b); delta is the supremum of this bound formula',
     domain: 't ≥ 5 m/b, overdamped; delta at the witness normalisation b = k = x0 = 1',
     horizon: 't ≥ 5 m/b (outside the boundary layer)',
     horizonHolds: (t, params) => {

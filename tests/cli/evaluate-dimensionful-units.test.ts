@@ -62,6 +62,9 @@ describe('dimensionful bridge inputs keep their units', () => {
 
     const diode = await runText(['evaluate', 'be-82', 'I_s_A=1pA', 'V_volts=0.7', 'T_K=300']);
     const diodeBare = await runText(['evaluate', 'be-82', 'I_s_A=1e-12', 'V_volts=0.7', 'T_K=300']);
+    const nonideal = await runText(['evaluate', 'be-82', 'I_s_A=1e-12', 'V_volts=20', 'T_K=300', 'n=2']);
+    expect(nonideal.code, nonideal.text).toBe(0);
+    expect(Number(/shockley-current \[A\] = (\S+)/.exec(nonideal.text)?.[1]) / (1e-12 * Math.expm1((E_SI * 20) / (2 * K_B_SI * 300)))).toBeCloseTo(1, 12);
     expect(diode.code, diode.text).toBe(0);
     expect(labeled(diode.text, 'I_s_A')).toContain('[A]');
     expect(output(diode.text, 'value')).toBe(output(diodeBare.text, 'value'));

@@ -55,7 +55,9 @@ describe('#551 / #532 evaluate names its target', () => {
     expect(be131).toMatch(/joukowsky-jump \[Pa\] = 277836\.2511554968/);
     const be120 = await ok(['evaluate', 'be-120', 'B_E_T=3.12e-5', 'rho_kg_per_m3=8.36310961845e-21', 'v_m_per_s=4e5']);
     expect(be120).toMatch(/standoff-sixth \[1\] = /);
-    expect(be120).toContain('(R/R_E)');
+    expect(be120).toContain('R/R_E');
+    expect(be120).toMatch(/standoff-radius-ratio \[1\] = 10\./);
+    expect(be120).toContain('specular reflection');
     for (const text of [be78, be131, be120]) expect(text).not.toMatch(/^\s*value = /m);
   });
 });

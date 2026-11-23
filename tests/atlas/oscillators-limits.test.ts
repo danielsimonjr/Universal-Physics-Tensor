@@ -193,7 +193,7 @@ describe('ab-damped-massless — W8: the order drops and the roots separate', ()
 
   it('records the limit as singular', () => {
     expect(AB_DAMPED_MASSLESS.bound?.limitCharacter).toBe('singular');
-    expect(AB_DAMPED_MASSLESS.bound?.norm).toBe('sup |x − x_reduced| for t ≥ 5 m/b');
+    expect(AB_DAMPED_MASSLESS.bound?.norm).toContain('delta is the supremum of this bound formula');
   });
 });
 

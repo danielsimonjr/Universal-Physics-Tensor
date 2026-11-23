@@ -47,6 +47,9 @@ describe('deltaAt is a proven bound where it is labelled closed-form', () => {
     const cases: [string, Record<string, number>, number][] = [
       ['ab-klein-gordon-wave', { omega0: 0.05, c: 1, k: 1 }, Math.sqrt(1 + 0.05 ** 2) - 1],
       ['ab-kg-schrodinger', { c: 1, k: 0.05, omega0: 1 }, (0.05 ** 2 / 2 - (Math.sqrt(1 + 0.05 ** 2) - 1)) / (0.05 ** 2 / 2)],
+      ['ab-chain-wave', { q: 0.5, a: 1 }, 1 - Math.sin(0.25) / 0.25],
+      ['ab-langevin-diffusion', { m: 1, gamma: 1, t: 200 }, (1 - Math.exp(-200)) / 200],
+      ['ab-stokes-einstein', { Re: 0.05 }, 1 - 1 / (1 + 3 * 0.05 / 8)],
       ['ab-stiff-string', { F: 1, EI: 0.004, k: 1 }, Math.sqrt(1.004) - 1],
       ['ab-telegraph-diffusion', { tau: 1, D: 0.02, q: 1 }, (1 - Math.sqrt(1 - 0.08)) / 2 / 0.02 - 1],
       ['ab-telegraph-wave', { tau: 1, D: 40, q: 1 }, (Math.sqrt(40) - Math.sqrt(159) / 2) / Math.sqrt(40)],
@@ -56,7 +59,7 @@ describe('deltaAt is a proven bound where it is labelled closed-form', () => {
     }
   });
 
-  it('every approximation states the basis of its deltaAt; only the damped limit is numerical', () => {
+  it('every parameter-dependent bound states its basis; only the damped limit is numerical', () => {
     const basis = Object.fromEntries(
       ATLAS_FAMILIES.flatMap((f) => f.bridges)
         .filter((b) => b.bound?.deltaAt !== undefined)
@@ -65,6 +68,9 @@ describe('deltaAt is a proven bound where it is labelled closed-form', () => {
     expect(basis).toEqual({
       'ab-pendulum-linear': 'closed-form',
       'ab-damped-massless': 'numerically-supported',
+      'ab-chain-wave': 'closed-form',
+      'ab-langevin-diffusion': 'closed-form',
+      'ab-stokes-einstein': 'closed-form',
       'ab-telegraph-diffusion': 'closed-form',
       'ab-telegraph-wave': 'closed-form',
       'ab-klein-gordon-wave': 'closed-form',

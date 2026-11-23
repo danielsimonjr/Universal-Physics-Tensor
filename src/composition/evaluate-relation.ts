@@ -14,9 +14,9 @@
 import { EXPECTED_DIMENSION_BY_BRIDGE } from '../dimensional/bridge-check.js';
 import { siUnitOf } from '../dimensional/algebra.js';
 import type { Dimension } from '../dimensional/types.js';
-import { BRIDGE_EVALUATORS, type EvaluatorSpec } from '../bridges/evaluators.js';
+import { BRIDGE_EVALUATORS, evaluatorRelation, type EvaluatorSpec } from '../bridges/evaluators.js';
 import { checkInputs, inputContract, type EvaluationWant, type InputContract } from '../bridges/input-contract.js';
-import { catalogEdgeKey, parseBridgeId, primaryRelation } from '../bridges/catalog-load.js';
+import { catalogEdgeKey, parseBridgeId } from '../bridges/catalog-load.js';
 import { CANONICAL_EQUATIONS } from '../canonical/registry.js';
 import { CANONICAL_GROUP_PREFACTORS } from './canonical-prefactors.js';
 import { CANONICAL_GRAPH } from './canonical-graph.js';
@@ -158,14 +158,14 @@ function closedFormEvaluation(
   want: EvaluationWant,
 ): Evaluation {
   const numbers = spec.run(bindings, want);
-  const relation = primaryRelation(spec.bridgeId);
+  const relation = evaluatorRelation(spec);
   const dimension = edge?.target.dim ?? EXPECTED_DIMENSION_BY_BRIDGE.get(spec.bridgeId);
   if (dimension === undefined) {
     throw new Error(`evaluateRelation: be-${spec.bridgeId} has no catalog dimension`);
   }
   const value = numbers.value!;
   // `run` refused a non-finite input, so a non-finite value here comes from the closed form.
-  if (!Number.isFinite(value)) return { kind: 'unset', formula: edge?.label ?? relation?.label ?? spec.name };
+  if (!Number.isFinite(value)) return { kind: 'unset', formula: relation?.label ?? edge?.label ?? spec.name };
   return {
     kind: 'value',
     value,

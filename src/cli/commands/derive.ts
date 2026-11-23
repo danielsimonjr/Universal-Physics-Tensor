@@ -10,7 +10,7 @@ import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { emitJson } from '../output.js';
-import { UsageError } from '../errors.js';
+import { EXIT_CHECK_FAILED, UsageError } from '../errors.js';
 import { classifyDetermination } from '../determination.js';
 import { formulaParserLabel } from '../version.js';
 import { FormulaUsageError } from '../euler-guard.js';
@@ -36,7 +36,7 @@ function hyphenSubtractionNote(check: { readonly error?: string; readonly undecl
 const FLAGS: FlagSpec[] = [
   {
     name: '--formula',
-    valueStyle: 'next',
+    valueStyle: 'either',
     description: 'Check EXPR against the declared dimensions and recover the dimensionless prefactor.',
   },
   { name: '--debug', valueStyle: 'none', description: 'Print the formula parser name and version on stderr.' },
@@ -155,9 +155,10 @@ async function run(ctx: CommandCtx): Promise<number> {
       textOut(`  dimensionally determined up to a constant:  ${target.name} ∝ ${fmtMono(det.monomial!)}`);
     } else {
       full = api.buckinghamPi([target, ...used]);
-      textOut(`  NOT a unique monomial — ${full.piGroupCount} free dimensionless group(s) (${full.verdict}):`);
-      for (const g of full.piGroups) textOut(`     ${g.formula}`);
-      textOut(`  (${det.reason})`);
+      textOut(det.outsideGoverningSpan
+        ? `  No determining monomial: ${det.reason}`
+        : `  NOT a unique monomial: ${det.reason}`);
+      if (debug) for (const group of full.piGroups) textOut(`     ${group.formula}`);
     }
   };
   if (!formula) reportDetermination();
@@ -188,8 +189,11 @@ async function run(ctx: CommandCtx): Promise<number> {
     );
     if (cf !== undefined && cf.variables.includes(targetSymbol)) throw targetInFormula;
     if (cf !== undefined) {
-      const formulaVariables = cf.variables;
-      used = governing.filter((g) => formulaVariables.includes(formulaSymbol(g.name)));
+      const formulaVariables = new Set(cf.variables);
+      // The evaluator provides elementary charge by default, but a declaration
+      // explicitly supplies its dimension and scope value.
+      if (api.formulaHasBareE(formulaSymbols)) formulaVariables.add('e');
+      used = governing.filter((g) => formulaVariables.has(formulaSymbol(g.name)));
       unused = governing.filter((g) => !used.includes(g));
       if (unused.length > 0) det = api.dimensionallyDetermines(target, used);
     }
@@ -234,7 +238,8 @@ async function run(ctx: CommandCtx): Promise<number> {
     };
     const variables = governing.filter((g) => !isConstant(g));
     const compiled = cf;
-    canonicalComparisons = api.compareWithCanonical(
+    const dimensionsMatch = !failed;
+    canonicalComparisons = r.ok ? api.compareWithCanonical(
       target.name,
       variables.map((g) => ({ name: g.name, dim: g.dim })),
       (values) =>
@@ -246,12 +251,16 @@ async function run(ctx: CommandCtx): Promise<number> {
             ]),
           ),
         ),
-    );
+    ).filter((comparison) => dimensionsMatch || comparison.kind === 'form') : [];
     const relationSources = variables.map((g) => ({ name: g.name, dim: g.dim }));
     catalogEdges = api.matchingCatalogEdges(target.name, relationSources);
     const printComparisons = (): void => {
       // describeKnownRelation's first lines are one per comparison, in order (then the catalog
       // edges), so line i belongs to comparison i when i is below the comparison count.
+      if (!dimensionsMatch) {
+        textOut('  Canonical agreement requires a formula dimension matching the target.');
+        if (canonicalComparisons!.length === 0) return;
+      }
       api.describeKnownRelation(canonicalComparisons!, target.name, relationSources).forEach((line, i) => {
         textOut(`  ${line}`);
         // A form mismatch names which exponent differs (the log-design fit), beneath its line.
@@ -263,6 +272,14 @@ async function run(ctx: CommandCtx): Promise<number> {
       for (const line of conventionLines(canonicalComparisons!.map((c) => c.id))) textOut(`  ${line}`);
     };
     if (canonicalCheckFailed(canonicalComparisons)) failed = true;
+
+    if (!dimensionsMatch) {
+      matchesMonomial = false;
+      printComparisons();
+      if (isJson) emitEnvelope();
+      else flush();
+      return EXIT_CHECK_FAILED;
+    }
 
     if (!det.determined) {
       textOut('  formula given, but with no unique monomial there is no single prefactor to recover.');

@@ -21,6 +21,21 @@ describe('upt regime', () => {
     expect(text).toMatch(/ab-pendulum-linear/);
   });
 
+  it('forms qa from dimensional inputs and checks both signs', async () => {
+    for (const [q, status, verdict] of [[0.99, 0, 'valid'], [-1.01, 3, 'VIOLATED']] as const) {
+      const cap = captureMerged();
+      expect(await runCli(['regime', 'oscillators', '--at', `q=${q}`, 'a=1'], cap.io)).toBe(status);
+      expect(cap.lines.join('')).toContain(`ab-chain-wave: ${verdict}`);
+      expect(cap.lines.join('')).not.toContain('ignored coordinate');
+    }
+  });
+
+  it('refuses negative Reynolds numbers in the Stokes–Einstein regime', async () => {
+    const cap = captureMerged();
+    expect(await runCli(['regime', 'diffusion', '--at', 'Re=-1', 'm=1', 'gamma=1', 't=100'], cap.io)).toBe(3);
+    expect(cap.lines.join('')).toContain('ab-stokes-einstein: VIOLATED');
+  });
+
   it('reports a CHECKED violation by naming the inequality', async () => {
     const cap = captureMerged();
     const code = await runCli(['regime', 'oscillators', '--at', 'theta0=0.9'], cap.io);

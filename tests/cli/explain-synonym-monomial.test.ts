@@ -16,6 +16,12 @@ import { shareSynonyms } from '../../src/composition/aliases.js';
 const Q = -1.602176634e-19;
 const M = 9.1093837015e-31;
 
+function recoveredFrequency(text: string): number {
+  return Number(/Recovered value: ([+-]?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)/.exec(text)?.[1]);
+}
+
+const signedFrequency = Q / (2 * Math.PI * M);
+
 describe('a magnetic synonym is one Buckingham variable', () => {
   it('does not call the cyclotron monomial non-unique when only one B was given', async () => {
     const cap = captureMerged();
@@ -32,7 +38,7 @@ describe('a magnetic synonym is one Buckingham variable', () => {
     );
     const text = cap.lines.join('');
     expect(code).toBe(0);
-    expect(text).toMatch(/Recovered value: -175882001077\.216/);
+    expect(recoveredFrequency(text) / signedFrequency).toBeCloseTo(1, 12);
     expect(text).toMatch(/charge·magnetic-field·mass\^-1/);
     expect(text).toMatch(/fix it up to a dimensionless constant/);
     expect(text).not.toMatch(/do not fix a unique monomial/);
@@ -73,7 +79,7 @@ describe('a magnetic synonym is one Buckingham variable', () => {
     );
     const fluxText = flux.lines.join('');
     expect(fluxCode).toBe(0);
-    expect(fluxText).toMatch(/Recovered value: 175882001077\.216/);
+    expect(recoveredFrequency(fluxText) / -signedFrequency).toBeCloseTo(1, 12);
     expect(fluxText).toMatch(/charge·magnetic-field·mass\^-1/);
     expect(fluxText).not.toMatch(/do not fix a unique monomial/);
 
@@ -91,7 +97,7 @@ describe('a magnetic synonym is one Buckingham variable', () => {
     );
     const doubledText = doubled.lines.join('');
     expect(doubledCode, doubledText).toBe(0);
-    expect(doubledText).toMatch(/Recovered value: -351764002154\.433/);
+    expect(recoveredFrequency(doubledText) / (2 * signedFrequency)).toBeCloseTo(1, 12);
     expect(doubledText).not.toMatch(/do not fix a unique monomial/);
   });
 
@@ -111,7 +117,7 @@ describe('a magnetic synonym is one Buckingham variable', () => {
     );
     const text = cap.lines.join('');
     expect(code, text).toBe(0);
-    expect(text).toMatch(/Recovered value: -175882001077\.216/);
+    expect(recoveredFrequency(text) / signedFrequency).toBeCloseTo(1, 12);
     expect(text).toMatch(/\{charge, magnetic-field, mass\}/);
     expect(text).not.toMatch(/do not fix a unique monomial/);
     expect(text).not.toMatch(/magnetic-flux-density/);

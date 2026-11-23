@@ -372,7 +372,7 @@ describe('I8 — a phase tolerance gets a phase-based horizon through the declar
   it('a bridge with no declared translation refuses: UNDETERMINED, naming that none is encoded', async () => {
     const r = await runText([...DAMPED_AT, 't=1', '--tolerance=phase:0.1']);
     expect(r.code).toBe(0);
-    expect(r.text).toMatch(/\n {2}tolerance phase:0\.1: UNDETERMINED — no translation from 'sup \|x − x_reduced\| for t ≥ 5 m\/b' into 'phase' is encoded for ab-damped-massless\n/);
+    expect(r.text).toMatch(/\n {2}tolerance phase:0\.1: UNDETERMINED — no translation from 'position error \|x − x_reduced\|[^']*' into 'phase' is encoded for ab-damped-massless\n/);
     const env = await json([...DAMPED_AT, 't=1', '--tolerance=phase:0.1']);
     expect(env.result.tolerance).toEqual(expect.objectContaining({ verdict: 'undetermined', translation: null }));
     expect(env.result.tolerance.horizon).toBeUndefined();
@@ -754,7 +754,7 @@ describe('I14 — each confrontation names its statistical object, criterion and
     expect(rec('be-37')).toMatch(/\n {4}statistic: point estimate ± 1σ · criterion: residual ≤ 1σ · observed: as reported by the source \(no derivation recorded\)/);
     expect(rec('be-51')).toMatch(/\n {4}statistic: point estimate ± 1σ · criterion: residual ≤ 1σ · observed: derived from PPN γ/);
     expect(rec('be-48')).toMatch(/\n {4}statistic: one-sided upper limit · criterion: predicted ≤ limit/);
-    expect(rec('be-11')).toMatch(/\n {4}statistic: reference value with no σ · criterion: \|actual difference\| ≤ the record's stated agreement bound/);
+    expect(rec('be-11')).toMatch(/statistic: encoded reference · criterion: no compatibility decision/);
     expect(rec('be-21')).toMatch(/\n {4}statistic: lower limit claimed by the bridge, against a reference value with no σ · criterion: observed ≥ predicted lower limit — one-sided, not a σ-residual; not a precision test/);
     expect(rec('be-65')).toMatch(/\n {4}statistic: reference value with no σ · criterion: \|actual difference\| ≤ the record's stated agreement bound — a tolerance, not a σ-residual; not a precision test/);
   });
@@ -768,12 +768,13 @@ describe('I14 — each confrontation names its statistical object, criterion and
 
   it('the summary counts σ-tests apart from limits and consistency ratios, recounted from --json', async () => {
     const env = await json(['confront']);
-    const count = (k: string) => env.result.filter((r: any) => r.kind === k).length;
+    const count = (k: string) => env.result.filter((r: any) => r.kind === k && r.comparisonBasis !== 'encoded-reference').length;
     expect(env.statisticDistribution).toEqual({
       sigmaTests: count('value'),
       limits: count('upper-bound'),
       consistencyRatios: count('consistency'),
       tables: count('table'),
+      encodedReferences: env.result.filter((r: any) => r.comparisonBasis === 'encoded-reference').length,
     });
     for (const r of env.result) expect(typeof r.statistic.object).toBe('string');
     const { text } = await runText(['confront']);
@@ -1002,7 +1003,7 @@ describe('I7 — a premise checklist: machine-checked, declared by you, denied b
   it('--json keeps the states apart, with the basis of each', async () => {
     const env = await json(['regime', 'diffusion', ...STOKES_AT, '--assume', 'no-slip']);
     const r = env.result.records.find((x: any) => x.id === 'ab-stokes-einstein');
-    expect(r.premises.machine.satisfied).toHaveLength(2);
+    expect(r.premises.machine.satisfied).toHaveLength(3);
     expect(r.premises.machine.violated).toEqual([]);
     expect(r.premises.machine.unchecked).toEqual([]);
     expect(r.premises.declaredByUser).toEqual(['no-slip boundary']);

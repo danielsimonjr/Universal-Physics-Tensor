@@ -10,6 +10,22 @@ from v0.1.0 onward.
 
 ### Fixed
 
+- Regime checks derive the chain coordinate from wavenumber and spacing, and atlas listings identify domains with no models or bridges. The damped-spring report identifies what its bound supremum measures. Hermite crossing keeps the sign bracket and handles stationary roots.
+
+- Catalog descriptions identify the encoded holographic area law and the thermoelectric Onsager premise. Test plans report the correct RC pole, measurement provenance, and the recorded comparison criterion.
+
+- Evaluators report the scope of the Casimir, lower-critical-field, Debye, radiation-pressure, and Onsager models. The atlas records analytic agreement bounds for dispersion, diffusion, first-order Oseen drag, and the linearized acoustic closure.
+
+- Cyclotron frequency is returned in signed cycles per second. Evaluators state the Maxwellian and Saha assumptions. The Chapman–Ferraro evaluator returns the standoff radius ratio, with the former sixth power as an extra output. The Shockley evaluator uses the supplied ideality in its primary current and defaults to one.
+
+- Confrontation reports distinguish encoded references from measured comparisons and exclude them from frontier rankings. A refusal exits 3. The Johnson-noise record explains its historical CODATA reference.
+
+- Derivation checks canonical agreement only after validating the formula dimension, recognizes declared elementary charge, and distinguishes an unreachable dimension from redundant inputs. Derive and retrieve accept both formula flag forms. Canonical variable listings include formula inputs such as ideal-gas particle count.
+
+- Equation mapping withholds the RHS dimension when a name is unbound and reports canonical comparisons independently.
+
+- `upt explain` looks up exact canonical quantities absent from the default catalog. Explicit source selections restrict lookup and derivation.
+
 - An unbounded coarse-graining path reports no numeric error estimate instead of a zero identity bound.
 
 - Grid partial derivatives preserve the grid shape through tensor construction and reject insufficient clamp samples or invalid spacing. Explicit finite-difference steps must produce distinct representable coordinates.

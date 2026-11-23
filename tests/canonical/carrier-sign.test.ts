@@ -135,7 +135,7 @@ describe('carrier charge and mobility share a sign on a positive product', () =>
       'magnetic-field': 1,
       mass: M,
     });
-    expect(cyclotron).toBeCloseTo((-Q * 1) / M, 6);
+    expect(cyclotron).toBeCloseTo((-Q * 1) / (2 * Math.PI * M), 6);
     expect(cyclotron).toBeLessThan(0);
   });
 

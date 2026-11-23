@@ -23,6 +23,7 @@ import { getFormulaParser, parsePhysics } from '../numerical/formula-registry.js
 import { formulaSymbolDimension } from '../numerical/formula-dimension.js';
 import { rewriteConstantSpellings } from '../dimensional/constant-rows.js';
 import { CONSTANTS, isRegisteredConstant } from '../dimensional/symbolic-constants.js';
+import { CANONICAL_GROUP_PREFACTORS } from './canonical-prefactors.js';
 import { formulaNameDimensions } from '../dimensional/formula-names.js';
 import { naturalNote, naturalPowers, type UnitMode } from '../dimensional/natural-units.js';
 import { aliasesForTarget, editDistance, symbolIndex } from './aliases.js';
@@ -415,8 +416,8 @@ export interface EquationAnalysis {
   readonly shortBindings: readonly ShortBinding[];
   /**
    * RHS names given a dimensionless placeholder because they did not resolve.
-   * The reported RHS dimension treats them as dimensionless, so it is not a
-   * check of the formula until they are bound.
+   * The placeholder supports parsing and hints. The RHS dimension is withheld
+   * until these names are bound.
    */
   readonly placeholders: readonly string[];
   /** Set when `--natural` / `--geometrized` reconciled the two dimensions. */
@@ -473,9 +474,17 @@ export async function analyzeUserEquation(
   // placeholder so the RHS still parses.
   const dims: Record<string, Dimension> = {};
   for (const [name, c] of Object.entries(CONSTANTS)) dims[name] = c.dim;
-  for (const s of eq.sources) {
-    const r = resolve(s);
-    dims[s] = r ? (dimsIn.get(r) as Dimension) : (formulaSymbolDimension(s) ?? DIMENSIONLESS);
+  const dimensionlessGroups = new Set(CANONICAL_GROUP_PREFACTORS.map((prefactor) => prefactor.group));
+  const placeholders: string[] = [];
+  for (const source of eq.sources) {
+    const resolved = resolve(source);
+    const knownDimension = resolved !== null
+      ? dimsIn.get(resolved)
+      : !bindShort && literalShort(source) !== null
+        ? undefined
+        : dimensionlessGroups.has(source) ? DIMENSIONLESS : formulaSymbolDimension(source);
+    if (knownDimension === undefined) placeholders.push(source);
+    dims[source] = knownDimension ?? DIMENSIONLESS;
   }
   // Use the rewritten equation's RHS (eq.text) so planck-length has already
   // become planck_length before dimensional parse.
@@ -499,7 +508,6 @@ export async function analyzeUserEquation(
   const resolvedTarget = resolve(eq.target);
   const targetDimension = resolvedTarget ? (dimsIn.get(resolvedTarget) as Dimension) : null;
 
-  const placeholders = eq.sources.filter((s) => !resolve(s));
   const hints: EquationHint[] = [];
   if (exprForInference) {
     const unmatchedSources = placeholders.filter((s) => bindShort || literalShort(s) === null);
@@ -542,6 +550,9 @@ export async function analyzeUserEquation(
     .filter((s) => s.length === 1 && resolve(s) !== null)
     .map((s) => ({ name: s, quantity: resolve(s)!, dim: dimsIn.get(resolve(s)!) as Dimension }));
 
+  // Placeholder dimensions are useful for inferring hints, but cannot establish
+  // the dimension of the formula.
+  if (placeholders.length > 0) rhsDimension = null;
   let consistent = rhsDimension && targetDimension ? equals(rhsDimension, targetDimension) : null;
   let natural: string | undefined;
   if (

@@ -356,7 +356,9 @@ async function run(ctx: CommandCtx): Promise<number> {
     return verdicts.some((v) => v.ok === false) ? EXIT_CHECK_FAILED : 0;
   }
 
+  const domainOnly = records.every((record) => record.kind === 'domain');
   out(`\nRegimes of family '${registration.name}'`);
+  if (domainOnly) out('This domain has no atlas models or bridges.');
   // A family whose records state no inequality has nothing to check at any point: VACUOUS, not UNCHECKED.
   const allVacuous = verdicts.every((v) => v.vacuous);
   out(

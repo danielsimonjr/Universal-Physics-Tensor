@@ -58,6 +58,20 @@ describe('upt derive with a declared variable that the formula does not use', ()
     const r = await cli(['derive', 'zq:time', 'm:mass', 'b:M.T^-1', 'k:M.T^-2', '--formula', 'zq*b/m']);
     expect(r.code).toBe(2);
   });
+  it('includes explicitly declared elementary charge in the dimensional form', async () => {
+    const r = await cli(['derive', 'R_H:L^3.T^-1.I^-1', 'n:L^-3', 'e:e', '--formula=1/(n*e)']);
+    expect(r.code).toBe(0);
+    expect(r.out).toContain('R_H ∝ n^-1·e^-1');
+    expect(r.out).toMatch(/prefactor ≈ 1\b/);
+    expect(r.out).not.toContain('declared but not in the formula');
+  });
+
+  it('distinguishes an unreachable target dimension from redundant inputs', async () => {
+    const r = await cli(['derive', 'F:force', 'Th:temperature', 'Tc:temperature']);
+    expect(r.code).toBe(3);
+    expect(r.out).toContain("target's dimension is not in the span");
+    expect(r.out).not.toContain('NOT a unique monomial');
+  });
   it('a wrong formula is still caught', async () => {
     const r = await cli([...BASE, 'k:M.T^-2', '--formula', 'm*b']);
     expect(r.code).toBe(3);

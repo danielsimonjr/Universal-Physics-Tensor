@@ -20,7 +20,7 @@ exports[`the leaf walks read the one owner > checkApplicability findings over ev
   "CE-compton-shift": "division-unguarded|question|args[0].args[1]|Division whose divisor (m_e, c) has no stated non-vanishing side condition. This is a question, not a defect: the divisor may well be non-zero and simply unstated.",
   "CE-compton-wavelength-full": "division-unguarded|question|args[1]|Division whose divisor (mass, c) has no stated non-vanishing side condition. This is a question, not a defect: the divisor may well be non-zero and simply unstated.",
   "CE-coulomb": "division-unguarded|question|args[1]|Division whose divisor (4pi, epsilon_0, r, 2) has no stated non-vanishing side condition. This is a question, not a defect: the divisor may well be non-zero and simply unstated.",
-  "CE-cyclotron-frequency": "division-unguarded|question|args[1]|Division whose divisor (mass) has no stated non-vanishing side condition. This is a question, not a defect: the divisor may well be non-zero and simply unstated.",
+  "CE-cyclotron-frequency": "division-unguarded|question|args[1]|Division whose divisor (2pi, mass) has no stated non-vanishing side condition. This is a question, not a defect: the divisor may well be non-zero and simply unstated.",
   "CE-de-broglie": "division-unguarded|question|args[1]|Division whose divisor (p) has no stated non-vanishing side condition. This is a question, not a defect: the divisor may well be non-zero and simply unstated.",
   "CE-density-definition": "division-unguarded|question|args[1]|Division whose divisor (volume) has no stated non-vanishing side condition. This is a question, not a defect: the divisor may well be non-zero and simply unstated.",
   "CE-drift-velocity": "",

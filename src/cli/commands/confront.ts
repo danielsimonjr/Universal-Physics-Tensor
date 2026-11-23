@@ -6,7 +6,7 @@
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
-import { CliError, UsageError } from '../errors.js';
+import { CliError, EXIT_CHECK_FAILED, UsageError } from '../errors.js';
 import { emitJson } from '../output.js';
 import { publishedUrl } from '../published-url.js';
 import type { RigorTier } from '../../cli-api.js';
@@ -50,16 +50,16 @@ const HELP = `upt confront [be-XX] [--bridge=be-XX] [--rigor=stringent|moderate|
         confrontation needs a caller-supplied measured-coupling table and a
         running procedure, neither of which the library ships. The refusal names
         each missing input, prints no residual, and does not change the
-        catalog status. It is not a pass and not a fail. The one-loop
+        catalog status. A refusal exits 3. The one-loop
         coefficient's sign is oneLoopCoefficientStatement, not this command.`;
 
 const RIGOR_TIERS = new Set(['stringent', 'moderate', 'loose']);
 
 /** σ-headroom to the 1σ acceptance threshold for a value outcome; null for others. */
 function frontierMarginSigma(
-  outcome: { kind: string; residualInSigma?: number } | undefined,
+  outcome: Outcome,
 ): number | null {
-  return outcome && outcome.kind === 'value' && typeof outcome.residualInSigma === 'number'
+  return outcome.kind === 'value' && outcome.comparisonBasis !== 'encoded-reference'
     ? 1 - outcome.residualInSigma
     : null;
 }
@@ -107,6 +107,9 @@ type Outcome = ReturnType<CommandCtx['api']['listConfrontations']>[number]['run'
  * fields only.
  */
 function statisticOf(o: Outcome): { object: string; criterion: string; observed: string } {
+  if (o.comparisonBasis === 'encoded-reference') {
+    return { object: 'encoded reference', criterion: 'no compatibility decision', observed: 'source statement encoded without a measured comparison value' };
+  }
   const reported = 'as reported by the source (no derivation recorded)';
   switch (o.kind) {
     case 'value':
@@ -141,8 +144,12 @@ function statisticOf(o: Outcome): { object: string; criterion: string; observed:
 }
 
 function statisticDistribution(outcomes: readonly Outcome[]) {
-  const n = (k: Outcome['kind']) => outcomes.filter((o) => o.kind === k).length;
-  return { sigmaTests: n('value'), limits: n('upper-bound'), consistencyRatios: n('consistency'), tables: n('table') };
+  const measured = outcomes.filter((o) => o.comparisonBasis !== 'encoded-reference');
+  const n = (k: Outcome['kind']) => measured.filter((o) => o.kind === k).length;
+  return {
+    sigmaTests: n('value'), limits: n('upper-bound'), consistencyRatios: n('consistency'),
+    tables: n('table'), encodedReferences: outcomes.length - measured.length,
+  };
 }
 
 /** A fraction printed as a percentage is a statistic: three significant digits (`-43.7%`, `±150%`), never fifteen. */
@@ -230,8 +237,7 @@ async function run(ctx: CommandCtx): Promise<number> {
       out(`catalog id ${bridgeId} refused. Missing: ${missing}.`);
       out(`This is not a pass and not a fail. The catalog status of catalog id ${bridgeId} is unchanged.`);
     }
-    // The refusal is the result the command computed: exit 0, as a path with no composite claim.
-    return 0;
+    return EXIT_CHECK_FAILED;
   }
 
   let entries =
@@ -271,7 +277,9 @@ async function run(ctx: CommandCtx): Promise<number> {
     const jsonResults = results.map((r) => ({
       bridgeId: r.bridgeId,
       rigor: r.rigor,
-      ...(wantSensitivity && r.outcome.kind === 'value'
+      ...(r.outcome.kind === 'value' && r.outcome.comparisonBasis === 'encoded-reference'
+        ? { ...r.outcome, residualInSigma: null, withinObserved: null }
+        : wantSensitivity && r.outcome.kind === 'value'
         ? { ...r.outcome, sensitivity: api.decidingMeasurement(r.bridgeId) }
         : r.outcome),
       ...(r.outcome.kind === 'consistency' ? { comparison: api.consistencyComparison(r.outcome) } : {}),
@@ -305,7 +313,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     const s = statisticDistribution(results.map((r) => r.outcome));
     out(
       `by statistic: ${s.sigmaTests} σ-residual tests · ${s.limits} limits · ${s.consistencyRatios} consistency ratios ` +
-        `(no σ; never counted as precision tests)${s.tables ? ` · ${s.tables} tables` : ''}`,
+        `(no σ; never counted as precision tests)${s.tables ? ` · ${s.tables} tables` : ''} · ${s.encodedReferences} encoded references`,
     );
     const h = dataHandlingDistribution(results.map((r) => r.outcome));
     out(
@@ -325,7 +333,9 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
   for (const { bridgeId, title, rigor, outcome } of results) {
     out(`  be-${bridgeId} [${rigor}]: ${title}`);
-    switch (outcome.kind) {
+    if (outcome.comparisonBasis === 'encoded-reference') {
+      out('    encoded reference · no measured comparison value · no compatibility decision');
+    } else switch (outcome.kind) {
       case 'value': {
         const margin = wantFrontier ? ` · margin ${api.formatQuantity(1 - outcome.residualInSigma, 3)}σ to the 1σ acceptance threshold` : '';
         // A derived "observed" value is labelled derived, and the quantity that

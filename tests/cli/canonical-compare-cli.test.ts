@@ -17,6 +17,17 @@ async function text(args: string[], expected = 0): Promise<string> {
   return cap.lines.join('');
 }
 
+it('derive compares ideal-gas formulas only after checking their declared dimensions', async () => {
+  const derive = (dimension: string, code: number) => text([
+    'derive', 'pressure:pressure', `N:${dimension}`, 'temperature:temperature', 'V:volume', 'k_B:k_B',
+    '--formula', 'N*k_B*temperature/V',
+  ], code);
+  const invalid = await derive('amount', 3);
+  expect(invalid).toContain('homogeneous but ≠ target');
+  expect(invalid).not.toContain('agrees with CE-ideal-gas');
+  expect(await derive('dimensionless', 0)).toContain('agrees with CE-ideal-gas');
+});
+
 describe('upt map --equation — the canonical comparison', () => {
   it('a Hawking temperature with 4π for 8π differs from CE-hawking-temperature by the factor 2', async () => {
     const t = await text(['map', '--equation', 'hawking_temperature = hbar*c^3/(4*pi*G*mass*k_B)'], 3);
@@ -186,6 +197,18 @@ describe('N3: a mismatch caused by an unresolved placeholder is not established'
     expect(t).toMatch(/NOT ESTABLISHED: 'lenght'/);
     expect(t).not.toMatch(/\[L\^-0\.5 T\]/);
     expect(t).not.toMatch(/dimensional MISMATCH/);
+  });
+
+  it('reports an unbound radius separately from a failed prefactor comparison', async () => {
+    const equation = 'coulomb_force = q_1*q_2/(2*pi*epsilon_0*r^2)';
+    const unbound = await text(['map', '--equation', equation, '--equation-only'], 3);
+    expect(unbound).toContain("NOT ESTABLISHED: 'r'");
+    expect(unbound).not.toContain('dimensional MISMATCH');
+    expect(unbound).toContain('by a constant factor');
+
+    const bound = await text(['map', '--equation', equation, '--equation-only', '--bind-short'], 3);
+    expect(bound).toContain('dimensionally consistent: [force]');
+    expect(bound).toContain('by a constant factor');
   });
 
   it('control: with every name resolved, a mismatch is still a MISMATCH and exits 3', async () => {

@@ -867,7 +867,7 @@
       "bound": {
         "K": 1,
         "delta": 1.5,
-        "norm": "sup |x − x_reduced| for t ≥ 5 m/b",
+        "norm": "position error |x − x_reduced| for t ≥ 5 m/b, bounded by (m/b)(|v0| + k|x0|/b); delta is the supremum of this bound formula",
         "domain": "t ≥ 5 m/b, overdamped; delta at the witness normalisation b = k = x0 = 1",
         "horizon": "t ≥ 5 m/b (outside the boundary layer)",
         "parameterRange": "m k / b² < 1/4, |v0| ≤ 5; with b = k = 1 this is m < 1/4",
@@ -950,6 +950,19 @@
       "sideConditions": [
         "long-wavelength, qa ≪ 1"
       ],
+      "bound": {
+        "K": 1,
+        "delta": 0.04114892279159401,
+        "norm": "relative frequency error normalized by the continuum frequency, extended continuously at q = 0",
+        "domain": "0 ≤ |qa| < 1; the alternating sine series gives 1 − sinc(qa/2) ≤ (qa)²/24",
+        "horizon": "all t ≥ 0 for the dispersion relation",
+        "limitCharacter": "regular",
+        "uniformity": [
+          "all time for the modal frequencies",
+          "positive mass, spring constant and spacing"
+        ],
+        "deltaAtBasis": "closed-form"
+      },
       "regime": {
         "family": "oscillators",
         "inequalities": [
@@ -957,16 +970,20 @@
             "group": "qa",
             "op": "<",
             "bound": 1,
-            "alias": "qa ≪ 1"
+            "alias": "|qa| ≪ 1"
+          },
+          {
+            "group": "qa",
+            "op": ">",
+            "bound": -1,
+            "alias": "|qa| ≪ 1"
           }
         ],
         "groupDefinitions": {
           "qa": {
             "exponents": {
-              "a": 0,
-              "kappa": 0,
-              "m": 0,
-              "qa": 1
+              "a": 1,
+              "q": 1
             },
             "formula": "qa"
           }

@@ -82,6 +82,8 @@ export { foldName, quantityRecord } from './dimensional/quantity-registry.js';
 /** The two composition demonstrations the CLI prints. */
 export { demonstrationEdges } from './composition/catalog-graph.js';
 export type { ConfrontationEntry, RigorTier } from './bridges/confrontations.js';
+/** A bridge evaluator rejected an input outside its model domain. */
+export { DomainViolationError } from './bridges/evaluation-errors.js';
 export { consistencyComparison } from './bridges/observations/types.js';
 export type { ConfrontationOutcome } from './bridges/observations/types.js';
 export { decidingMeasurement } from './bridges/sensitivity.js';
@@ -342,6 +344,8 @@ export { evaluateResolved, resolveEvaluable } from './composition/evaluate-relat
 export { siUnitOf } from './dimensional/algebra.js';
 /** The required inputs of an evaluator that no relation source reads. They do not change the value. */
 export { unusedInputKeys } from './bridges/evaluators.js';
+/** The formula and output metadata used by a closed-form evaluator. */
+export { evaluatorRelation } from './bridges/evaluators.js';
 /** Two spellings of one quantity were given different numbers. The formula is not run. */
 export { SynonymDisagreementError } from './dimensional/formula-names.js';
 /** `upt retrieve`: the canonical corpus, the optional embedders (Ollama and ONNX), and the atlas-accepted hybrid search. */
@@ -354,7 +358,7 @@ export { fetchOnnxModel, onnxEmbedder } from './atlas/benchmark/onnx-embedder.js
  *
  * @internal
  */
-export { builtinFormulaDimensionChecker } from './numerical/formula-dimension.js';
+export { builtinFormulaDimensionChecker, formulaHasBareE } from './numerical/formula-dimension.js';
 
 /**
  * Query-formula parser for `upt retrieve --formula`.

@@ -95,6 +95,8 @@ export interface CatalogRelation {
 
 /** One named input of a catalog evaluator. */
 export interface CatalogEvaluatorParameter {
+  /** Value in the parameter unit when no binding is supplied. */
+  readonly defaultValue?: number;
   readonly key: string;
   readonly quantity: string;
   readonly symbol: string;
@@ -136,6 +138,8 @@ export interface CatalogEvaluator {
   readonly name: string;
   readonly parameters: readonly CatalogEvaluatorParameter[];
   readonly outputs?: readonly CatalogEvaluatorOutput[];
+  /** Evaluator formula when it differs from the catalog graph statement. */
+  readonly formula?: Pick<CatalogRelation, 'label' | 'expression' | 'target' | 'sources'> & { readonly additionalCondition?: string };
   /** Keys that the evaluator refuses, each with the API that reads the key. */
   readonly refusedInputs?: readonly { readonly key: string; readonly use: string }[];
 }

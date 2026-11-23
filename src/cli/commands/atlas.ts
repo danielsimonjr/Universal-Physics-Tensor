@@ -227,13 +227,15 @@ async function run(ctx: CommandCtx): Promise<number> {
 
   if (id === undefined) {
     const listing = rows.map((r) => ({ id: r.bridge.id, family: r.family, relation: r.bridge.relation }));
+    const domainOnly = api.domainRegimeRegistrations().map((domain) => domain.name);
     if (wantJson) {
-      emitJson({ command: 'atlas', result: { bridges: listing } }, ctx.write);
+      emitJson({ command: 'atlas', result: { bridges: listing, domainOnly } }, ctx.write);
       return 0;
     }
     out(`\n${listing.length} atlas bridges across ${families.length} families:`);
     for (const l of listing) out(`  ${l.id.padEnd(28)} ${l.relation.padEnd(22)} [${l.family}]`);
     out('\nRun `upt atlas <bridge-id>` for one bridge with every qualification, or `upt atlas --evidence` for every bridge\'s derived evidence.');
+    if (domainOnly.length > 0) out(`Regime-only domains with no atlas models or bridges: ${domainOnly.join(', ')}.`);
     out('A catalog equation with a stored formal reference is `upt atlas be-<n>`.');
     return 0;
   }

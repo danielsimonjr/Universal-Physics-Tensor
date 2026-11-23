@@ -1993,7 +1993,7 @@
   },
   {
     "id": "CE-cyclotron-frequency",
-    "text": "Cyclotron frequency\nelectromagnetism\nnon-relativistic charged particle",
+    "text": "Cyclotron frequency\nelectromagnetism\nnon-relativistic charged particle\nsigned rotation frequency in cycles per second",
     "expr": {
       "kind": "op",
       "op": "/",
@@ -2031,17 +2031,36 @@
           ]
         },
         {
-          "kind": "symbol",
-          "name": "mass",
-          "dim": {
-            "L": 0,
-            "M": 1,
-            "T": 0,
-            "I": 0,
-            "Theta": 0,
-            "N": 0,
-            "J": 0
-          }
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "2pi",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "mass",
+              "dim": {
+                "L": 0,
+                "M": 1,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
         }
       ]
     }

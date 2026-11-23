@@ -14,7 +14,7 @@ import { E_SI } from '../../src/core/constants.js';
 const M_PROTON_SI = 1.67262192369e-27;
 const CHARGE = 'charge=1.602176634e-19';
 const MASS = 'mass=1.67262192369e-27';
-const EXPECTED = (E_SI * 12e-9) / M_PROTON_SI;
+const EXPECTED = (E_SI * 12e-9) / (2 * Math.PI * M_PROTON_SI);
 
 async function explain(binding: string) {
   const cap = capture();

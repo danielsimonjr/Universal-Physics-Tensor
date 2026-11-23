@@ -68,7 +68,7 @@ describe('a declared alternate works in the library, and T_yr only adds the per-
 describe('the output carries its name and unit (issue 460)', () => {
   it('evaluateRelation names the target and its SI unit', () => {
     const o = evaluateRelation('be-120', { B_E_T: 3.1e-5, rho_kg_per_m3: 8.36e-21, v_m_per_s: 4e5 });
-    expect(o).toMatchObject({ kind: 'value', name: 'standoff-sixth', unit: '1' });
+    expect(o).toMatchObject({ kind: 'value', name: 'standoff-radius-ratio', unit: '1' });
     expect(evaluateRelation('be-67', { B_T: 1e-8, rho_kg_per_m3: 1.67e-21 })).toMatchObject({ name: 'alfven-speed', unit: 'm/s' });
   });
   it('the text line names it', async () => {
@@ -107,11 +107,13 @@ describe('a required input that does not enter the formula is said so (issue 451
     const rows = [...BRIDGE_EVALUATORS].filter(([, spec]) => unusedInputKeys(spec).length > 0).map(([id]) => id);
     expect(rows).toEqual([170]);
   });
-  it('the CLI prints the note for the evaluator that still has an unused input', async () => {
-    const key = unusedInputKeys(BRIDGE_EVALUATORS.get(170)!)[0]!;
-    const cap = capture();
-    // B_T is a validity condition (|B| <= 1 pT), not a term of the value
-    await runCli(['evaluate', 'be-170', 'L12=3', 'B_T=0'], cap.io);
-    expect(cap.lines.join('')).toMatch(new RegExp(`${key}.*does not enter`));
+  it('defaults the zero-field domain input and explains the finite-field refusal', async () => {
+    const defaulted = capture();
+    expect(await runCli(['evaluate', 'be-170', 'L12=3'], defaulted.io)).toBe(0);
+    expect(defaulted.lines.join('')).toContain('default: 0');
+    expect(defaulted.lines.join('')).toContain('onsager-l21 [1] = 3');
+    const finiteField = capture();
+    expect(await runCli(['evaluate', 'be-170', 'L12=3', 'B_T=1T'], finiteField.io)).toBe(1);
+    expect(finiteField.lines.join('')).toContain('Onsager–Casimir');
   });
 });

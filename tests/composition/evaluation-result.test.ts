@@ -13,7 +13,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../src/cli/main.js';
-import { BRIDGE_EVALUATORS } from '../../src/bridges/evaluators.js';
+import { BRIDGE_EVALUATORS, evaluatorRelation } from '../../src/bridges/evaluators.js';
 import { primaryRelation } from '../../src/bridges/catalog-load.js';
 import { formulaVariables } from '../../src/bridges/expr-parse.js';
 import { evaluateRelation, evaluateResolved, resolveEvaluable } from '../../src/composition/evaluate-relation.js';
@@ -78,7 +78,7 @@ describe('every evaluation names its quantity, unit and meaning', () => {
   });
 
   it.each(WITH_REFERENCE.map((spec) => [spec.bridgeId, spec] as const))('be-%i', (id, spec) => {
-    const relation = primaryRelation(id)!;
+    const relation = evaluatorRelation(spec)!;
     const result = evaluateRelation(`be-${id}`, fullInputs(spec)!);
     if (result.kind === 'unset') return;
     expect(result.name).toBe(relation.target);
@@ -148,7 +148,7 @@ describe('the dogfood repros', () => {
 
   it('evaluateRelation names be-120 and be-67 the way the CLI line does', async () => {
     const standoff = evaluateRelation('be-120', { B_E_T: 3.1e-5, rho_kg_per_m3: 8.36e-21, v_m_per_s: 4e5 });
-    expect(standoff).toMatchObject({ kind: 'value', name: 'standoff-sixth', unit: '1' });
+    expect(standoff).toMatchObject({ kind: 'value', name: 'standoff-radius-ratio', unit: '1' });
     const alfven = evaluateRelation('be-67', { B_T: 1e-8, rho_kg_per_m3: 1.67e-21 });
     expect(alfven).toMatchObject({ kind: 'value', name: 'alfven-speed', unit: 'm/s' });
     const r = await cli(['evaluate', 'be-67', 'B_T=1e-8', 'rho_kg_per_m3=1.67e-21']);

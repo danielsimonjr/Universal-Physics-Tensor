@@ -103,8 +103,8 @@ describe('ApproximationBound.deltaAt — the machine form of delta', () => {
     expect(() => admitApproximation(broken)).toThrow(/ab-pendulum-linear/);
   });
 
-  it('still admits the coarse-graining bridge, which carries no bound at all', () => {
-    expect(BRIDGE_CHAIN_WAVE.bound).toBeUndefined();
+  it('admits the chain coarse-graining with its dispersion-error bound', () => {
+    expect(BRIDGE_CHAIN_WAVE.bound?.deltaAt?.({ qa: 0.5 })).toBeCloseTo(1 - Math.sin(0.25) / 0.25, 14);
     expect(admitApproximation(BRIDGE_CHAIN_WAVE as AtlasBridge)).toBe(BRIDGE_CHAIN_WAVE);
   });
 

@@ -144,6 +144,16 @@ export const BRIDGE_SOUND_SPEED: AtlasBridge = {
       },
     ],
   ),
+  bound: {
+    K: 1,
+    delta: 0,
+    norm: 'relative error of sound speed in the linearized adiabatic equations',
+    domain: 'positive background density and pressure, adiabatic linear closure, and the stated small-perturbation regime',
+    horizon: 'all t ≥ 0 for the linearized sound speed',
+    horizonHolds: (t) => Number.isFinite(t) && t >= 0,
+    limitCharacter: 'regular',
+    uniformity: ['background states in the stated domain', 'time within the linearized model'],
+  },
   counterexamples: [
     {
       description:

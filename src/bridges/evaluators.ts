@@ -10,6 +10,8 @@
  * @module bridges/evaluators
  */
 
+import { equals } from '../dimensional/algebra.js';
+import { quantityRecord } from '../dimensional/quantity-registry.js';
 import { FORMULA_NAMED } from '../dimensional/formula-names.js';
 import { catalogEntries, catalogEntry, catalogEvaluators, primaryRelation } from './catalog-load.js';
 import type { CatalogEvaluator, CatalogEvaluatorOutput, CatalogEvaluatorParameter, CatalogRelation } from './catalog-types.js';
@@ -31,6 +33,8 @@ export interface ParameterAlternate {
 
 /** One named input of an evaluator. @public */
 export interface EvaluatorParameter {
+  /** Value in the parameter unit when no binding is supplied. */
+  readonly defaultValue?: number;
   readonly key: string;
   readonly quantity: string;
   readonly symbol: string;
@@ -43,7 +47,7 @@ export interface EvaluatorParameter {
   /** An angular frequency in rad/s. A cycle unit (Hz, rpm) given to it is multiplied by 2π. */
   readonly angular?: true;
   readonly alternates?: readonly ParameterAlternate[];
-  /** Derived: the parameter binds no relation source, so only an extra output reads it. */
+  /** Derived: the parameter has a default or only an extra output reads it. */
   readonly optional?: true;
 }
 
@@ -67,6 +71,13 @@ export interface EvaluatorSpec {
   run(inputs: Readonly<Record<string, number>>, want?: EvaluationWant): Record<string, number>;
 }
 
+const evaluatorRelations = new WeakMap<EvaluatorSpec, CatalogRelation>();
+
+/** The closed form run by the evaluator, including any evaluator-specific formula. @internal */
+export function evaluatorRelation(spec: EvaluatorSpec): CatalogRelation | undefined {
+  return evaluatorRelations.get(spec) ?? primaryRelation(spec.bridgeId);
+}
+
 function toParameter(row: CatalogEvaluatorParameter, optional: boolean): EvaluatorParameter {
   return {
     key: row.key,
@@ -79,7 +90,8 @@ function toParameter(row: CatalogEvaluatorParameter, optional: boolean): Evaluat
     ...(row.sign !== undefined ? { sign: row.sign } : {}),
     ...(row.angular === true ? { angular: true as const } : {}),
     ...(row.alternates !== undefined ? { alternates: row.alternates } : {}),
-    ...(optional ? { optional: true as const } : {}),
+    ...(row.defaultValue === undefined ? {} : { defaultValue: row.defaultValue }),
+    ...(optional || row.defaultValue !== undefined ? { optional: true as const } : {}),
   };
 }
 
@@ -107,7 +119,7 @@ function symbolNames(node: ExprNode): string[] {
  * the value, so a caller who varies one sees no effect.
  */
 export function unusedInputKeys(spec: EvaluatorSpec): string[] {
-  const relation = primaryRelation(spec.bridgeId);
+  const relation = evaluatorRelation(spec);
   if (relation === undefined) return [];
   const used = new Set(symbolNames(parseCatalogExpression(relation.expression)));
   // An output reads the scope names its parsed expression names, the same parse `run` evaluates.
@@ -221,22 +233,40 @@ function unsignedOptional(parameter: EvaluatorParameter, value: number | undefin
  * @internal
  */
 export function buildEvaluatorSpec(row: CatalogEvaluator): EvaluatorSpec {
-  const relation = primaryRelation(row.catalogId);
-  if (relation === undefined) throw new Error(missingEvaluatorMessage(row.catalogId));
+  const primary = primaryRelation(row.catalogId);
+  if (primary === undefined) throw new Error(missingEvaluatorMessage(row.catalogId));
+  const formula = row.formula;
+  const relation = formula === undefined ? primary : {
+    ...primary,
+    label: formula.label,
+    expression: formula.expression,
+    target: formula.target,
+    sources: formula.sources,
+    holds: formula.additionalCondition === undefined
+      ? primary.holds
+      : `(${primary.holds}) and (${formula.additionalCondition})`,
+    reference: undefined,
+  };
+  if (relation.target !== primary.target) {
+    const target = quantityRecord(relation.target);
+    const original = quantityRecord(primary.target);
+    if (target === undefined || original === undefined || !equals(target.dimension, original.dimension)) {
+      throw new Error(`be-${row.catalogId}: the evaluator's alternate target must preserve the catalog dimension`);
+    }
+  }
   const parameters = row.parameters.map((p) => toParameter(p, sourceOfParameter(relation, p) === undefined));
   const elsewhere = row.refusedInputs === undefined ? undefined : Object.fromEntries(row.refusedInputs.map((r) => [r.key, r.use]));
-  return buildSpec(row.catalogId, row.name, parameters, row.outputs ?? [], elsewhere);
+  return buildSpec(relation, row.catalogId, row.name, parameters, row.outputs ?? [], elsewhere);
 }
 
 function buildSpec(
+  relation: CatalogRelation,
   catalogId: number,
   name: string,
   parameters: readonly EvaluatorParameter[],
   outputs: readonly CatalogEvaluatorOutput[],
   elsewhere?: Readonly<Record<string, string>>,
 ): EvaluatorSpec {
-  const relation = primaryRelation(catalogId);
-  if (relation === undefined) throw new Error(missingEvaluatorMessage(catalogId));
   const contract = evaluatorContract(catalogId, relation, parameters, elsewhere);
   const keys = parameters.map((parameter) => parameter.key);
   const reserved = reservedFormulaNames();
@@ -256,7 +286,7 @@ function buildSpec(
       return source === undefined ? [] : [[source, parameter.key] as const];
     }),
   );
-  return {
+  const spec: EvaluatorSpec = {
     bridgeId: catalogId,
     name,
     inputKeys: parameters.filter((parameter) => parameter.optional !== true).map((parameter) => parameter.key),
@@ -265,6 +295,11 @@ function buildSpec(
     contract,
     run(inputs, want = 'all') {
       const given = checkInputs(contract, inputs, want);
+      for (const parameter of parameters) {
+        if (given[parameter.key] === undefined && parameter.defaultValue !== undefined) {
+          given[parameter.key] = parameter.defaultValue;
+        }
+      }
       const bound = bindRelationInputs(relation, parameters, given);
       const violated = [
         ...relationDomain(relation).violations(bound, (source) => keyOfSource.get(source) ?? source),
@@ -280,6 +315,8 @@ function buildSpec(
       return result;
     },
   };
+  evaluatorRelations.set(spec, relation);
+  return spec;
 }
 
 /** Bridge id → evaluator. @internal */

@@ -25,6 +25,10 @@ describe('hermiteCrossingFraction', () => {
     expect(hermiteCrossingFraction(1, -2, -1, -2)).toBeCloseTo(0.5, 14);
   });
 
+  it('returns a sign-changing stationary root at the secant starting point', () => {
+    expect(hermiteCrossingFraction(-1, 6, 1, 6)).toBe(0.5);
+  });
+
   it('converges to the cubic root when the secant start is far from it (0 or 1 Newton steps do not)', () => {
     // Root measured with mpmath at 50 digits: 0.84524359124347405207240223211170631858824432335753.
     // The secant start p0 / (p0 - p1) = 0.909 is 6.4e-2 away; one Newton step leaves 1.1e-2.
