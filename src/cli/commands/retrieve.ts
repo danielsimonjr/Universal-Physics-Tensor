@@ -73,7 +73,7 @@ const FLAGS: FlagSpec[] = [
   },
   {
     name: '--formula',
-    valueStyle: 'attached',
+    valueStyle: 'either',
     description:
       'A formula text, for example "E - m*c^2". The atlas search ranks the corpus by its structure. Every symbol needs a --dim. It is used instead of --expr.',
   },

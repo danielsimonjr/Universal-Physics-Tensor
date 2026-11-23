@@ -33,6 +33,11 @@ async function run(ctx: CommandCtx): Promise<number> {
   const entries = api.CANONICAL_EQUATIONS;
   const gap = api.bridgesWithoutCanonicalPartner();
   const withVars = args.flags.has('vars');
+  const sources = new Map(api.CANONICAL_GRAPH.map((edge) => [edge.id, edge.sources]));
+  const variables = (entry: (typeof entries)[number]): string[] => [...new Set([
+    ...entry.dimensional.governing.map((variable) => variable.name),
+    ...(sources.get(entry.id) ?? []).map((quantity) => quantity.name),
+  ])];
 
   if (args.flags.has('json')) {
     const payload = withVars
@@ -40,7 +45,7 @@ async function run(ctx: CommandCtx): Promise<number> {
           entries: entries.map((e) => ({
             ...e,
             target: e.dimensional.target.name,
-            variables: e.dimensional.governing.map((g) => g.name),
+            variables: variables(e),
           })),
           gap,
         }
@@ -58,7 +63,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     out('   ──────────────────────────────────────────────────────────────────────────');
     for (const e of entries) {
       const target = e.dimensional.target.name;
-      const vars = e.dimensional.governing.map((g) => g.name).join(', ') || '—';
+      const vars = variables(e).join(', ') || '—';
       out(`   ${fidelity(e).padEnd(3)}  ${e.id.padEnd(24)} ${target.padEnd(22)} ${vars}`);
     }
     out('\n  Use these names in `upt map --equation` / `upt derive` (underscores OK for kebabs).');

@@ -249,13 +249,19 @@ export function dimensionallyDetermines(
 ): DimensionalDeterminationResult {
   const governingNames = governing.map((v) => v.name);
 
-  const governingPi = buckinghamPi(
-    governing.length > 0 ? governing : [target],
-  );
-  // A redundancy among the governing variables means the monomial is not
-  // unique (any dimensionless governing combo can be folded into the
-  // constant) → not determined.
-  if (governing.length > 0 && governingPi.piGroupCount > 0) {
+  const governingGroups = governing.length === 0 ? 0 : buckinghamPi(governing).piGroupCount;
+  const full = buckinghamPi([target, ...governing]);
+  // Adding one column leaves nullity unchanged exactly when it increases rank.
+  if (full.piGroupCount === governingGroups) {
+    return {
+      target: target.name,
+      governing: governingNames,
+      determined: false,
+      outsideGoverningSpan: true,
+      reason: "the target's dimension is not in the span of the governing variables",
+    };
+  }
+  if (governingGroups > 0) {
     return {
       target: target.name,
       governing: governingNames,
@@ -263,24 +269,8 @@ export function dimensionallyDetermines(
       outsideGoverningSpan: false,
       reason:
         'governing variables are dimensionally dependent ' +
-        `(${governingPi.piGroupCount} dimensionless combination(s) among them); ` +
+        `(${governingGroups} dimensionless combination(s) among them); ` +
         'the determining monomial is not unique',
-    };
-  }
-
-  const full = buckinghamPi([target, ...governing]);
-  if (full.piGroupCount !== 1) {
-    return {
-      target: target.name,
-      governing: governingNames,
-      determined: false,
-      outsideGoverningSpan: full.piGroupCount === 0,
-      reason:
-        full.piGroupCount === 0
-          ? "the target's dimension is not in the span of the governing " +
-            'variables — no dimensionless group exists, so no monomial determines it'
-          : `${full.piGroupCount} independent π-groups — the target is fixed ` +
-            'only as a function of several dimensionless ratios (under-constrained)',
     };
   }
 

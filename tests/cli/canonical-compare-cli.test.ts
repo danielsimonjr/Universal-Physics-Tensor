@@ -17,6 +17,17 @@ async function text(args: string[], expected = 0): Promise<string> {
   return cap.lines.join('');
 }
 
+it('derive compares ideal-gas formulas only after checking their declared dimensions', async () => {
+  const derive = (dimension: string, code: number) => text([
+    'derive', 'pressure:pressure', `N:${dimension}`, 'temperature:temperature', 'V:volume', 'k_B:k_B',
+    '--formula', 'N*k_B*temperature/V',
+  ], code);
+  const invalid = await derive('amount', 3);
+  expect(invalid).toContain('homogeneous but ≠ target');
+  expect(invalid).not.toContain('agrees with CE-ideal-gas');
+  expect(await derive('dimensionless', 0)).toContain('agrees with CE-ideal-gas');
+});
+
 describe('upt map --equation — the canonical comparison', () => {
   it('a Hawking temperature with 4π for 8π differs from CE-hawking-temperature by the factor 2', async () => {
     const t = await text(['map', '--equation', 'hawking_temperature = hbar*c^3/(4*pi*G*mass*k_B)'], 3);

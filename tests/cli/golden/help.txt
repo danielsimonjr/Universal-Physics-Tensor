@@ -196,7 +196,7 @@ Flags:
         e.g.  upt derive period:time length:length gravity:acceleration \
                        --formula "2*pi*sqrt(length/gravity)"
 Flags:
-  --formula VALUE
+  --formula=VALUE (or --formula VALUE)
         Check EXPR against the declared dimensions and recover the dimensionless prefactor.
   --debug
         Print the formula parser name and version on stderr.
@@ -968,7 +968,7 @@ Flags:
         Write a JSON envelope to stdout instead of the text report.
   --expr=VALUE
         An ExprNode JSON file (the format of `upt probe`). A value that starts with package: names a file relative to the package root. The atlas search ranks the corpus by its structure. A text claim has no expression, so without this flag nothing is accepted.
-  --formula=VALUE
+  --formula=VALUE (or --formula VALUE)
         A formula text, for example "E - m*c^2". The atlas search ranks the corpus by its structure. Every symbol needs a --dim. It is used instead of --expr.
   --dim=VALUE (repeatable)
         name:dimension of one --formula symbol, for example --dim=m:mass. A registered constant is declared as itself, for example --dim=c:c. Needs --formula.

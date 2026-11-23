@@ -108,9 +108,9 @@ function resolveSymbol(name: string, dims: Readonly<Record<string, Dimension>>):
 
 const CHARGE_SQUARED = multiply(CHARGE, CHARGE);
 
-/** A bare `e`, not `exp`, `e_charge`, `eps0`, or the exponent in `1e-19`. */
-function formulaHasBareE(expr: string): boolean {
-  return /(?<![A-Za-z0-9_])e(?![A-Za-z0-9_])/.test(expr);
+/** Whether the formula contains the identifier `e`. @internal */
+export function formulaHasBareE(expr: string): boolean {
+  return /(?<![A-Za-z0-9_.])e(?![A-Za-z0-9_])/.test(expr);
 }
 
 /**

@@ -10,6 +10,8 @@ from v0.1.0 onward.
 
 ### Fixed
 
+- Derivation checks canonical agreement only after validating the formula dimension, recognizes declared elementary charge, and distinguishes an unreachable dimension from redundant inputs. Derive and retrieve accept both formula flag forms. Canonical variable listings include formula inputs such as ideal-gas particle count.
+
 - Equation mapping withholds the RHS dimension when a name is unbound and reports canonical comparisons independently.
 
 - `upt explain` looks up exact canonical quantities absent from the default catalog. Explicit source selections restrict lookup and derivation.
