@@ -106,6 +106,7 @@ function resolveInputs(api: CommandCtx['api'], label: string, spec: ContractedIn
 function describeParameter(p: EvaluatorParameter): string {
   const extras = [
     ...(p.geometry === undefined ? [] : [`geometry: ${p.geometry}`]),
+    ...(p.sign === 'positive' ? ['> 0'] : p.sign === 'nonnegative' ? ['≥ 0'] : []),
     ...(p.temperature === undefined ? [] : ['an absolute temperature; degC adds 273.15; degF is (degF − 32)×5/9 + 273.15']),
     ...(p.defaultValue !== undefined ? [`default: ${p.defaultValue}`] : p.optional === true ? ['optional'] : []),
   ];

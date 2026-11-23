@@ -72,7 +72,7 @@ describe('a canonical equation is one record', () => {
   });
 
   it('the validity conditions are entry fields', () => {
-    expect(CANONICAL_EQUATIONS.filter((e) => e.holds !== undefined).length).toBe(52);
+    expect(CANONICAL_EQUATIONS.filter((e) => e.holds !== undefined).length).toBe(53);
     expect(canonicalById('CE-wien')?.holds).toBe('temperature > 0');
   });
 

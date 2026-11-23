@@ -25,6 +25,7 @@ const rho = sym('mass-energy-density', MASS_DENSITY);
 const compactness = over(times(literal('2'), G, mass), times(radius, pow(C, '2')));
 const opticalObject = sym('object-distance', LENGTH);
 const opticalImage = sym('image-distance', LENGTH);
+const focalLength = sym('paraxial-focal-length', LENGTH);
 const wavelength = sym('optical-wavelength', LENGTH);
 const flux = divide(ACTION, CHARGE);
 const ratePerHz = dim(-1, 1, -1);
@@ -53,7 +54,7 @@ export const TEXTBOOK_COVERAGE: readonly CanonicalEquation[] = [
     references: ['Halliday, Resnick and Walker, Fundamentals of Physics, Waves II'],
     partnerBridges: [],
   }),
-  l1(sym('paraxial-focal-length', LENGTH), [opticalObject, opticalImage], {
+  l1(focalLength, [opticalObject, opticalImage], {
     id: 'CE-thin-lens-mirror',
     name: 'Thin lens and spherical mirror equation',
     searchTerms: ['thin lens', 'spherical mirror', 'Gaussian imaging'],
@@ -62,6 +63,21 @@ export const TEXTBOOK_COVERAGE: readonly CanonicalEquation[] = [
     epistemicStatus: 'fully-quantitative',
     scalarAst: over(times(opticalObject, opticalImage), op('+', [opticalObject, opticalImage])),
     holds: 'object-distance != 0 and image-distance != 0 and object-distance + image-distance != 0',
+    regime: { scale: 'classical', force: 'electromagnetic' },
+    assumptions: ['paraxial rays', 'thin lens or spherical mirror', 'real-is-positive signed distances'],
+    references: ['Hecht, Optics, Geometrical Optics'],
+    partnerBridges: [],
+  }),
+  l1(opticalImage, [opticalObject, focalLength], {
+    id: 'CE-thin-lens-image-distance',
+    name: 'Thin lens and spherical mirror image distance',
+    searchTerms: ['thin lens', 'spherical mirror', 'Gaussian imaging', 'virtual image distance'],
+    domain: 'electromagnetism',
+    formula_latex: String.raw`d_i=f d_o/(d_o-f)`,
+    epistemicStatus: 'fully-quantitative',
+    scalarAst: over(times(focalLength, opticalObject), op('-', [opticalObject, focalLength])),
+    holds: 'object-distance != 0 and paraxial-focal-length != 0 and object-distance != paraxial-focal-length',
+    conventionNote: 'Distances use the real-is-positive convention. At the focal plane the outgoing rays are parallel and the image is at infinity.',
     regime: { scale: 'classical', force: 'electromagnetic' },
     assumptions: ['paraxial rays', 'thin lens or spherical mirror', 'real-is-positive signed distances'],
     references: ['Hecht, Optics, Geometrical Optics'],
@@ -76,6 +92,7 @@ export const TEXTBOOK_COVERAGE: readonly CanonicalEquation[] = [
     domain: 'thermodynamics',
     formula_latex: String.raw`u_\nu=8\pi h\nu^3/[c^3(\exp(h\nu/(k_BT))-1)]`,
     epistemicStatus: 'fully-quantitative',
+    // Use 1/(exp(x)−1) = exp(−x)(1+coth(x/2))/2 to avoid cancellation.
     // Distribute exp(−x) across two half-decays after the prefactor.
     // The prefactor can keep the final value representable even when exp(−x) alone underflows.
     scalarAst: times(times(over(times(literal('4pi'), h, pow(frequency, '3'),

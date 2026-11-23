@@ -142,10 +142,10 @@ describe('criterion 3 export — the frozen files', () => {
     expect(lfSha(queriesText)).toBe(freeze.files['queries.json'].sha256);
   });
 
-  it('hold 122 corpus records and 125 queries, and record no commit or tree hash', () => {
+  it('hold 123 corpus records and 125 queries, and record no commit or tree hash', () => {
     expect(JSON.parse(corpusText)).toHaveLength(freeze.files['corpus.json'].records);
     expect(JSON.parse(queriesText)).toHaveLength(125);
-    expect(freeze.files['corpus.json'].records).toBe(122);
+    expect(freeze.files['corpus.json'].records).toBe(123);
     // No commit and no git tree hash: nothing read either, a squash merge made the commit
     // unreachable, and a tree hash went stale on every src/canonical edit. The SHA-256 above
     // and the fresh-export test below are what bind the files.

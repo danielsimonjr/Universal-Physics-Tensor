@@ -2,7 +2,7 @@
 Canonical-equation registry — the standard-physics L-layer (Π = L + B + E)
 the textbook "answer key" bridge equations are validated against.
 
-  122 entries:
+  123 entries:
 
    fid  domain               id                       partners
    ─────────────────────────────────────────────────────────────────
@@ -117,6 +117,7 @@ the textbook "answer key" bridge equations are validated against.
    L1   statistical         CE-normal-distribution   —
    L1   mechanics           CE-acoustic-doppler      —
    L1   electromagnetism    CE-thin-lens-mirror      —
+   L1   electromagnetism    CE-thin-lens-image-distance —
    L1   thermodynamics      CE-planck-blackbody-spectrum 164
    L1   electromagnetism    CE-faraday-induction     —
    L1   mechanics           CE-level-projectile-range —

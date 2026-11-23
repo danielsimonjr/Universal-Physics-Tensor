@@ -29,6 +29,8 @@ import { canonicalById } from '../canonical/registry.js';
 import { constantRatio, fixedPoint } from '../canonical/fixed-points.js';
 import { formatRational, rationalize } from './rational-exponent.js';
 import { buckinghamPi, dimensionallyDetermines } from '../dimensional/buckingham.js';
+import type { ExprNode } from '../dimensional/ast-types.js';
+import { ALL_SCALAR_ARMS, scalarChildren } from '../dimensional/ast-leaves.js';
 import type { Dimension } from '../dimensional/types.js';
 import { DIMENSIONLESS } from '../dimensional/types.js';
 import { equals, format } from '../dimensional/algebra.js';
@@ -288,6 +290,14 @@ interface DerivationResult {
   readonly prefactorForm?: string;
 }
 
+/** A nonlinear function of a source cannot be a constant prefactor. */
+function hasInputTranscendental(expr: ExprNode, inputs: ReadonlySet<string>): boolean {
+  const readsInput = (node: ExprNode): boolean =>
+    node.kind === 'symbol' ? inputs.has(node.name) : scalarChildren(node, ALL_SCALAR_ARMS).some(readsInput);
+  return expr.kind === 'transcendental' && readsInput(expr.arg) ||
+    scalarChildren(expr, ALL_SCALAR_ARMS).some((child) => hasInputTranscendental(child, inputs));
+}
+
 /**
  * Attempt to derive a bridge: the first constant-subset that dimensionally
  * closes the target AND reproduces the evaluator up to a constant ratio.
@@ -342,6 +352,10 @@ export function attemptDerivation(e: BridgeEdge): DerivationResult {
     // The coefficient of variation under 1e-9: this audit's own statistic and tolerance.
     const decided = constantRatio(ratios, 1e-9, { statistic: 'cv' });
     if (decided.constant && recoveredCanonicalPrefactor(e.id, decided.value)) {
+      // An asymptotic power law can fit all sampled points without reproducing the encoded relation.
+      if (symbolic !== undefined && hasInputTranscendental(symbolic, new Set(e.sources.map((source) => source.name)))) {
+        return { status: 'not-a-monomial' };
+      }
       const form = cleanPrefactorForm(decided.value);
       return {
         status: 'derived',

@@ -874,8 +874,22 @@ digraph PhysicsMap {
     q_remaining_nuclei [shape=ellipse,label="remaining-nuclei"];
     j_CE_radioactive_decay -> q_remaining_nuclei;
   }
+  subgraph cluster_10 {
+    label="anchored cluster (2)";
+    j_CE_thin_lens_mirror [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Thin lens and spherical mirror equation"];
+    q_object_distance [shape=ellipse,label="object-distance"];
+    q_object_distance -> j_CE_thin_lens_mirror;
+    q_image_distance [shape=ellipse,label="image-distance"];
+    q_image_distance -> j_CE_thin_lens_mirror;
+    q_paraxial_focal_length [shape=ellipse,label="paraxial-focal-length"];
+    j_CE_thin_lens_mirror -> q_paraxial_focal_length;
+    j_CE_thin_lens_image_distance [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Thin lens and spherical mirror image distance"];
+    q_object_distance -> j_CE_thin_lens_image_distance;
+    q_paraxial_focal_length -> j_CE_thin_lens_image_distance;
+    j_CE_thin_lens_image_distance -> q_image_distance;
+  }
   subgraph cluster_iso {
-    label="isolated (141)";
+    label="isolated (140)";
     j_be_100 [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="BE-100"];
     q_lst_static [shape=ellipse,label="lst-static"];
     q_lst_static -> j_be_100;
@@ -1942,13 +1956,6 @@ digraph PhysicsMap {
     q_angle_of_refraction -> j_CE_snell_law;
     q_refracted_index [shape=ellipse,label="refracted-index"];
     j_CE_snell_law -> q_refracted_index;
-    j_CE_thin_lens_mirror [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Thin lens and spherical mirror equation"];
-    q_object_distance [shape=ellipse,label="object-distance"];
-    q_object_distance -> j_CE_thin_lens_mirror;
-    q_image_distance [shape=ellipse,label="image-distance"];
-    q_image_distance -> j_CE_thin_lens_mirror;
-    q_paraxial_focal_length [shape=ellipse,label="paraxial-focal-length"];
-    j_CE_thin_lens_mirror -> q_paraxial_focal_length;
     j_CE_tolman_oppenheimer_volkoff [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Tolman–Oppenheimer–Volkoff equilibrium and mass limit"];
     q_enclosed_mass [shape=ellipse,label="enclosed-mass"];
     q_enclosed_mass -> j_CE_tolman_oppenheimer_volkoff;

@@ -116,7 +116,9 @@ export interface QuantityExplanation {
   readonly derivations: readonly DerivationExplanation[];
   /** Retrodiction result, present when ≥2 derivations fired on values. */
   readonly consistency?: RetrodictionResult;
-  /** Agreed recovered value (consistent or single), when values supplied. */
+  /** Direction when all derivations compute the same kind of bound on the observable. */
+  readonly bound?: DerivationExplanation['bound'];
+  /** Agreed recovered value or bound (consistent or single), when values supplied. */
   readonly recoveredValue?: number;
   /** Weakest confidence among the routes contributing to the recovered value. */
   readonly confidence?: EdgeConfidence;
@@ -312,6 +314,7 @@ function buildSummary(
   derivations: readonly DerivationExplanation[],
   consistency: RetrodictionResult | undefined,
   recoveredValue: number | undefined,
+  bound: QuantityExplanation['bound'],
   dimensional: DimensionalDeterminationResult | undefined,
   knownNames: readonly string[],
   formulaIsSum: boolean,
@@ -330,6 +333,13 @@ function buildSummary(
     ? `{${determinants.join(', ')}}`
     : '{} (no inputs)';
   const ids = derivations.map((d) => d.edge).join(', ');
+  if (bound !== undefined && derived) {
+    const route = derivations.length === 1 ? `${ids} (${derivations[0]!.label})` : ids;
+    const value = recoveredValue === undefined ? '' : ` Bound value: ${formatQuantity(recoveredValue)}.`;
+    const unusedNote = unused.length === 0 ? '' : ` Given but not used: {${unused.join(', ')}}.`;
+    return `A ${bound} bound on '${target}' follows from ${known} via ${route}.${value}${unusedNote}`;
+  }
+
   let s: string;
 
   switch (id.verdict) {
@@ -680,12 +690,16 @@ export function explainQuantity(
       ? identifications.find((ident) => ident.to === target && determinable.has(ident.from))
       : undefined;
 
+  const firstBound = derivations[0]?.bound;
+  const bound = firstBound !== undefined && derivations.every((derivation) => derivation.bound === firstBound)
+    ? firstBound : undefined;
   const summary = buildSummary(
     target,
     identifiability,
     derivations,
     consistency,
     recoveredValue,
+    bound,
     dimensional,
     knownNames,
     formulaIsSum,
@@ -713,6 +727,7 @@ export function explainQuantity(
     derivations,
     ...(consistency ? { consistency } : {}),
     ...(recoveredValue !== undefined ? { recoveredValue } : {}),
+    ...(bound === undefined ? {} : { bound }),
     ...(confidence === undefined ? {} : { confidence }),
     ...(coefficient !== undefined ? { coefficient } : {}),
     ...(dimensional ? { dimensional } : {}),

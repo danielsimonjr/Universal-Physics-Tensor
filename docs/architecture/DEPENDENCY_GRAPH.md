@@ -3759,6 +3759,8 @@ The codebase is organized into the following modules:
 | `../canonical/fixed-points.js` | `constantRatio, fixedPoint` | Import |
 | `./rational-exponent.js` | `formatRational, rationalize` | Import |
 | `../dimensional/buckingham.js` | `buckinghamPi, dimensionallyDetermines` | Import |
+| `../dimensional/ast-types.js` | `ExprNode` | Import (type-only) |
+| `../dimensional/ast-leaves.js` | `ALL_SCALAR_ARMS, scalarChildren` | Import |
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `../dimensional/types.js` | `DIMENSIONLESS` | Import |
 | `../dimensional/algebra.js` | `equals, format` | Import |
@@ -7893,7 +7895,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 395 |
 | Total Modules | 13 |
-| Total Lines of Code | 91374 |
+| Total Lines of Code | 91422 |
 | Total Exports | 2882 |
 | Total Re-exports | 1418 |
 | Total Classes | 86 |
@@ -7901,7 +7903,7 @@ graph TD
 | Total Functions | 965 |
 | Total Type Guards | 17 |
 | Total Enums | 0 |
-| Type-only Imports | 544 |
+| Type-only Imports | 545 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

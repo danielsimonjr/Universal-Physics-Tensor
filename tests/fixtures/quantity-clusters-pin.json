@@ -2910,6 +2910,18 @@
       },
       {
         "edges": [
+          "CE-thin-lens-mirror",
+          "CE-thin-lens-image-distance"
+        ],
+        "anchored": true,
+        "hubs": [
+          "image-distance",
+          "object-distance",
+          "paraxial-focal-length"
+        ]
+      },
+      {
+        "edges": [
           "CE-bekenstein-bound"
         ],
         "anchored": true,
@@ -3078,13 +3090,6 @@
       },
       {
         "edges": [
-          "CE-thin-lens-mirror"
-        ],
-        "anchored": true,
-        "hubs": []
-      },
-      {
-        "edges": [
           "CE-tolman-oppenheimer-volkoff"
         ],
         "anchored": true,
@@ -3123,7 +3128,6 @@
       "CE-rydberg-energy",
       "CE-rydberg-formula",
       "CE-snell-law",
-      "CE-thin-lens-mirror",
       "CE-tolman-oppenheimer-volkoff",
       "CE-uncertainty-principle"
     ],
@@ -3410,6 +3414,18 @@
       },
       {
         "junctionIds": [
+          "CE-thin-lens-mirror",
+          "CE-thin-lens-image-distance"
+        ],
+        "quantities": [
+          "image-distance",
+          "object-distance",
+          "paraxial-focal-length"
+        ],
+        "anchored": true
+      },
+      {
+        "junctionIds": [
           "CE-bekenstein-bound"
         ],
         "quantities": [
@@ -3651,17 +3667,6 @@
           "angle-of-refraction",
           "incident-index",
           "refracted-index"
-        ],
-        "anchored": true
-      },
-      {
-        "junctionIds": [
-          "CE-thin-lens-mirror"
-        ],
-        "quantities": [
-          "image-distance",
-          "object-distance",
-          "paraxial-focal-length"
         ],
         "anchored": true
       },
@@ -3977,6 +3982,18 @@
         "anchored": true,
         "hubs": [
           "decay-constant"
+        ]
+      },
+      {
+        "edges": [
+          "CE-thin-lens-mirror",
+          "CE-thin-lens-image-distance"
+        ],
+        "anchored": true,
+        "hubs": [
+          "image-distance",
+          "object-distance",
+          "paraxial-focal-length"
         ]
       },
       {
@@ -4947,13 +4964,6 @@
       },
       {
         "edges": [
-          "CE-thin-lens-mirror"
-        ],
-        "anchored": true,
-        "hubs": []
-      },
-      {
-        "edges": [
           "CE-tolman-oppenheimer-volkoff"
         ],
         "anchored": true,
@@ -4989,7 +4999,6 @@
       "CE-rydberg-energy",
       "CE-rydberg-formula",
       "CE-snell-law",
-      "CE-thin-lens-mirror",
       "CE-tolman-oppenheimer-volkoff",
       "CE-uncertainty-principle",
       "be-100",
@@ -5567,6 +5576,18 @@
           "half-life",
           "initial-nuclei",
           "remaining-nuclei"
+        ],
+        "anchored": true
+      },
+      {
+        "junctionIds": [
+          "CE-thin-lens-mirror",
+          "CE-thin-lens-image-distance"
+        ],
+        "quantities": [
+          "image-distance",
+          "object-distance",
+          "paraxial-focal-length"
         ],
         "anchored": true
       },
@@ -7135,17 +7156,6 @@
           "angle-of-refraction",
           "incident-index",
           "refracted-index"
-        ],
-        "anchored": true
-      },
-      {
-        "junctionIds": [
-          "CE-thin-lens-mirror"
-        ],
-        "quantities": [
-          "image-distance",
-          "object-distance",
-          "paraxial-focal-length"
         ],
         "anchored": true
       },

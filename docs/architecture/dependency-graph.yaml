@@ -9238,6 +9238,14 @@ modules:
           imports:
             - buckinghamPi
             - dimensionallyDetermines
+        - file: ../dimensional/ast-types.js
+          imports:
+            - ExprNode
+          typeOnly: true
+        - file: ../dimensional/ast-leaves.js
+          imports:
+            - ALL_SCALAR_ARMS
+            - scalarChildren
         - file: ../dimensional/types.js
           imports:
             - Dimension
@@ -20079,7 +20087,7 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 395
   totalModules: 13
-  totalLinesOfCode: 91374
+  totalLinesOfCode: 91422
   totalExports: 2882
   totalClasses: 86
   totalInterfaces: 523
@@ -20088,7 +20096,7 @@ statistics:
   totalEnums: 0
   totalConstants: 404
   totalReExports: 1418
-  totalTypeOnlyImports: 544
+  totalTypeOnlyImports: 545
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 0
