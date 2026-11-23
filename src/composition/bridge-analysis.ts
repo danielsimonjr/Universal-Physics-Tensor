@@ -25,6 +25,7 @@
  */
 
 import { constantRecord } from '../dimensional/symbolic-constants.js';
+import { canonicalById } from '../canonical/registry.js';
 import { constantRatio, fixedPoint } from '../canonical/fixed-points.js';
 import { formatRational, rationalize } from './rational-exponent.js';
 import { buckinghamPi, dimensionallyDetermines } from '../dimensional/buckingham.js';
@@ -272,6 +273,7 @@ type DerivationStatus =
   | 'derived'
   | 'decoy'
   | 'open'
+  | 'not-unique'
   | 'no-samples'
   | 'not-a-monomial'
   | 'coefficient-unset';
@@ -294,17 +296,34 @@ export function attemptDerivation(e: BridgeEdge): DerivationResult {
   // A sum of dimensionful terms is not a proportionality. The constant search
   // below would report a decoy, or a derived constant, for a monomial the
   // formula is not. Proof status is separate and is not read here.
-  if (e.symbolic !== undefined && formulaShape(e.symbolic) === 'dimensional-sum') {
+  const canonical = e.beId === null ? canonicalById(e.id) : undefined;
+  const symbolic = canonical?.scalarAst ?? e.symbolic;
+  if (symbolic !== undefined &&
+      (formulaShape(symbolic) === 'dimensional-sum' ||
+        (canonical !== undefined && symbolic.kind === 'transcendental'))) {
     return { status: 'not-a-monomial' };
   }
   // A missing coefficient is not the constant 1. The evaluator returns
   // no number, so a ratio against that number is not a recovered prefactor.
   if (e.coefficientUnset === true) return { status: 'coefficient-unset' };
   const { target, sources } = asVars(e);
+  if (canonical !== undefined) {
+    const fixedFactors = e.formulaFactors ?? {};
+    const declared = canonical.dimensional.governing.filter((source) => fixedFactors[source.name] === undefined);
+    const determination = dimensionallyDetermines(target, declared);
+    if (!determination.determined && !determination.outsideGoverningSpan) return { status: 'not-unique' };
+  }
+  // Search the standard basis first. A canonical formula may also bake a
+  // registered constant outside that basis, such as vacuum permeability.
+  const declaredConstants = canonical?.dimensional.governing.flatMap((source) => {
+    const record = constantRecord(source.name);
+    return record !== undefined && equals(record.dim, source.dim) && !e.sources.some((s) => s.name === source.name)
+      ? [{ name: source.name, dim: record.dim, si: record.value }] : [];
+  }) ?? [];
   const inputs = makeInputs(e);
   const need = e.sources.length === 0 ? 1 : 2;
   let anyClosure = false;
-  for (const S of FUNDAMENTAL_CONSTANT_SUBSETS) {
+  for (const S of [...FUNDAMENTAL_CONSTANT_SUBSETS, declaredConstants]) {
     const r = dimensionallyDetermines(target, [...sources, ...S]);
     if (!r.determined) continue;
     anyClosure = true;

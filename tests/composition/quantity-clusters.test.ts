@@ -69,9 +69,9 @@ describe('component ids and order are unchanged by the move to one owner (pinned
   }
 
   it('the pin is not vacuous: it holds the recorded component counts', () => {
-    expect(PIN.catalog.linkageClusters.length).toBe(133);
-    expect(PIN.canonical.linkageClusters.length).toBe(26);
-    expect(PIN.both.linkageClusters.length).toBe(146);
+    expect(PIN.catalog.linkageClusters.length).toBe(132);
+    expect(PIN.canonical.linkageClusters.length).toBe(32);
+    expect(PIN.both.linkageClusters.length).toBe(151);
   });
 
   it('the discovery funnel still sees every catalog candidate as cross-component', () => {
@@ -109,12 +109,13 @@ describe('component ids and order are unchanged by the move to one owner (pinned
     expect(vetLinkCandidate(twoConstants, cand('k', 'f'), { representativeValues: {} }).mergesComponents).toBe(false);
   });
 
-  it('every source-less canonical target is a component member (eight equations on the canonical graph)', () => {
+  it('every source-less canonical target is a component member (source-free equations on the canonical graph)', () => {
     const sourceless = CANONICAL_GRAPH.filter((e) => e.sources.length === 0).map((e) => e.id).sort();
     expect(sourceless).toEqual([
       'CE-bohr-magneton',
       'CE-bohr-radius',
       'CE-classical-electron-radius',
+      'CE-fine-structure-constant',
       'CE-planck-length',
       'CE-planck-mass',
       'CE-planck-time',

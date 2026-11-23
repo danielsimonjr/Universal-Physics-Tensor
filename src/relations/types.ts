@@ -212,6 +212,9 @@ export interface ApproximationBound {
   readonly horizon: string;
   /** MANDATORY machine form of `horizon`: true while the bound is claimed to hold. */
   readonly horizonHolds: (t: number, params: Readonly<Record<string, number>>) => boolean;
+  /** The strict limits tested at the point, when the closed form states them. */
+  readonly horizonAt?: (params: Readonly<Record<string, number>>) =>
+    { readonly minimum?: number; readonly maximum: number; readonly pointDelta?: number } | null;
   /**
    * MACHINE FORM OF `delta`, mirroring what `horizonHolds` is to `horizon`:
    * the bound AT A POINT of the declared domain, in the same norm.

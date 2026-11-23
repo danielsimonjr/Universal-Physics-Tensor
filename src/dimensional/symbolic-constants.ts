@@ -89,7 +89,7 @@ export class ConstantDisagreementError extends Error {
   ) {
     super(
       `'${key}' is the registered constant ${constant} = ${registered}; ` +
-        `${given} disagrees, and the equations use the registered value, so it cannot be rebound.`,
+        `${given} disagrees (relative tolerance ${100 * CONSTANT_AGREEMENT}%), and the equations use the registered value, so it cannot be rebound.`,
     );
     this.name = 'ConstantDisagreementError';
   }
@@ -102,13 +102,13 @@ export class ConstantDisagreementError extends Error {
  * a graph quantity, so a stated value is checked, never bound.
  * @internal
  */
-export function constantAgreement(key: string, value: number): string | null {
+export function constantAgreement(key: string, value: number): { name: string; value: number; tolerance: number } | null {
   const record = BY_SPELLING.get(key);
   if (record === undefined) return null;
   if (!withinRel(value, record.value, CONSTANT_AGREEMENT, 0)) {
     throw new ConstantDisagreementError(key, record.name, record.value, value);
   }
-  return record.name;
+  return { name: record.name, value: record.value, tolerance: CONSTANT_AGREEMENT };
 }
 
 /** The notes of the registered constants among `names`, each once, in registry order. @internal */

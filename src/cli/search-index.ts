@@ -10,6 +10,7 @@
  * alias or a whole id segment exactly, and never a stray letter inside a description.
  */
 import type { CommandCtx } from './command.js';
+import { METRIC_TOPICS } from './metric-topics.js';
 
 /** The registry a search-index entry comes from. */
 export type SearchKind =
@@ -19,7 +20,8 @@ export type SearchKind =
   | 'atlas-bridge'
   | 'quantity'
   | 'applied-case'
-  | 'regime';
+  | 'regime'
+  | 'metric';
 
 export const SEARCH_SECTIONS: readonly (readonly [SearchKind, string])[] = [
   ['catalog-bridge', 'catalog bridges'],
@@ -29,6 +31,7 @@ export const SEARCH_SECTIONS: readonly (readonly [SearchKind, string])[] = [
   ['quantity', 'quantities'],
   ['applied-case', 'applied cases'],
   ['regime', 'regimes'],
+  ['metric', 'spacetime metrics'],
 ];
 
 /** A searchable field: its label, its words, and the exact strings a short word may equal. */
@@ -212,13 +215,13 @@ export function buildSearchIndex(api: CommandCtx['api']): SearchEntry[] {
       id: key,
       line: `${key} ${b.name} [${b.status}]`,
       command: ev !== undefined
-        ? `upt evaluate ${key} ${ev.inputKeys.map((k) => `${k}=…`).join(' ')}`
+        ? `upt evaluate ${key}${ev.inputKeys.map((k) => ` ${k}=…`).join('')}`
         : formulaRoute
           ? `upt atlas ${key}`
           : `upt explain ${key}`,
       commandLabel: ev !== undefined ? 'evaluate' : formulaRoute ? 'formula' : 'no evaluator; route',
       ...(ev !== undefined
-        ? { note: `units: ${ev.parameters.map((p) => `${p.key} in ${p.unit || 'dimensionless'}`).join(', ')}; a value may carry its own unit` }
+        ? ev.parameters.length === 0 ? {} : { note: `units: ${ev.parameters.map((p) => `${p.key} in ${p.unit || 'dimensionless'}`).join(', ')}; a value may carry its own unit` }
         : formulaRoute
           ? { note: ref!.covers }
           : {}),
@@ -245,6 +248,7 @@ export function buildSearchIndex(api: CommandCtx['api']): SearchEntry[] {
       fields: [
         { label: 'id', text: c.id, exact: [c.id] },
         ...titleAndGloss('name', c.name),
+        ...(c.searchTerms ?? []).map((term) => ({ label: 'alternate name', text: term, exact: [term] })),
         { label: 'variables', text: [t.name, ...c.dimensional.governing.map((g) => g.name)].join(' ') },
       ],
     });
@@ -297,6 +301,20 @@ export function buildSearchIndex(api: CommandCtx['api']): SearchEntry[] {
       addQ(e.target, graph);
     }
   }
+  for (const [id, topic] of Object.entries(METRIC_TOPICS)) {
+    entries.push({
+      kind: 'metric',
+      id,
+      line: topic.title,
+      command: `upt metric ${id}`,
+      commandLabel: 'inspect',
+      fields: [
+        { label: 'name', text: topic.title, exact: [id] },
+        { label: 'report topic', text: topic.terms },
+      ],
+    });
+  }
+
   for (const registration of api.domainRegimeRegistrations()) {
     const vacuous = registration.records.every((record) => record.regime.inequalities.length === 0);
     entries.push({

@@ -29,7 +29,7 @@
  * @module composition/retrodiction
  */
 
-import type { BridgeEdge } from './edge.js';
+import type { BridgeEdge, EdgeConfidence } from './edge.js';
 import { CANONICAL_GROUP_PREFACTORS } from './canonical-prefactors.js';
 import { CoefficientUnsetError, evaluateEdge } from './edge.js';
 import { DomainViolationError } from '../bridges/evaluation-errors.js';
@@ -67,17 +67,47 @@ export type RetrodictionOutcome =
   | 'single'
   | 'unrecoverable';
 
+/** One operation that supplied a recovered value, in dependency order. @public */
+export type RecoveryStep =
+  | { readonly kind: 'edge'; readonly id: string; readonly target: string; readonly inputs: readonly string[]; readonly confidence: EdgeConfidence }
+  | { readonly kind: 'identification'; readonly from: string; readonly to: string; readonly rationale: string; readonly confidence: EdgeConfidence };
+
+/** Collect the executed producers by following each edge's actual numeric inputs. */
+function recoveryRoute(last: RecoveryStep, producers: ReadonlyMap<string, RecoveryStep>): RecoveryStep[] {
+  const steps: RecoveryStep[] = [];
+  const seen = new Set<RecoveryStep>();
+  const visit = (step: RecoveryStep): void => {
+    if (seen.has(step)) return;
+    seen.add(step);
+    const inputs = step.kind === 'edge' ? step.inputs : [step.from];
+    for (const input of inputs) {
+      const producer = producers.get(input);
+      if (producer !== undefined) visit(producer);
+    }
+    steps.push(step);
+  };
+  visit(last);
+  return steps;
+}
+
+function edgeStep(edge: BridgeEdge, inputs: Record<string, number>): RecoveryStep {
+  return { kind: 'edge', id: edge.id, target: edge.target.name, inputs: Object.keys(inputs), confidence: edge.confidence };
+}
+
 /** One derivation's recovered value for a masked node. @public */
 export interface RetrodictionPrediction {
   /** The edge id that produced this value. */
   readonly edge: string;
   readonly value: number;
+  readonly route?: readonly RecoveryStep[];
 }
 
 /** Options for the harness. @public */
 export interface RetrodictionOptions {
   /** Identifications honored in forward evaluation (default registered). */
   readonly identifications?: readonly QuantityIdentification[];
+  /** Include the evaluated edge and identification provenance for each prediction. */
+  readonly includeRoutes?: boolean;
   /** Relative-spread tolerance for `consistent` (default 1e-6). */
   readonly tolerance?: number;
   /** External (textbook) values to score recovered nodes against. */
@@ -168,6 +198,7 @@ export function forwardEvaluate(
   edges: readonly BridgeEdge[],
   groundTruth: Readonly<Record<string, number>>,
   idents: readonly QuantityIdentification[],
+  producers?: Map<string, RecoveryStep>,
 ): Map<string, number> {
   // Finite-seed guard (matches the computed-value guard below and the
   // library-wide finiteness discipline): a NaN/∞ seed would propagate silently
@@ -189,6 +220,10 @@ export function forwardEvaluate(
         const converted = fromVal * conventionFactor(id.from, id.to);
         if (Number.isFinite(converted)) {
           values.set(id.to, converted);
+          producers?.set(id.to, {
+            kind: 'identification', from: id.from, to: id.to, rationale: id.rationale,
+            confidence: id.confidence ?? 'speculative',
+          });
           changed = true;
         }
       }
@@ -210,6 +245,7 @@ export function forwardEvaluate(
       }
       if (Number.isFinite(v)) {
         values.set(e.target.name, v);
+        producers?.set(e.target.name, edgeStep(e, inputs));
         changed = true;
       }
     }
@@ -235,7 +271,9 @@ export function retrodictNode(
   // Masked source values: never let the target be assigned (so no
   // derivation reads it back — circular self-support excluded).
   const edgesMinusIntoTarget = edges.filter((e) => e.target.name !== target);
-  const values = forwardEvaluate(edgesMinusIntoTarget, groundTruth, idents);
+  const producers = opts.includeRoutes === true ? new Map<string, RecoveryStep>() : undefined;
+  const seeds = Object.fromEntries(Object.entries(groundTruth).filter(([name]) => name !== target));
+  const values = forwardEvaluate(edgesMinusIntoTarget, seeds, idents.filter((id) => id.to !== target), producers);
 
   const predictions: RetrodictionPrediction[] = [];
   const refusals: RetrodictionRefusal[] = [];
@@ -256,7 +294,30 @@ export function retrodictNode(
       refusals.push({ edge: e.id, kind, reason: (err as Error).message });
       continue;
     }
-    if (Number.isFinite(v)) predictions.push({ edge: e.id, value: v });
+    if (Number.isFinite(v)) {
+      const route = producers === undefined ? undefined : recoveryRoute(edgeStep(e, inputs), producers);
+      predictions.push({ edge: e.id, value: v, ...(route === undefined ? {} : { route }) });
+    }
+  }
+
+  // An identification into the masked node is a candidate prediction. It
+  // never seeds a path that reads the target back into its own reconstruction.
+  for (const id of idents) {
+    if (id.to !== target) continue;
+    const fromValue = values.get(id.from);
+    if (fromValue === undefined) continue;
+    const value = fromValue * conventionFactor(id.from, id.to);
+    if (!Number.isFinite(value)) continue;
+    const step: RecoveryStep = {
+      kind: 'identification', from: id.from, to: id.to, rationale: id.rationale,
+      confidence: id.confidence ?? 'speculative',
+    };
+    const route = producers === undefined ? undefined : recoveryRoute(step, producers);
+    predictions.push({
+      edge: `identify:${id.from}:${id.to}`,
+      value,
+      ...(route === undefined ? {} : { route }),
+    });
   }
 
   let relativeSpread = 0;

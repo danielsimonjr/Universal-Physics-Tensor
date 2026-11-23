@@ -41,26 +41,26 @@
     "unsubmitted": 109
   },
   "linkage": {
-    "components": 133,
-    "isolated": 128,
-    "compositions": 14,
-    "anchoredClusterSize": 22,
-    "anchoredClusterEstablished": 11
+    "components": 132,
+    "isolated": 127,
+    "compositions": 20,
+    "anchoredClusterSize": 23,
+    "anchoredClusterEstablished": 12
   },
   "linkCandidates": {
-    "total": 4192,
-    "touchingCore": 4157,
-    "touchingCoreSameKind": 1092
+    "total": 4137,
+    "touchingCore": 4102,
+    "touchingCoreSameKind": 1065
   },
   "discovery": {
     "catalog": {
-      "total": 4192,
+      "total": 4137,
       "promising": 1,
       "promisingUnchecked": 30,
-      "inert": 2365,
+      "inert": 2363,
       "magnitudeClash": 20,
       "contradictory": 0,
-      "axisClash": 1776,
+      "axisClash": 1723,
       "shadowedByMagnitudeClash": 10
     },
     "canonical": {
@@ -86,25 +86,30 @@
     "coefficientUnset": 0,
     "decoy": 22,
     "notAMonomial": 25,
-    "open": 75,
+    "notUnique": 0,
+    "noSamples": 16,
+    "open": 59,
     "closable": 64,
     "freedomOne": 56,
     "maxFiniteFreedom": 6,
     "unspannable": 1
   },
   "canonical": {
-    "bridgesWithoutPartner": 152,
+    "bridgesWithoutPartner": 150,
     "audit": {
-      "derived": 81,
+      "derived": 83,
       "coefficientUnset": 6,
-      "decoy": 5,
-      "open": 17
+      "decoy": 0,
+      "notAMonomial": 9,
+      "notUnique": 23,
+      "noSamples": 1,
+      "open": 0
     }
   },
   "mapBothFormallyProved": {
-    "total": 268,
+    "total": 281,
     "kept": 118,
     "droppedNotMatching": 40,
-    "droppedMissingMetadata": 110
+    "droppedMissingMetadata": 123
   }
 }

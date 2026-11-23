@@ -2,7 +2,7 @@
 Canonical-equation registry — the standard-physics L-layer (Π = L + B + E)
 the textbook "answer key" bridge equations are validated against.
 
-  109 entries:
+  122 entries:
 
    fid  domain               id                       partners
    ─────────────────────────────────────────────────────────────────
@@ -115,7 +115,20 @@ the textbook "answer key" bridge equations are validated against.
    L1   thermodynamics      CE-first-law-thermodynamics —
    L1   statistical         CE-boltzmann-entropy     —
    L1   statistical         CE-normal-distribution   —
+   L1   mechanics           CE-acoustic-doppler      —
+   L1   electromagnetism    CE-thin-lens-mirror      —
+   L1   thermodynamics      CE-planck-blackbody-spectrum 164
+   L1   electromagnetism    CE-faraday-induction     —
+   L1   mechanics           CE-level-projectile-range —
+   L1   electromagnetism    CE-double-slit-interference —
+   L1   electromagnetism    CE-single-slit-diffraction —
+   L1   general-relativity  CE-tolman-oppenheimer-volkoff —
+   L1   quantum             CE-fine-structure-constant —
+   L1   information         CE-bekenstein-bound      —
+   L1   quantum             CE-margolus-levitin-bound —
+   L1   quantum             CE-unruh-temperature     57,=57
+   L1   general-relativity  CE-schwarzschild-horizon-area —
 
   tip: `upt canonical --vars` lists the variable names formulas must use
-  coverage: 152 catalog bridges have no canonical partner yet
+  coverage: 150 catalog bridges have no canonical partner yet
   (fidelity: L0 dimensional · L1 scalar-AST · L2 field-equation; "=NN" = restatesBridge)

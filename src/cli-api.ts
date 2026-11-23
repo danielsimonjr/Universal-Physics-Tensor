@@ -110,6 +110,7 @@ export { CASE_CONTRACTS } from './cases/index.js';
 export { slotForSpelling } from './bridges/input-contract.js';
 export type { AppliedCase, CaseCheck, CaseResult } from './cases/index.js';
 /** The unit reader's conversion, its refusal and the rows of the unit table. */
+export { quantityConventionUnit } from './dimensional/unit-convention.js';
 export { convertValue, readQuantityLiteral, UnitError, unitRows } from './dimensional/units.js';
 /** The unit spellings and syntax listed by the units help topic. */
 export { unitHelpText } from './dimensional/units.js';

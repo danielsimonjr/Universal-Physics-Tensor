@@ -25,7 +25,7 @@ const FLAGS: FlagSpec[] = [JSON_FLAG];
 
 const HELP = `upt search <word> ...
         Find a catalog bridge, canonical equation, atlas model, atlas bridge,
-        quantity, applied case, or regime registration by the words in its name, id, symbol, alias
+        quantity, applied case, regime registration, or spacetime metric by its name, id, symbol, alias
         or bridge description, and print the command that inspects each match. Every
         word must match. Two or more words that share a field must sit together
         there, in either order, and a word in that phrase is not a prefix of a

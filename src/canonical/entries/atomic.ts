@@ -9,8 +9,7 @@
  *
  * Scope: generic dimensional MONOMIAL laws (Adam+Eve adversarial audit,
  * 2026-06-20). Leading numeric/geometric prefactors (½, 4π, 8) are recorded via
- * `scalar-up-to-constant`. The fine-structure constant α (dimensionless-only) is
- * out of scope. See docs/research/bridges-vs-canonical-map.md.
+ * `scalar-up-to-constant` or included in fully quantitative records. See docs/research/bridges-vs-canonical-map.md.
  *
  * @module canonical/entries/atomic
  */
@@ -220,14 +219,16 @@ export const ATOMIC: readonly CanonicalEquation[] = [
     { name: 'hbar', dim: ACTION },
   ], {
     id: 'CE-uncertainty-principle',
+    bound: 'lower',
     name: 'Heisenberg uncertainty principle',
     domain: 'quantum',
     formula_latex: '\\Delta x \\, \\Delta p \\geq \\hbar/2',
-    epistemicStatus: 'scalar-up-to-constant', // the ½ is the dropped prefactor
-    scalarAst: sym('hbar', ACTION),
+    epistemicStatus: 'fully-quantitative',
+    scalarAst: op('/', [sym('hbar', ACTION), sym('2', DIMENSIONLESS)]),
+    conventionNote: 'The recovered value is the lower bound on ΔxΔp. A physical state can have a larger product.',
     regime: { scale: 'quantum' },
     assumptions: [
-      'a LOWER BOUND, not an equality; the scalarAst is its saturating case',
+      'the scalar expression gives the lower bound on the uncertainty product',
       'saturated only by minimum-uncertainty (Gaussian) states',
     ],
     references: ['Heisenberg 1927', 'Kennard 1927', 'Robertson 1929 Phys. Rev. 34:163'],

@@ -21,6 +21,12 @@ Code review is a standing gate. ~~The owner's rule (2026-10-06): Tom deep-review
 ## Open tasks, easiest first
 
 - [x] F15: read standard unit names, fractional unit powers and temperature intervals through the shared unit grammar (#740, #765–#767, #769).
+- [x] F23: account for catalog projection, route triage, candidate evidence, and dimensional audit coverage (#773, #785, #787, #788, #790).
+- [x] Kerr: distinguish the time coordinate, initialize circular and spherical turning points, report exact curvature and characteristic radii, and index supported metrics (#781, #782, #784, #825, #829).
+- [x] Eval: report literal syntax, mixed binding dimensions, domain scope, and concise SI units (#738, #739, #754, #768).
+- [x] Retrieval and study: rank typed expressions, index query terminology, and keep baseline scope, search termination, and design help consistent (#737, #743, #756, #764, #786, #789).
+- [x] Explain and route contracts: bind equation symbols in context, recover typed values with provenance, validate API selectors, and report the tested horizon (#684, #748–#751, #758, #770, #794, #796, #798).
+- [x] Canonical catalog: add textbook optics, motion, induction and quantum/gravitational limits with explicit validity and provenance (#741, #826).
 
 - [x] F12: preserve regime coordinates, bound meaning, and crossing brackets (#791, #793, #795, #835).
 

@@ -103,6 +103,17 @@ describe('probe study — result classes', () => {
     expect(r.candidates[0]!.credibility).toMatch(/so does a constant/);
   });
 
+  it('resolves registered baseline constants and separates search stopping from the study verdict', async () => {
+    const raw = load('pendulum-small-angle');
+    const baseline = { name: 'registered constants', formula: '2*pi*sqrt(length/gravity)*k_B/k_B' };
+    const result = await run({ ...raw, baselines: [baseline] });
+    expect(result.search.stopReason).toBe('awaiting-validation');
+    expect(result.verdict).toBe('survives-holdout');
+    expect(result.baselines[0]!.exploratory?.pass).toBe(true);
+    expect(() => parseStudy({ ...raw, baselines: [{ ...baseline, formula: '1.380649e-23*length' }] }))
+      .toThrow(/Numeric literals \(1\.380649e-23\) are dimensionless/);
+  });
+
   it('with no holdout rows the verdict is untested-on-holdout, not survives', async () => {
     const raw = load('pendulum-small-angle');
     const r = await run({ ...raw, observations: raw.observations.filter((o) => o.role !== 'holdout') });

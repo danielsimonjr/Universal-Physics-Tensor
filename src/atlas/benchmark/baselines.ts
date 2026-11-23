@@ -26,12 +26,18 @@
 
 import type { ExprNode } from '../../dimensional/ast-types.js';
 import { leakageKey } from './leakage.js';
+import { BASES, exactlyEquals } from '../../dimensional/algebra.js';
+import { ALL_SCALAR_ARMS, forEachScalarLeaf, isDecimalLiteral } from '../../dimensional/ast-leaves.js';
+import { constantRecord } from '../../dimensional/symbolic-constants.js';
+import { monomialExponentsExact } from '../../composition/formula-shape.js';
 
 /** One record a baseline can retrieve. @internal */
 export interface CorpusRecord {
   readonly id: string;
   readonly text: string;
   readonly expr?: ExprNode;
+  /** Canonical solved form, if the record also indexes a residual. */
+  readonly solved?: { readonly target: Extract<ExprNode, { kind: 'symbol' }>; readonly rhs: ExprNode };
 }
 
 /** A query: an item's text and, when it has one, its expression. @internal */
@@ -98,10 +104,40 @@ export function rankBySymbolOverlap(query: RetrievalQuery, corpus: readonly Corp
   return rankBy(corpus, (r) => jaccard(q, symbolNames(r.expr)));
 }
 
+/** Typed variable powers with coefficients removed, preserving separate same-dimension variables. */
+function monomialKey(expr: ExprNode): string | undefined {
+  const powers = monomialExponentsExact(expr);
+  if (powers === undefined) return undefined;
+  const factors: string[] = [];
+  const seen = new Set<string>();
+  forEachScalarLeaf(expr, (leaf) => {
+    const exponent = powers.get(leaf.name);
+    if (exponent === undefined || exponent.isZero() || seen.has(leaf.name) || isDecimalLiteral(leaf.name)) return;
+    seen.add(leaf.name);
+    const signature = BASES.map((key) => leaf.dim[key]);
+    const coefficient = signature.every((value) => value === 0) &&
+      (leaf.name === 'pi' || leaf.name === 'tau' || constantRecord(leaf.name) !== undefined);
+    if (!coefficient) factors.push(JSON.stringify([signature, exponent.toString()]));
+  }, ALL_SCALAR_ARMS);
+  return factors.length === 0 ? undefined : JSON.stringify(factors.sort());
+}
+
+function solvedScore(query: ExprNode, solved: NonNullable<CorpusRecord['solved']>): number {
+  let rhs = query;
+  if (query.kind === 'op' && query.op === '-' && query.args.length === 2) {
+    const target = query.args[0];
+    if (target?.kind === 'symbol' && exactlyEquals(target.dim, solved.target.dim)) rhs = query.args[1]!;
+  }
+  if (leakageKey(rhs) === leakageKey(solved.rhs)) return 2;
+  const key = monomialKey(rhs);
+  return key !== undefined && key === monomialKey(solved.rhs) ? 1 : 0;
+}
+
 /**
  * Baseline 3: typed structural search. A record whose leakage key equals the
- * query's scores above every record that does not; symbol overlap orders within
- * each tier. A query or record with no expression scores zero structurally.
+ * query's scores first. Records with a solved form can also match its RHS,
+ * including an algebraically equivalent product of typed variable powers.
+ * Symbol overlap orders within each tier.
  *
  * @internal
  */
@@ -110,7 +146,8 @@ export function rankByStructure(query: RetrievalQuery, corpus: readonly CorpusRe
   const qSyms = symbolNames(query.expr);
   return rankBy(corpus, (r) => {
     const structural = qKey !== undefined && r.expr !== undefined && leakageKey(r.expr) === qKey ? 1 : 0;
-    return 2 * structural + jaccard(qSyms, symbolNames(r.expr));
+    const solved = query.expr === undefined || r.solved === undefined ? 0 : solvedScore(query.expr, r.solved);
+    return 8 * structural + 2 * solved + jaccard(qSyms, symbolNames(r.expr));
   });
 }
 

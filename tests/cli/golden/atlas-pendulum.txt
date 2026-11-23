@@ -11,7 +11,7 @@ regime:
 bound:
   K = 1, delta = 0.015852531101436806 (relative period error, normalized by the value of the reduced model)
   domain: θ0 ≤ 0.5 rad
-  horizon: t ≪ 16 T0/θ0²; machine form t < 4 T0/θ0², the π/2-drift time
+  horizon: t < 4 T0/θ0² (π/2-drift time)
   limit: regular
   uniformity: one period, for θ0 in the stated domain
 preserves:

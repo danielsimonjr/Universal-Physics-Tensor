@@ -91,7 +91,7 @@ UPT follows a layered architecture. The TypeScript files under `src/` fall into 
 └────────────────────────────────────────────────────────────────┘
 ```
 
-**Total** (`src/` scope): the generator writes the file, export and re-export counts to `docs/architecture/dependency-graph.json` (`statistics`) and to the Summary Statistics of `DEPENDENCY_GRAPH.md`. `bun run docs:deps` regenerates both. `data/bridge-catalog.json` is the record of the bridge catalog: its size, id range and status split. The test fixture `tests/fixtures/catalog-census.json` pins the census. `CANONICAL_GRAPH` has one edge for each canonical equation (109 canonical equations). The scope has 19 real-data confrontations (`DATA_CONFRONTED_IDS`). The ids are BE-11, BE-21, BE-23, BE-35, BE-36, BE-37, BE-48, BE-51, BE-52, BE-55, BE-56, BE-58, BE-59, BE-60, BE-61, BE-62, BE-63, BE-64, BE-65.
+**Total** (`src/` scope): the generator writes the file, export and re-export counts to `docs/architecture/dependency-graph.json` (`statistics`) and to the Summary Statistics of `DEPENDENCY_GRAPH.md`. `bun run docs:deps` regenerates both. `data/bridge-catalog.json` is the record of the bridge catalog: its size, id range and status split. The test fixture `tests/fixtures/catalog-census.json` pins the census. `CANONICAL_GRAPH` has one edge for each canonical equation (122 canonical equations). The scope has 19 real-data confrontations (`DATA_CONFRONTED_IDS`). The ids are BE-11, BE-21, BE-23, BE-35, BE-36, BE-37, BE-48, BE-51, BE-52, BE-55, BE-56, BE-58, BE-59, BE-60, BE-61, BE-62, BE-63, BE-64, BE-65.
 
 (The `src/`-scope file and export counts come from the Summary Statistics in `docs/architecture/DEPENDENCY_GRAPH.md`, which `bun run docs:deps` regenerates.)
 
@@ -275,7 +275,7 @@ The surface barrel for the namespacing-gate symbols (`CompositionAliasError`, `S
 
 ## Canonical Module
 
-The textbook **L-layer** registry (`src/canonical/`): the standard-physics "answer key" the catalog bridges are validated against (Π = L + B + E). **109 canonical equations** (mechanics, EM/circuits, fluids/waves, thermo, quantum/atomic, gravitation, cosmology, condensed-matter, + the L1-sum non-monomial tier), grouped into per-domain `entries/` modules.
+The textbook **L-layer** registry (`src/canonical/`): the standard-physics "answer key" the catalog bridges are validated against (Π = L + B + E). **122 canonical equations** (mechanics, EM/circuits, fluids/waves, thermo, quantum/atomic, gravitation, cosmology, condensed-matter, + the L1-sum non-monomial tier), grouped into per-domain `entries/` modules.
 
 ### `CanonicalEquation` type (`src/canonical/canonical-equation.ts`)
 
@@ -1008,7 +1008,7 @@ Regenerate: `repo-tools map <repo> --out=<dir>` · Check: `repo-tools check <rep
 
 | Claim | Value | Source |
 |---|---|---|
-| totalSourceFiles | 1273 | `dependency-graph.json` `statistics.totalSourceFiles` |
+| totalSourceFiles | 1276 | `dependency-graph.json` `statistics.totalSourceFiles` |
 | runtimeCircularDeps | 0 | `dependency-graph.json` `statistics.runtimeCircularDeps` |
 | typeOnlyCircularDeps | 0 | `dependency-graph.json` `statistics.typeOnlyCircularDeps` |
 

@@ -88,6 +88,10 @@ export interface CanonicalEquation {
   readonly id: string;
   readonly name: string;
   readonly domain: CanonicalDomain;
+  /** Established alternate search terms for the equation. */
+  readonly searchTerms?: readonly string[];
+  /** The scalar expression gives this bound on an observable. */
+  readonly bound?: 'lower' | 'upper';
   /** LaTeX rendering (display only). */
   readonly formula_latex: string;
 

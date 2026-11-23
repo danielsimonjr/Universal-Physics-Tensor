@@ -33,6 +33,14 @@ describe('upt frontier', () => {
     expect(be28.source).toBe('membership-rejection');
     expect(parsed.result.nullResults.some((row: { id: string }) => row.id === 'be-11')).toBe(false);
     expect(parsed.result.nullResults.some((row: { id: string }) => row.id === 'be-44')).toBe(false);
+    const candidateReasons = new Set(parsed.result.nullResults
+      .filter((row: { source: string }) => row.source === 'candidate')
+      .map((row: { reason: string }) => row.reason));
+    for (const reason of ['inert', 'axis-clash', 'magnitude-clash', 'promising-unchecked']) {
+      expect(candidateReasons.has(reason)).toBe(true);
+    }
+    expect(parsed.result.frontier.some((row: { reason: string }) => row.reason.startsWith('magnitude-clash — ')))
+      .toBe(true);
     const absent = parsed.result.frontier.find(
       (row: { observation: string }) => row.observation === 'observation absent',
     );

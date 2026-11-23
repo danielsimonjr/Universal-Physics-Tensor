@@ -137,9 +137,9 @@ export const CONSTANT_ROWS: readonly ConstantRow[] = [
     meaning: 'unified atomic mass unit (atomic mass constant)', source: `CODATA 2022, MathTS (${OWNER} M_U_SI)` }),
   row({ name: 'm_e', spellings: ['electron_mass', 'electron-mass'], value: M_E_SI, unit: 'kg', canonical: true, mathts: 'electronMass',
     meaning: 'electron mass', source: `CODATA 2022, MathTS (${OWNER} M_E_SI)` }),
-  // ── overlay names for `upt eval` and the dimensional assignment only ────
-  row({ name: 'mu_0', spellings: ['mu0'], value: MU0_SI, unit: 'H/m', mathts: 'magneticConstant',
+  row({ name: 'mu_0', spellings: ['mu0'], value: MU0_SI, unit: 'H/m', canonical: true, mathts: 'magneticConstant',
     meaning: 'vacuum permeability 1/(ε₀ c²)', source: `1/(EPS0_SI·C_SI²) (${OWNER} MU0_SI)` }),
+  // ── overlay names for `upt eval` and the dimensional assignment only ────
   row({ name: 'm_p', spellings: ['m_proton'], value: M_PROTON_SI, unit: 'kg', mathts: 'protonMass',
     meaning: 'proton mass', source: `CODATA 2022, MathTS (${OWNER} M_PROTON_SI)` }),
   row({ name: 'N_A', value: N_A_SI, unit: 'mol^-1', mathts: 'avogadro', exact: true,

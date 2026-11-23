@@ -53,6 +53,8 @@ export interface JsonEnvelope {
   anchor?: AnchorScope;
   options?: Record<string, unknown>;
   epistemics?: string;
+  /** Catalog entries represented by the selected graph, and entries without a route. */
+  coverage?: { total: number; withoutRoutes: readonly string[]; nonBridgeLaws?: readonly string[] };
   /** `upt confront` — count of confrontations by rigor tier (stringent/moderate/loose). */
   rigorDistribution?: Record<string, number>;
   /** `upt confront` — count of confrontations by statistical object (σ-test, limit, consistency ratio, table). */

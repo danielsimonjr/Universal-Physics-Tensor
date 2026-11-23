@@ -48,7 +48,7 @@ describe('explain text formats a recovered value at 15 significant digits', () =
     expect(shown).not.toBe('5.8000e+3');
     expect(String(raw)).not.toBe(shown);
 
-    expect(text).toContain(`Recovered value: ${shown}.`);
+    expect(text).toContain(`Recovered value: ${shown} K [established].`);
     expect(text).not.toContain('Recovered value: 5.8000e+3');
     expect(text).toContain(`= ${shown}`);
     expect(envelope.result.derivations[0]?.value).toBe(raw);

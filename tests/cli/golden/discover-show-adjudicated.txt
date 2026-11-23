@@ -4,9 +4,9 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
 ⚠ a REVIEW SURFACE: `promising` means "worth a physicist's minute", not "true".
   Each candidate hypothesises an identification a≡b and tests its consequences.
 
-  funnel:  429 candidates  →  0 promising  ·  128 promising, magnitude unchecked  ·  275 inert  ·  25 magnitude-clash  ·  0 contradictory (numerically falsified)  ·  1 axis-clash
+  funnel:  830 candidates  →  0 promising  ·  223 promising, magnitude unchecked  ·  580 inert  ·  26 magnitude-clash  ·  0 contradictory (numerically falsified)  ·  1 axis-clash
   readiness of the 0 promising: 0 mechanism-tested · 0 data-tested · 0 without magnitude evidence · 0 with axis unresolved · 0 with an entailed consequence
-  readiness of the 128 promising, magnitude unchecked: 0 mechanism-tested · 0 data-tested · 128 without magnitude evidence · 128 with axis unresolved · 0 with an entailed consequence
+  readiness of the 223 promising, magnitude unchecked: 0 mechanism-tested · 0 data-tested · 223 without magnitude evidence · 223 with axis unresolved · 0 with an entailed consequence
   promising ≠ evidence: promotion to a bridge needs a mechanism and a falsifiable prediction.
 
   no candidate is `promising` (with magnitude evidence) from the anchor above.
@@ -28,6 +28,20 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [to make it testable — premise: rest-energy and photon-energy are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: photon-energy · needs a stated scale regime for: rest-energy, photon-energy · needs a stated force regime for: rest-energy, photon-energy · needs a consequence that re-derives a known law]
         [observation: measure rest-energy and photon-energy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
         [adjudicated: entailed — Real physics, already entailed by the L-layer via CE-planck-einstein (E=hν) and CE-mass-energy (E=mc²); not a new link. Both Adam and Eve agree it is not a new discovery.]
+    erasure-energy ≟ mean-energy-above-ground            [[energy]]  score 8
+        unlocks: mean-energy-above-ground, orthogonalization-time-lower-bound
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 2 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: erasure-energy and mean-energy-above-ground are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: mean-energy-above-ground · needs a stated scale regime for: erasure-energy, mean-energy-above-ground · needs a stated force regime for: erasure-energy, mean-energy-above-ground · needs a consequence that re-derives a known law]
+        [observation: measure erasure-energy and mean-energy-above-ground in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    free-energy-difference ≟ mean-energy-above-ground    [[energy]]  score 8
+        unlocks: mean-energy-above-ground, orthogonalization-time-lower-bound
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 2 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: free-energy-difference and mean-energy-above-ground are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: mean-energy-above-ground · needs a stated scale regime for: free-energy-difference, mean-energy-above-ground · needs a stated force regime for: free-energy-difference, mean-energy-above-ground · needs a consequence that re-derives a known law]
+        [observation: measure free-energy-difference and mean-energy-above-ground in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     planck-mass ≟ molecular-mass                         [[mass]]  score 8
         unlocks: molecular-mass, most-probable-speed
         [consequence: inconclusive]
@@ -35,6 +49,20 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 2 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: planck-mass and molecular-mass are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: molecular-mass · needs a stated scale regime for: molecular-mass · needs a stated force regime for: molecular-mass · needs a consequence that re-derives a known law]
         [observation: measure planck-mass and molecular-mass in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    rest-energy ≟ mean-energy-above-ground               [[energy]]  score 8
+        unlocks: mean-energy-above-ground, orthogonalization-time-lower-bound
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 2 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: rest-energy and mean-energy-above-ground are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: mean-energy-above-ground · needs a stated scale regime for: rest-energy, mean-energy-above-ground · needs a stated force regime for: rest-energy, mean-energy-above-ground · needs a consequence that re-derives a known law]
+        [observation: measure rest-energy and mean-energy-above-ground in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    rydberg-energy ≟ mean-energy-above-ground            [[energy]]  score 8
+        unlocks: mean-energy-above-ground, orthogonalization-time-lower-bound
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 2 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: rydberg-energy and mean-energy-above-ground are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: mean-energy-above-ground · needs a stated scale regime for: rydberg-energy, mean-energy-above-ground · needs a stated force regime for: rydberg-energy, mean-energy-above-ground · needs a consequence that re-derives a known law]
+        [observation: measure rydberg-energy and mean-energy-above-ground in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     rydberg-energy ≟ state-energy                        [[energy]]  score 8
         unlocks: boltzmann-factor, state-energy
         [consequence: inconclusive]
@@ -42,13 +70,13 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 2 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: rydberg-energy and state-energy are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: state-energy · needs a stated scale regime for: rydberg-energy, state-energy · needs a stated force regime for: rydberg-energy, state-energy · needs a consequence that re-derives a known law]
         [observation: measure rydberg-energy and state-energy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
-    A ≟ thomson-cross-section                            [[area]]  score 7
-        unlocks: A, bh-entropy
+    thermal-energy ≟ mean-energy-above-ground            [[energy]]  score 8
+        unlocks: mean-energy-above-ground, orthogonalization-time-lower-bound
         [consequence: inconclusive]
         [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
-        [readiness — structure: merges components, unlocks 2 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
-        [to make it testable — premise: A and thomson-cross-section are the same physical quantity, not only both [area] · needs a representative magnitude for: A · needs a stated scale regime for: A, thomson-cross-section · needs a stated force regime for: A, thomson-cross-section · needs a consequence that re-derives a known law]
-        [observation: measure A and thomson-cross-section in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+        [readiness — structure: merges components, unlocks 2 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: thermal-energy and mean-energy-above-ground are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: mean-energy-above-ground · needs a stated scale regime for: thermal-energy, mean-energy-above-ground · needs a stated force regime for: thermal-energy, mean-energy-above-ground · needs a consequence that re-derives a known law]
+        [observation: measure thermal-energy and mean-energy-above-ground in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     angular-momentum ≟ position-momentum-uncertainty-product [[action]]  score 7
         unlocks: angular-momentum
         [consequence: inconclusive]
@@ -56,6 +84,34 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: angular-momentum and position-momentum-uncertainty-product are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: angular-momentum · needs a stated scale regime for: angular-momentum, position-momentum-uncertainty-product · needs a stated force regime for: angular-momentum, position-momentum-uncertainty-product · needs a consequence that re-derives a known law]
         [observation: measure angular-momentum and position-momentum-uncertainty-product in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    bh-entropy ≟ bekenstein-entropy-upper-bound          [[entropy]]  score 7
+        unlocks: bekenstein-entropy-upper-bound
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: bh-entropy and bekenstein-entropy-upper-bound are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: bekenstein-entropy-upper-bound · needs a stated scale regime for: bh-entropy, bekenstein-entropy-upper-bound · needs a stated force regime for: bh-entropy, bekenstein-entropy-upper-bound · needs a consequence that re-derives a known law]
+        [observation: measure bh-entropy and bekenstein-entropy-upper-bound in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    bh-entropy ≟ boltzmann-entropy                       [[entropy]]  score 7
+        unlocks: boltzmann-entropy
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: bh-entropy and boltzmann-entropy are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: boltzmann-entropy · needs a stated scale regime for: bh-entropy, boltzmann-entropy · needs a stated force regime for: bh-entropy, boltzmann-entropy · needs a consequence that re-derives a known law]
+        [observation: measure bh-entropy and boltzmann-entropy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    bohr-radius ≟ areal-radius                           [[length]]  score 7
+        unlocks: areal-radius
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: bohr-radius and areal-radius are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: areal-radius · needs a stated scale regime for: bohr-radius, areal-radius · needs a stated force regime for: bohr-radius, areal-radius · needs a consequence that re-derives a known law]
+        [observation: measure bohr-radius and areal-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    bohr-radius ≟ enclosing-radius                       [[length]]  score 7
+        unlocks: enclosing-radius
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: bohr-radius and enclosing-radius are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: enclosing-radius · needs a stated scale regime for: bohr-radius, enclosing-radius · needs a stated force regime for: bohr-radius, enclosing-radius · needs a consequence that re-derives a known law]
+        [observation: measure bohr-radius and enclosing-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     bohr-radius ≟ particle-radius                        [[length]]  score 7
         unlocks: particle-radius
         [consequence: inconclusive]
@@ -63,6 +119,20 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: bohr-radius and particle-radius are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: particle-radius · needs a stated scale regime for: bohr-radius, particle-radius · needs a stated force regime for: bohr-radius, particle-radius · needs a consequence that re-derives a known law]
         [observation: measure bohr-radius and particle-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    classical-electron-radius ≟ areal-radius             [[length]]  score 7
+        unlocks: areal-radius
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: classical-electron-radius and areal-radius are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: areal-radius · needs a stated scale regime for: classical-electron-radius, areal-radius · needs a stated force regime for: classical-electron-radius, areal-radius · needs a consequence that re-derives a known law]
+        [observation: measure classical-electron-radius and areal-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    classical-electron-radius ≟ enclosing-radius         [[length]]  score 7
+        unlocks: enclosing-radius
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: classical-electron-radius and enclosing-radius are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: enclosing-radius · needs a stated scale regime for: classical-electron-radius, enclosing-radius · needs a stated force regime for: classical-electron-radius, enclosing-radius · needs a consequence that re-derives a known law]
+        [observation: measure classical-electron-radius and enclosing-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     classical-electron-radius ≟ particle-radius          [[length]]  score 7
         unlocks: particle-radius
         [consequence: inconclusive]
@@ -70,6 +140,13 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: classical-electron-radius and particle-radius are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: particle-radius · needs a stated scale regime for: classical-electron-radius, particle-radius · needs a stated force regime for: classical-electron-radius, particle-radius · needs a consequence that re-derives a known law]
         [observation: measure classical-electron-radius and particle-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    compton-wavelength ≟ optical-wavelength              [[length]]  score 7
+        unlocks: optical-wavelength
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: compton-wavelength and optical-wavelength are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: optical-wavelength · needs a stated scale regime for: compton-wavelength, optical-wavelength · needs a stated force regime for: compton-wavelength, optical-wavelength · needs a consequence that re-derives a known law]
+        [observation: measure compton-wavelength and optical-wavelength in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     compton-wavelength-full ≟ compton-wavelength-shift   [[length]]  score 7
         unlocks: compton-wavelength-shift
         [consequence: inconclusive]
@@ -77,6 +154,13 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: compton-wavelength-full and compton-wavelength-shift are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: compton-wavelength-shift · needs a stated scale regime for: compton-wavelength-full, compton-wavelength-shift · needs a stated force regime for: compton-wavelength-full, compton-wavelength-shift · needs a consequence that re-derives a known law]
         [observation: measure compton-wavelength-full and compton-wavelength-shift in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    compton-wavelength-full ≟ optical-wavelength         [[length]]  score 7
+        unlocks: optical-wavelength
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: compton-wavelength-full and optical-wavelength are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: optical-wavelength · needs a stated scale regime for: compton-wavelength-full, optical-wavelength · needs a stated force regime for: compton-wavelength-full, optical-wavelength · needs a consequence that re-derives a known law]
+        [observation: measure compton-wavelength-full and optical-wavelength in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     cross-sectional-area ≟ thomson-cross-section         [[area]]  score 7
         unlocks: cross-sectional-area
         [consequence: inconclusive]
@@ -112,6 +196,13 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: erasure-energy and photoelectron-max-energy are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: photoelectron-max-energy · needs a stated scale regime for: erasure-energy, photoelectron-max-energy · needs a stated force regime for: erasure-energy, photoelectron-max-energy · needs a consequence that re-derives a known law]
         [observation: measure erasure-energy and photoelectron-max-energy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    erasure-energy ≟ system-energy                       [[energy]]  score 7
+        unlocks: system-energy
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: erasure-energy and system-energy are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: system-energy · needs a stated scale regime for: erasure-energy, system-energy · needs a stated force regime for: erasure-energy, system-energy · needs a consequence that re-derives a known law]
+        [observation: measure erasure-energy and system-energy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     free-energy-difference ≟ internal-energy-change      [[energy]]  score 7
         unlocks: internal-energy-change
         [consequence: inconclusive]
@@ -133,6 +224,13 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: free-energy-difference and photon-energy are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: photon-energy · needs a stated scale regime for: free-energy-difference, photon-energy · needs a stated force regime for: free-energy-difference, photon-energy · needs a consequence that re-derives a known law]
         [observation: measure free-energy-difference and photon-energy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    free-energy-difference ≟ system-energy               [[energy]]  score 7
+        unlocks: system-energy
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: free-energy-difference and system-energy are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: system-energy · needs a stated scale regime for: free-energy-difference, system-energy · needs a stated force regime for: free-energy-difference, system-energy · needs a consequence that re-derives a known law]
+        [observation: measure free-energy-difference and system-energy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     gravitational-potential-energy ≟ rydberg-energy      [[energy]]  score 7
         unlocks: gravitational-potential-energy
         [consequence: inconclusive]
@@ -203,6 +301,13 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: peak-wavelength and compton-wavelength-shift are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: compton-wavelength-shift · needs a stated scale regime for: peak-wavelength, compton-wavelength-shift · needs a stated force regime for: peak-wavelength, compton-wavelength-shift · needs a consequence that re-derives a known law]
         [observation: measure peak-wavelength and compton-wavelength-shift in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    peak-wavelength ≟ optical-wavelength                 [[length]]  score 7
+        unlocks: optical-wavelength
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: peak-wavelength and optical-wavelength are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: optical-wavelength · needs a stated scale regime for: peak-wavelength, optical-wavelength · needs a stated force regime for: peak-wavelength, optical-wavelength · needs a consequence that re-derives a known law]
+        [observation: measure peak-wavelength and optical-wavelength in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     photon-energy ≟ thermal-energy                       [[energy]]  score 7
         unlocks: photon-energy
         [consequence: inconclusive]
@@ -217,6 +322,20 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 2 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: planck-length and impact_parameter are the same physical quantity, not only both [length] · needs a representative magnitude for: impact_parameter · needs a stated scale regime for: impact_parameter · needs a stated force regime for: impact_parameter · needs a consequence that re-derives a known law]
         [observation: measure planck-length and impact_parameter in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    planck-length ≟ paraxial-focal-length                [[length]]  score 7
+        unlocks: paraxial-focal-length
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: planck-length and paraxial-focal-length are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: paraxial-focal-length · needs a stated scale regime for: paraxial-focal-length · needs a stated force regime for: paraxial-focal-length · needs a consequence that re-derives a known law]
+        [observation: measure planck-length and paraxial-focal-length in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    planck-mass ≟ enclosed-mass                          [[mass]]  score 7
+        unlocks: enclosed-mass
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: planck-mass and enclosed-mass are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: enclosed-mass · needs a stated scale regime for: enclosed-mass · needs a stated force regime for: enclosed-mass · needs a consequence that re-derives a known law]
+        [observation: measure planck-mass and enclosed-mass in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     planck-mass ≟ secondary-mass                         [[mass]]  score 7
         unlocks: secondary-mass
         [consequence: inconclusive]
@@ -231,6 +350,13 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: planck-time and elapsed-time are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: elapsed-time · needs a stated scale regime for: planck-time, elapsed-time · needs a stated force regime for: planck-time, elapsed-time · needs a consequence that re-derives a known law]
         [observation: measure planck-time and elapsed-time in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    planck-time ≟ orthogonalization-time-lower-bound     [[time]]  score 7
+        unlocks: orthogonalization-time-lower-bound
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: planck-time and orthogonalization-time-lower-bound are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: orthogonalization-time-lower-bound · needs a stated scale regime for: planck-time, orthogonalization-time-lower-bound · needs a stated force regime for: planck-time, orthogonalization-time-lower-bound · needs a consequence that re-derives a known law]
+        [observation: measure planck-time and orthogonalization-time-lower-bound in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     planck-time ≟ rc-time-constant                       [[time]]  score 7
         unlocks: rc-time-constant
         [consequence: inconclusive]
@@ -245,6 +371,13 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: planck-time and relaxation-time are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: relaxation-time · needs a stated scale regime for: planck-time, relaxation-time · needs a stated force regime for: planck-time, relaxation-time · needs a consequence that re-derives a known law]
         [observation: measure planck-time and relaxation-time in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    planck-time ≟ time-interval                          [[time]]  score 7
+        unlocks: time-interval
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: planck-time and time-interval are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: time-interval · needs a stated scale regime for: planck-time, time-interval · needs a stated force regime for: planck-time, time-interval · needs a consequence that re-derives a known law]
+        [observation: measure planck-time and time-interval in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     rest-energy ≟ internal-energy-change                 [[energy]]  score 7
         unlocks: internal-energy-change
         [consequence: inconclusive]
@@ -259,6 +392,13 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: rest-energy and photoelectron-max-energy are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: photoelectron-max-energy · needs a stated scale regime for: rest-energy, photoelectron-max-energy · needs a stated force regime for: rest-energy, photoelectron-max-energy · needs a consequence that re-derives a known law]
         [observation: measure rest-energy and photoelectron-max-energy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    rest-energy ≟ system-energy                          [[energy]]  score 7
+        unlocks: system-energy
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: rest-energy and system-energy are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: system-energy · needs a stated scale regime for: rest-energy, system-energy · needs a stated force regime for: rest-energy, system-energy · needs a consequence that re-derives a known law]
+        [observation: measure rest-energy and system-energy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     rotational-kinetic-energy ≟ rydberg-energy           [[energy]]  score 7
         unlocks: rotational-kinetic-energy
         [consequence: inconclusive]
@@ -294,6 +434,13 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: rydberg-energy and photon-energy are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: photon-energy · needs a stated scale regime for: rydberg-energy, photon-energy · needs a stated force regime for: rydberg-energy, photon-energy · needs a consequence that re-derives a known law]
         [observation: measure rydberg-energy and photon-energy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    rydberg-energy ≟ system-energy                       [[energy]]  score 7
+        unlocks: system-energy
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: rydberg-energy and system-energy are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: system-energy · needs a stated scale regime for: rydberg-energy, system-energy · needs a stated force regime for: rydberg-energy, system-energy · needs a consequence that re-derives a known law]
+        [observation: measure rydberg-energy and system-energy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     semi-major-axis ≟ bohr-radius                        [[length]]  score 7
         unlocks: period, semi-major-axis
         [consequence: inconclusive]
@@ -329,6 +476,13 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: thermal-energy and photoelectron-max-energy are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: photoelectron-max-energy · needs a stated scale regime for: thermal-energy, photoelectron-max-energy · needs a stated force regime for: thermal-energy, photoelectron-max-energy · needs a consequence that re-derives a known law]
         [observation: measure thermal-energy and photoelectron-max-energy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    thermal-energy ≟ system-energy                       [[energy]]  score 7
+        unlocks: system-energy
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: thermal-energy and system-energy are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: system-energy · needs a stated scale regime for: thermal-energy, system-energy · needs a stated force regime for: thermal-energy, system-energy · needs a consequence that re-derives a known law]
+        [observation: measure thermal-energy and system-energy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     thermal-wavelength ≟ compton-wavelength-shift        [[length]]  score 7
         unlocks: compton-wavelength-shift
         [consequence: inconclusive]
@@ -336,6 +490,13 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: thermal-wavelength and compton-wavelength-shift are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: thermal-wavelength, compton-wavelength-shift · needs a stated scale regime for: compton-wavelength-shift · needs a stated force regime for: thermal-wavelength, compton-wavelength-shift · needs a consequence that re-derives a known law]
         [observation: measure thermal-wavelength and compton-wavelength-shift in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    thermal-wavelength ≟ optical-wavelength              [[length]]  score 7
+        unlocks: optical-wavelength
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: thermal-wavelength and optical-wavelength are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: thermal-wavelength, optical-wavelength · needs a stated scale regime for: optical-wavelength · needs a stated force regime for: thermal-wavelength, optical-wavelength · needs a consequence that re-derives a known law]
+        [observation: measure thermal-wavelength and optical-wavelength in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     a ≟ bohr-radius                                      [[length]]  score 6
         unlocks: a
         [consequence: inconclusive]
@@ -385,6 +546,69 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: bohr-radius and deviation-from-mean are the same physical quantity, not only both [length] · needs a representative magnitude for: deviation-from-mean · needs a stated scale regime for: bohr-radius, deviation-from-mean · needs a stated force regime for: bohr-radius, deviation-from-mean · needs a consequence that re-derives a known law]
         [observation: measure bohr-radius and deviation-from-mean in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    bohr-radius ≟ double-slit-fringe-spacing             [[length]]  score 6
+        unlocks: double-slit-fringe-spacing
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: bohr-radius and double-slit-fringe-spacing are the same physical quantity, not only both [length] · needs a representative magnitude for: double-slit-fringe-spacing · needs a stated scale regime for: bohr-radius, double-slit-fringe-spacing · needs a stated force regime for: bohr-radius, double-slit-fringe-spacing · needs a consequence that re-derives a known law]
+        [observation: measure bohr-radius and double-slit-fringe-spacing in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    bohr-radius ≟ image-distance                         [[length]]  score 6
+        unlocks: image-distance
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: bohr-radius and image-distance are the same physical quantity, not only both [length] · needs a representative magnitude for: image-distance · needs a stated scale regime for: bohr-radius, image-distance · needs a stated force regime for: bohr-radius, image-distance · needs a consequence that re-derives a known law]
+        [observation: measure bohr-radius and image-distance in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    bohr-radius ≟ object-distance                        [[length]]  score 6
+        unlocks: object-distance
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: bohr-radius and object-distance are the same physical quantity, not only both [length] · needs a representative magnitude for: object-distance · needs a stated scale regime for: bohr-radius, object-distance · needs a stated force regime for: bohr-radius, object-distance · needs a consequence that re-derives a known law]
+        [observation: measure bohr-radius and object-distance in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    bohr-radius ≟ optical-wavelength                     [[length]]  score 6
+        unlocks: optical-wavelength
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: bohr-radius and optical-wavelength are the same physical quantity, not only both [length] · needs a representative magnitude for: optical-wavelength · needs a stated scale regime for: bohr-radius, optical-wavelength · needs a stated force regime for: bohr-radius, optical-wavelength · needs a consequence that re-derives a known law]
+        [observation: measure bohr-radius and optical-wavelength in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    bohr-radius ≟ paraxial-focal-length                  [[length]]  score 6
+        unlocks: paraxial-focal-length
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: bohr-radius and paraxial-focal-length are the same physical quantity, not only both [length] · needs a representative magnitude for: paraxial-focal-length · needs a stated scale regime for: bohr-radius, paraxial-focal-length · needs a stated force regime for: bohr-radius, paraxial-focal-length · needs a consequence that re-derives a known law]
+        [observation: measure bohr-radius and paraxial-focal-length in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    bohr-radius ≟ projectile-horizontal-range            [[length]]  score 6
+        unlocks: projectile-horizontal-range
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: bohr-radius and projectile-horizontal-range are the same physical quantity, not only both [length] · needs a representative magnitude for: projectile-horizontal-range · needs a stated scale regime for: bohr-radius, projectile-horizontal-range · needs a stated force regime for: bohr-radius, projectile-horizontal-range · needs a consequence that re-derives a known law]
+        [observation: measure bohr-radius and projectile-horizontal-range in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    bohr-radius ≟ screen-distance                        [[length]]  score 6
+        unlocks: screen-distance
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: bohr-radius and screen-distance are the same physical quantity, not only both [length] · needs a representative magnitude for: screen-distance · needs a stated scale regime for: bohr-radius, screen-distance · needs a stated force regime for: bohr-radius, screen-distance · needs a consequence that re-derives a known law]
+        [observation: measure bohr-radius and screen-distance in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    bohr-radius ≟ slit-separation                        [[length]]  score 6
+        unlocks: slit-separation
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: bohr-radius and slit-separation are the same physical quantity, not only both [length] · needs a representative magnitude for: slit-separation · needs a stated scale regime for: bohr-radius, slit-separation · needs a stated force regime for: bohr-radius, slit-separation · needs a consequence that re-derives a known law]
+        [observation: measure bohr-radius and slit-separation in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    bohr-radius ≟ slit-width                             [[length]]  score 6
+        unlocks: slit-width
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: bohr-radius and slit-width are the same physical quantity, not only both [length] · needs a representative magnitude for: slit-width · needs a stated scale regime for: bohr-radius, slit-width · needs a stated force regime for: bohr-radius, slit-width · needs a consequence that re-derives a known law]
+        [observation: measure bohr-radius and slit-width in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     bohr-radius ≟ standard-deviation                     [[length]]  score 6
         unlocks: standard-deviation
         [consequence: inconclusive]
@@ -406,6 +630,69 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: classical-electron-radius and deviation-from-mean are the same physical quantity, not only both [length] · needs a representative magnitude for: deviation-from-mean · needs a stated scale regime for: classical-electron-radius, deviation-from-mean · needs a stated force regime for: classical-electron-radius, deviation-from-mean · needs a consequence that re-derives a known law]
         [observation: measure classical-electron-radius and deviation-from-mean in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    classical-electron-radius ≟ double-slit-fringe-spacing [[length]]  score 6
+        unlocks: double-slit-fringe-spacing
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: classical-electron-radius and double-slit-fringe-spacing are the same physical quantity, not only both [length] · needs a representative magnitude for: double-slit-fringe-spacing · needs a stated scale regime for: classical-electron-radius, double-slit-fringe-spacing · needs a stated force regime for: classical-electron-radius, double-slit-fringe-spacing · needs a consequence that re-derives a known law]
+        [observation: measure classical-electron-radius and double-slit-fringe-spacing in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    classical-electron-radius ≟ image-distance           [[length]]  score 6
+        unlocks: image-distance
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: classical-electron-radius and image-distance are the same physical quantity, not only both [length] · needs a representative magnitude for: image-distance · needs a stated scale regime for: classical-electron-radius, image-distance · needs a stated force regime for: classical-electron-radius, image-distance · needs a consequence that re-derives a known law]
+        [observation: measure classical-electron-radius and image-distance in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    classical-electron-radius ≟ object-distance          [[length]]  score 6
+        unlocks: object-distance
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: classical-electron-radius and object-distance are the same physical quantity, not only both [length] · needs a representative magnitude for: object-distance · needs a stated scale regime for: classical-electron-radius, object-distance · needs a stated force regime for: classical-electron-radius, object-distance · needs a consequence that re-derives a known law]
+        [observation: measure classical-electron-radius and object-distance in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    classical-electron-radius ≟ optical-wavelength       [[length]]  score 6
+        unlocks: optical-wavelength
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: classical-electron-radius and optical-wavelength are the same physical quantity, not only both [length] · needs a representative magnitude for: optical-wavelength · needs a stated scale regime for: classical-electron-radius, optical-wavelength · needs a stated force regime for: classical-electron-radius, optical-wavelength · needs a consequence that re-derives a known law]
+        [observation: measure classical-electron-radius and optical-wavelength in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    classical-electron-radius ≟ paraxial-focal-length    [[length]]  score 6
+        unlocks: paraxial-focal-length
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: classical-electron-radius and paraxial-focal-length are the same physical quantity, not only both [length] · needs a representative magnitude for: paraxial-focal-length · needs a stated scale regime for: classical-electron-radius, paraxial-focal-length · needs a stated force regime for: classical-electron-radius, paraxial-focal-length · needs a consequence that re-derives a known law]
+        [observation: measure classical-electron-radius and paraxial-focal-length in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    classical-electron-radius ≟ projectile-horizontal-range [[length]]  score 6
+        unlocks: projectile-horizontal-range
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: classical-electron-radius and projectile-horizontal-range are the same physical quantity, not only both [length] · needs a representative magnitude for: projectile-horizontal-range · needs a stated scale regime for: classical-electron-radius, projectile-horizontal-range · needs a stated force regime for: classical-electron-radius, projectile-horizontal-range · needs a consequence that re-derives a known law]
+        [observation: measure classical-electron-radius and projectile-horizontal-range in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    classical-electron-radius ≟ screen-distance          [[length]]  score 6
+        unlocks: screen-distance
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: classical-electron-radius and screen-distance are the same physical quantity, not only both [length] · needs a representative magnitude for: screen-distance · needs a stated scale regime for: classical-electron-radius, screen-distance · needs a stated force regime for: classical-electron-radius, screen-distance · needs a consequence that re-derives a known law]
+        [observation: measure classical-electron-radius and screen-distance in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    classical-electron-radius ≟ slit-separation          [[length]]  score 6
+        unlocks: slit-separation
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: classical-electron-radius and slit-separation are the same physical quantity, not only both [length] · needs a representative magnitude for: slit-separation · needs a stated scale regime for: classical-electron-radius, slit-separation · needs a stated force regime for: classical-electron-radius, slit-separation · needs a consequence that re-derives a known law]
+        [observation: measure classical-electron-radius and slit-separation in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    classical-electron-radius ≟ slit-width               [[length]]  score 6
+        unlocks: slit-width
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: classical-electron-radius and slit-width are the same physical quantity, not only both [length] · needs a representative magnitude for: slit-width · needs a stated scale regime for: classical-electron-radius, slit-width · needs a stated force regime for: classical-electron-radius, slit-width · needs a consequence that re-derives a known law]
+        [observation: measure classical-electron-radius and slit-width in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     classical-electron-radius ≟ standard-deviation       [[length]]  score 6
         unlocks: standard-deviation
         [consequence: inconclusive]
@@ -413,6 +700,13 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: classical-electron-radius and standard-deviation are the same physical quantity, not only both [length] · needs a representative magnitude for: standard-deviation · needs a stated scale regime for: classical-electron-radius, standard-deviation · needs a stated force regime for: classical-electron-radius, standard-deviation · needs a consequence that re-derives a known law]
         [observation: measure classical-electron-radius and standard-deviation in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    compton-wavelength ≟ areal-radius                    [[length]]  score 6
+        unlocks: areal-radius
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: compton-wavelength and areal-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: areal-radius · needs a stated scale regime for: compton-wavelength, areal-radius · needs a stated force regime for: compton-wavelength, areal-radius · needs a consequence that re-derives a known law]
+        [observation: measure compton-wavelength and areal-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     compton-wavelength ≟ deviation-from-mean             [[length]]  score 6
         unlocks: deviation-from-mean
         [consequence: inconclusive]
@@ -420,6 +714,13 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: compton-wavelength and deviation-from-mean are the same physical quantity, not only both [length] · needs a representative magnitude for: deviation-from-mean · needs a stated scale regime for: compton-wavelength, deviation-from-mean · needs a stated force regime for: compton-wavelength, deviation-from-mean · needs a consequence that re-derives a known law]
         [observation: measure compton-wavelength and deviation-from-mean in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    compton-wavelength ≟ double-slit-fringe-spacing      [[length]]  score 6
+        unlocks: double-slit-fringe-spacing
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: compton-wavelength and double-slit-fringe-spacing are the same physical quantity, not only both [length] · needs a representative magnitude for: double-slit-fringe-spacing · needs a stated scale regime for: compton-wavelength, double-slit-fringe-spacing · needs a stated force regime for: compton-wavelength, double-slit-fringe-spacing · needs a consequence that re-derives a known law]
+        [observation: measure compton-wavelength and double-slit-fringe-spacing in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     compton-wavelength ≟ droplet-radius                  [[length]]  score 6
         unlocks: droplet-radius
         [consequence: inconclusive]
@@ -427,6 +728,34 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: compton-wavelength and droplet-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: droplet-radius · needs a stated scale regime for: compton-wavelength, droplet-radius · needs a stated force regime for: compton-wavelength, droplet-radius · needs a consequence that re-derives a known law]
         [observation: measure compton-wavelength and droplet-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    compton-wavelength ≟ enclosing-radius                [[length]]  score 6
+        unlocks: enclosing-radius
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: compton-wavelength and enclosing-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: enclosing-radius · needs a stated scale regime for: compton-wavelength, enclosing-radius · needs a stated force regime for: compton-wavelength, enclosing-radius · needs a consequence that re-derives a known law]
+        [observation: measure compton-wavelength and enclosing-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    compton-wavelength ≟ image-distance                  [[length]]  score 6
+        unlocks: image-distance
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: compton-wavelength and image-distance are the same physical quantity, not only both [length] · needs a representative magnitude for: image-distance · needs a stated scale regime for: compton-wavelength, image-distance · needs a stated force regime for: compton-wavelength, image-distance · needs a consequence that re-derives a known law]
+        [observation: measure compton-wavelength and image-distance in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    compton-wavelength ≟ object-distance                 [[length]]  score 6
+        unlocks: object-distance
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: compton-wavelength and object-distance are the same physical quantity, not only both [length] · needs a representative magnitude for: object-distance · needs a stated scale regime for: compton-wavelength, object-distance · needs a stated force regime for: compton-wavelength, object-distance · needs a consequence that re-derives a known law]
+        [observation: measure compton-wavelength and object-distance in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    compton-wavelength ≟ paraxial-focal-length           [[length]]  score 6
+        unlocks: paraxial-focal-length
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: compton-wavelength and paraxial-focal-length are the same physical quantity, not only both [length] · needs a representative magnitude for: paraxial-focal-length · needs a stated scale regime for: compton-wavelength, paraxial-focal-length · needs a stated force regime for: compton-wavelength, paraxial-focal-length · needs a consequence that re-derives a known law]
+        [observation: measure compton-wavelength and paraxial-focal-length in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     compton-wavelength ≟ scale-factor                    [[length]]  score 6
         unlocks: scale-factor
         [consequence: inconclusive]
@@ -434,6 +763,27 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: compton-wavelength and scale-factor are the same physical quantity, not only both [length] · needs a representative magnitude for: scale-factor · needs a stated scale regime for: compton-wavelength, scale-factor · needs a stated force regime for: compton-wavelength, scale-factor · needs a consequence that re-derives a known law]
         [observation: measure compton-wavelength and scale-factor in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    compton-wavelength ≟ screen-distance                 [[length]]  score 6
+        unlocks: screen-distance
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: compton-wavelength and screen-distance are the same physical quantity, not only both [length] · needs a representative magnitude for: screen-distance · needs a stated scale regime for: compton-wavelength, screen-distance · needs a stated force regime for: compton-wavelength, screen-distance · needs a consequence that re-derives a known law]
+        [observation: measure compton-wavelength and screen-distance in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    compton-wavelength ≟ slit-separation                 [[length]]  score 6
+        unlocks: slit-separation
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: compton-wavelength and slit-separation are the same physical quantity, not only both [length] · needs a representative magnitude for: slit-separation · needs a stated scale regime for: compton-wavelength, slit-separation · needs a stated force regime for: compton-wavelength, slit-separation · needs a consequence that re-derives a known law]
+        [observation: measure compton-wavelength and slit-separation in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    compton-wavelength ≟ slit-width                      [[length]]  score 6
+        unlocks: slit-width
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: compton-wavelength and slit-width are the same physical quantity, not only both [length] · needs a representative magnitude for: slit-width · needs a stated scale regime for: compton-wavelength, slit-width · needs a stated force regime for: compton-wavelength, slit-width · needs a consequence that re-derives a known law]
+        [observation: measure compton-wavelength and slit-width in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     compton-wavelength ≟ standard-deviation              [[length]]  score 6
         unlocks: standard-deviation
         [consequence: inconclusive]
@@ -441,6 +791,13 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: compton-wavelength and standard-deviation are the same physical quantity, not only both [length] · needs a representative magnitude for: standard-deviation · needs a stated scale regime for: compton-wavelength, standard-deviation · needs a stated force regime for: compton-wavelength, standard-deviation · needs a consequence that re-derives a known law]
         [observation: measure compton-wavelength and standard-deviation in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    compton-wavelength-full ≟ areal-radius               [[length]]  score 6
+        unlocks: areal-radius
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: compton-wavelength-full and areal-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: areal-radius · needs a stated scale regime for: compton-wavelength-full, areal-radius · needs a stated force regime for: compton-wavelength-full, areal-radius · needs a consequence that re-derives a known law]
+        [observation: measure compton-wavelength-full and areal-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     compton-wavelength-full ≟ deviation-from-mean        [[length]]  score 6
         unlocks: deviation-from-mean
         [consequence: inconclusive]
@@ -448,6 +805,62 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: compton-wavelength-full and deviation-from-mean are the same physical quantity, not only both [length] · needs a representative magnitude for: deviation-from-mean · needs a stated scale regime for: compton-wavelength-full, deviation-from-mean · needs a stated force regime for: compton-wavelength-full, deviation-from-mean · needs a consequence that re-derives a known law]
         [observation: measure compton-wavelength-full and deviation-from-mean in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    compton-wavelength-full ≟ double-slit-fringe-spacing [[length]]  score 6
+        unlocks: double-slit-fringe-spacing
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: compton-wavelength-full and double-slit-fringe-spacing are the same physical quantity, not only both [length] · needs a representative magnitude for: double-slit-fringe-spacing · needs a stated scale regime for: compton-wavelength-full, double-slit-fringe-spacing · needs a stated force regime for: compton-wavelength-full, double-slit-fringe-spacing · needs a consequence that re-derives a known law]
+        [observation: measure compton-wavelength-full and double-slit-fringe-spacing in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    compton-wavelength-full ≟ enclosing-radius           [[length]]  score 6
+        unlocks: enclosing-radius
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: compton-wavelength-full and enclosing-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: enclosing-radius · needs a stated scale regime for: compton-wavelength-full, enclosing-radius · needs a stated force regime for: compton-wavelength-full, enclosing-radius · needs a consequence that re-derives a known law]
+        [observation: measure compton-wavelength-full and enclosing-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    compton-wavelength-full ≟ image-distance             [[length]]  score 6
+        unlocks: image-distance
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: compton-wavelength-full and image-distance are the same physical quantity, not only both [length] · needs a representative magnitude for: image-distance · needs a stated scale regime for: compton-wavelength-full, image-distance · needs a stated force regime for: compton-wavelength-full, image-distance · needs a consequence that re-derives a known law]
+        [observation: measure compton-wavelength-full and image-distance in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    compton-wavelength-full ≟ object-distance            [[length]]  score 6
+        unlocks: object-distance
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: compton-wavelength-full and object-distance are the same physical quantity, not only both [length] · needs a representative magnitude for: object-distance · needs a stated scale regime for: compton-wavelength-full, object-distance · needs a stated force regime for: compton-wavelength-full, object-distance · needs a consequence that re-derives a known law]
+        [observation: measure compton-wavelength-full and object-distance in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    compton-wavelength-full ≟ paraxial-focal-length      [[length]]  score 6
+        unlocks: paraxial-focal-length
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: compton-wavelength-full and paraxial-focal-length are the same physical quantity, not only both [length] · needs a representative magnitude for: paraxial-focal-length · needs a stated scale regime for: compton-wavelength-full, paraxial-focal-length · needs a stated force regime for: compton-wavelength-full, paraxial-focal-length · needs a consequence that re-derives a known law]
+        [observation: measure compton-wavelength-full and paraxial-focal-length in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    compton-wavelength-full ≟ screen-distance            [[length]]  score 6
+        unlocks: screen-distance
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: compton-wavelength-full and screen-distance are the same physical quantity, not only both [length] · needs a representative magnitude for: screen-distance · needs a stated scale regime for: compton-wavelength-full, screen-distance · needs a stated force regime for: compton-wavelength-full, screen-distance · needs a consequence that re-derives a known law]
+        [observation: measure compton-wavelength-full and screen-distance in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    compton-wavelength-full ≟ slit-separation            [[length]]  score 6
+        unlocks: slit-separation
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: compton-wavelength-full and slit-separation are the same physical quantity, not only both [length] · needs a representative magnitude for: slit-separation · needs a stated scale regime for: compton-wavelength-full, slit-separation · needs a stated force regime for: compton-wavelength-full, slit-separation · needs a consequence that re-derives a known law]
+        [observation: measure compton-wavelength-full and slit-separation in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    compton-wavelength-full ≟ slit-width                 [[length]]  score 6
+        unlocks: slit-width
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: compton-wavelength-full and slit-width are the same physical quantity, not only both [length] · needs a representative magnitude for: slit-width · needs a stated scale regime for: compton-wavelength-full, slit-width · needs a stated force regime for: compton-wavelength-full, slit-width · needs a consequence that re-derives a known law]
+        [observation: measure compton-wavelength-full and slit-width in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     compton-wavelength-full ≟ standard-deviation         [[length]]  score 6
         unlocks: standard-deviation
         [consequence: inconclusive]
@@ -574,6 +987,13 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: length and classical-electron-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: length · needs a stated scale regime for: length, classical-electron-radius · needs a stated force regime for: length, classical-electron-radius · needs a consequence that re-derives a known law]
         [observation: measure length and classical-electron-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    peak-wavelength ≟ areal-radius                       [[length]]  score 6
+        unlocks: areal-radius
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: peak-wavelength and areal-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: areal-radius · needs a stated scale regime for: peak-wavelength, areal-radius · needs a stated force regime for: peak-wavelength, areal-radius · needs a consequence that re-derives a known law]
+        [observation: measure peak-wavelength and areal-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     peak-wavelength ≟ deviation-from-mean                [[length]]  score 6
         unlocks: deviation-from-mean
         [consequence: inconclusive]
@@ -581,6 +1001,62 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: peak-wavelength and deviation-from-mean are the same physical quantity, not only both [length] · needs a representative magnitude for: deviation-from-mean · needs a stated scale regime for: peak-wavelength, deviation-from-mean · needs a stated force regime for: peak-wavelength, deviation-from-mean · needs a consequence that re-derives a known law]
         [observation: measure peak-wavelength and deviation-from-mean in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    peak-wavelength ≟ double-slit-fringe-spacing         [[length]]  score 6
+        unlocks: double-slit-fringe-spacing
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: peak-wavelength and double-slit-fringe-spacing are the same physical quantity, not only both [length] · needs a representative magnitude for: double-slit-fringe-spacing · needs a stated scale regime for: peak-wavelength, double-slit-fringe-spacing · needs a stated force regime for: peak-wavelength, double-slit-fringe-spacing · needs a consequence that re-derives a known law]
+        [observation: measure peak-wavelength and double-slit-fringe-spacing in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    peak-wavelength ≟ enclosing-radius                   [[length]]  score 6
+        unlocks: enclosing-radius
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: peak-wavelength and enclosing-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: enclosing-radius · needs a stated scale regime for: peak-wavelength, enclosing-radius · needs a stated force regime for: peak-wavelength, enclosing-radius · needs a consequence that re-derives a known law]
+        [observation: measure peak-wavelength and enclosing-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    peak-wavelength ≟ image-distance                     [[length]]  score 6
+        unlocks: image-distance
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: peak-wavelength and image-distance are the same physical quantity, not only both [length] · needs a representative magnitude for: image-distance · needs a stated scale regime for: peak-wavelength, image-distance · needs a stated force regime for: peak-wavelength, image-distance · needs a consequence that re-derives a known law]
+        [observation: measure peak-wavelength and image-distance in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    peak-wavelength ≟ object-distance                    [[length]]  score 6
+        unlocks: object-distance
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: peak-wavelength and object-distance are the same physical quantity, not only both [length] · needs a representative magnitude for: object-distance · needs a stated scale regime for: peak-wavelength, object-distance · needs a stated force regime for: peak-wavelength, object-distance · needs a consequence that re-derives a known law]
+        [observation: measure peak-wavelength and object-distance in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    peak-wavelength ≟ paraxial-focal-length              [[length]]  score 6
+        unlocks: paraxial-focal-length
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: peak-wavelength and paraxial-focal-length are the same physical quantity, not only both [length] · needs a representative magnitude for: paraxial-focal-length · needs a stated scale regime for: peak-wavelength, paraxial-focal-length · needs a stated force regime for: peak-wavelength, paraxial-focal-length · needs a consequence that re-derives a known law]
+        [observation: measure peak-wavelength and paraxial-focal-length in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    peak-wavelength ≟ screen-distance                    [[length]]  score 6
+        unlocks: screen-distance
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: peak-wavelength and screen-distance are the same physical quantity, not only both [length] · needs a representative magnitude for: screen-distance · needs a stated scale regime for: peak-wavelength, screen-distance · needs a stated force regime for: peak-wavelength, screen-distance · needs a consequence that re-derives a known law]
+        [observation: measure peak-wavelength and screen-distance in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    peak-wavelength ≟ slit-separation                    [[length]]  score 6
+        unlocks: slit-separation
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: peak-wavelength and slit-separation are the same physical quantity, not only both [length] · needs a representative magnitude for: slit-separation · needs a stated scale regime for: peak-wavelength, slit-separation · needs a stated force regime for: peak-wavelength, slit-separation · needs a consequence that re-derives a known law]
+        [observation: measure peak-wavelength and slit-separation in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    peak-wavelength ≟ slit-width                         [[length]]  score 6
+        unlocks: slit-width
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: peak-wavelength and slit-width are the same physical quantity, not only both [length] · needs a representative magnitude for: slit-width · needs a stated scale regime for: peak-wavelength, slit-width · needs a stated force regime for: peak-wavelength, slit-width · needs a consequence that re-derives a known law]
+        [observation: measure peak-wavelength and slit-width in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     peak-wavelength ≟ standard-deviation                 [[length]]  score 6
         unlocks: standard-deviation
         [consequence: inconclusive]
@@ -609,6 +1085,13 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: planck-length and amplitude are the same physical quantity, not only both [length] · needs a representative magnitude for: amplitude · needs a stated scale regime for: amplitude · needs a stated force regime for: amplitude · needs a consequence that re-derives a known law]
         [observation: measure planck-length and amplitude in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    planck-length ≟ areal-radius                         [[length]]  score 6
+        unlocks: areal-radius
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: planck-length and areal-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: areal-radius · needs a stated scale regime for: areal-radius · needs a stated force regime for: areal-radius · needs a consequence that re-derives a known law]
+        [observation: measure planck-length and areal-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     planck-length ≟ compton-wavelength-shift             [[length]]  score 6
         unlocks: compton-wavelength-shift
         [consequence: inconclusive]
@@ -637,6 +1120,13 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: planck-length and distance are the same physical quantity, not only both [length] · needs a representative magnitude for: distance · needs a stated scale regime for: distance · needs a stated force regime for: distance · needs a consequence that re-derives a known law]
         [observation: measure planck-length and distance in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    planck-length ≟ double-slit-fringe-spacing           [[length]]  score 6
+        unlocks: double-slit-fringe-spacing
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: planck-length and double-slit-fringe-spacing are the same physical quantity, not only both [length] · needs a representative magnitude for: double-slit-fringe-spacing · needs a stated scale regime for: double-slit-fringe-spacing · needs a stated force regime for: double-slit-fringe-spacing · needs a consequence that re-derives a known law]
+        [observation: measure planck-length and double-slit-fringe-spacing in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     planck-length ≟ droplet-radius                       [[length]]  score 6
         unlocks: droplet-radius
         [consequence: inconclusive]
@@ -644,6 +1134,13 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: planck-length and droplet-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: droplet-radius · needs a stated scale regime for: droplet-radius · needs a stated force regime for: droplet-radius · needs a consequence that re-derives a known law]
         [observation: measure planck-length and droplet-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    planck-length ≟ enclosing-radius                     [[length]]  score 6
+        unlocks: enclosing-radius
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: planck-length and enclosing-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: enclosing-radius · needs a stated scale regime for: enclosing-radius · needs a stated force regime for: enclosing-radius · needs a consequence that re-derives a known law]
+        [observation: measure planck-length and enclosing-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     planck-length ≟ height                               [[length]]  score 6
         unlocks: height
         [consequence: inconclusive]
@@ -651,6 +1148,13 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: planck-length and height are the same physical quantity, not only both [length] · needs a representative magnitude for: height · needs a stated scale regime for: height · needs a stated force regime for: height · needs a consequence that re-derives a known law]
         [observation: measure planck-length and height in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    planck-length ≟ image-distance                       [[length]]  score 6
+        unlocks: image-distance
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: planck-length and image-distance are the same physical quantity, not only both [length] · needs a representative magnitude for: image-distance · needs a stated scale regime for: image-distance · needs a stated force regime for: image-distance · needs a consequence that re-derives a known law]
+        [observation: measure planck-length and image-distance in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     planck-length ≟ larmor-radius                        [[length]]  score 6
         unlocks: larmor-radius
         [consequence: inconclusive]
@@ -658,6 +1162,20 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: planck-length and larmor-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: larmor-radius · needs a stated scale regime for: larmor-radius · needs a stated force regime for: larmor-radius · needs a consequence that re-derives a known law]
         [observation: measure planck-length and larmor-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    planck-length ≟ object-distance                      [[length]]  score 6
+        unlocks: object-distance
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: planck-length and object-distance are the same physical quantity, not only both [length] · needs a representative magnitude for: object-distance · needs a stated scale regime for: object-distance · needs a stated force regime for: object-distance · needs a consequence that re-derives a known law]
+        [observation: measure planck-length and object-distance in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    planck-length ≟ optical-wavelength                   [[length]]  score 6
+        unlocks: optical-wavelength
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: planck-length and optical-wavelength are the same physical quantity, not only both [length] · needs a representative magnitude for: optical-wavelength · needs a stated scale regime for: optical-wavelength · needs a stated force regime for: optical-wavelength · needs a consequence that re-derives a known law]
+        [observation: measure planck-length and optical-wavelength in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     planck-length ≟ particle-radius                      [[length]]  score 6
         unlocks: particle-radius
         [consequence: inconclusive]
@@ -665,6 +1183,13 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: planck-length and particle-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: particle-radius · needs a stated scale regime for: particle-radius · needs a stated force regime for: particle-radius · needs a consequence that re-derives a known law]
         [observation: measure planck-length and particle-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    planck-length ≟ projectile-horizontal-range          [[length]]  score 6
+        unlocks: projectile-horizontal-range
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: planck-length and projectile-horizontal-range are the same physical quantity, not only both [length] · needs a representative magnitude for: projectile-horizontal-range · needs a stated scale regime for: projectile-horizontal-range · needs a stated force regime for: projectile-horizontal-range · needs a consequence that re-derives a known law]
+        [observation: measure planck-length and projectile-horizontal-range in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     planck-length ≟ r                                    [[length]]  score 6
         unlocks: r
         [consequence: inconclusive]
@@ -679,6 +1204,27 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: planck-length and scale-factor are the same physical quantity, not only both [length] · needs a representative magnitude for: scale-factor · needs a stated scale regime for: scale-factor · needs a stated force regime for: scale-factor · needs a consequence that re-derives a known law]
         [observation: measure planck-length and scale-factor in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    planck-length ≟ screen-distance                      [[length]]  score 6
+        unlocks: screen-distance
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: planck-length and screen-distance are the same physical quantity, not only both [length] · needs a representative magnitude for: screen-distance · needs a stated scale regime for: screen-distance · needs a stated force regime for: screen-distance · needs a consequence that re-derives a known law]
+        [observation: measure planck-length and screen-distance in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    planck-length ≟ slit-separation                      [[length]]  score 6
+        unlocks: slit-separation
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: planck-length and slit-separation are the same physical quantity, not only both [length] · needs a representative magnitude for: slit-separation · needs a stated scale regime for: slit-separation · needs a stated force regime for: slit-separation · needs a consequence that re-derives a known law]
+        [observation: measure planck-length and slit-separation in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    planck-length ≟ slit-width                           [[length]]  score 6
+        unlocks: slit-width
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: planck-length and slit-width are the same physical quantity, not only both [length] · needs a representative magnitude for: slit-width · needs a stated scale regime for: slit-width · needs a stated force regime for: slit-width · needs a consequence that re-derives a known law]
+        [observation: measure planck-length and slit-width in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     planck-length ≟ standard-deviation                   [[length]]  score 6
         unlocks: standard-deviation
         [consequence: inconclusive]
@@ -742,6 +1288,41 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: radius and deviation-from-mean are the same physical quantity, not only both [length] · needs a representative magnitude for: deviation-from-mean · needs a stated scale regime for: radius, deviation-from-mean · needs a stated force regime for: radius, deviation-from-mean · needs a consequence that re-derives a known law]
         [observation: measure radius and deviation-from-mean in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    radius ≟ double-slit-fringe-spacing                  [[length]]  score 6
+        unlocks: double-slit-fringe-spacing
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: radius and double-slit-fringe-spacing are the same physical quantity, not only both [length] · needs a representative magnitude for: double-slit-fringe-spacing · needs a stated scale regime for: radius, double-slit-fringe-spacing · needs a stated force regime for: radius, double-slit-fringe-spacing · needs a consequence that re-derives a known law]
+        [observation: measure radius and double-slit-fringe-spacing in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    radius ≟ image-distance                              [[length]]  score 6
+        unlocks: image-distance
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: radius and image-distance are the same physical quantity, not only both [length] · needs a representative magnitude for: image-distance · needs a stated scale regime for: radius, image-distance · needs a stated force regime for: radius, image-distance · needs a consequence that re-derives a known law]
+        [observation: measure radius and image-distance in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    radius ≟ object-distance                             [[length]]  score 6
+        unlocks: object-distance
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: radius and object-distance are the same physical quantity, not only both [length] · needs a representative magnitude for: object-distance · needs a stated scale regime for: radius, object-distance · needs a stated force regime for: radius, object-distance · needs a consequence that re-derives a known law]
+        [observation: measure radius and object-distance in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    radius ≟ optical-wavelength                          [[length]]  score 6
+        unlocks: optical-wavelength
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: radius and optical-wavelength are the same physical quantity, not only both [length] · needs a representative magnitude for: optical-wavelength · needs a stated scale regime for: radius, optical-wavelength · needs a stated force regime for: radius, optical-wavelength · needs a consequence that re-derives a known law]
+        [observation: measure radius and optical-wavelength in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    radius ≟ paraxial-focal-length                       [[length]]  score 6
+        unlocks: paraxial-focal-length
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: radius and paraxial-focal-length are the same physical quantity, not only both [length] · needs a representative magnitude for: paraxial-focal-length · needs a stated scale regime for: radius, paraxial-focal-length · needs a stated force regime for: radius, paraxial-focal-length · needs a consequence that re-derives a known law]
+        [observation: measure radius and paraxial-focal-length in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     radius ≟ scale-factor                                [[length]]  score 6
         unlocks: scale-factor
         [consequence: inconclusive]
@@ -749,6 +1330,27 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: radius and scale-factor are the same physical quantity, not only both [length] · needs a representative magnitude for: scale-factor · needs a stated scale regime for: radius, scale-factor · needs a stated force regime for: radius, scale-factor · needs a consequence that re-derives a known law]
         [observation: measure radius and scale-factor in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    radius ≟ screen-distance                             [[length]]  score 6
+        unlocks: screen-distance
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: radius and screen-distance are the same physical quantity, not only both [length] · needs a representative magnitude for: screen-distance · needs a stated scale regime for: radius, screen-distance · needs a stated force regime for: radius, screen-distance · needs a consequence that re-derives a known law]
+        [observation: measure radius and screen-distance in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    radius ≟ slit-separation                             [[length]]  score 6
+        unlocks: slit-separation
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: radius and slit-separation are the same physical quantity, not only both [length] · needs a representative magnitude for: slit-separation · needs a stated scale regime for: radius, slit-separation · needs a stated force regime for: radius, slit-separation · needs a consequence that re-derives a known law]
+        [observation: measure radius and slit-separation in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    radius ≟ slit-width                                  [[length]]  score 6
+        unlocks: slit-width
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: radius and slit-width are the same physical quantity, not only both [length] · needs a representative magnitude for: slit-width · needs a stated scale regime for: radius, slit-width · needs a stated force regime for: radius, slit-width · needs a consequence that re-derives a known law]
+        [observation: measure radius and slit-width in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     radius ≟ standard-deviation                          [[length]]  score 6
         unlocks: standard-deviation
         [consequence: inconclusive]
@@ -847,6 +1449,13 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: thermal-energy and work-function are the same physical quantity, not only both [energy] · needs a representative magnitude for: work-function · needs a stated scale regime for: thermal-energy, work-function · needs a stated force regime for: thermal-energy, work-function · needs a consequence that re-derives a known law]
         [observation: measure thermal-energy and work-function in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    thermal-wavelength ≟ areal-radius                    [[length]]  score 6
+        unlocks: areal-radius
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: thermal-wavelength and areal-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: thermal-wavelength, areal-radius · needs a stated scale regime for: areal-radius · needs a stated force regime for: thermal-wavelength, areal-radius · needs a consequence that re-derives a known law]
+        [observation: measure thermal-wavelength and areal-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     thermal-wavelength ≟ deviation-from-mean             [[length]]  score 6
         unlocks: deviation-from-mean
         [consequence: inconclusive]
@@ -854,6 +1463,13 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: thermal-wavelength and deviation-from-mean are the same physical quantity, not only both [length] · needs a representative magnitude for: thermal-wavelength, deviation-from-mean · needs a stated scale regime for: deviation-from-mean · needs a stated force regime for: thermal-wavelength, deviation-from-mean · needs a consequence that re-derives a known law]
         [observation: measure thermal-wavelength and deviation-from-mean in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    thermal-wavelength ≟ double-slit-fringe-spacing      [[length]]  score 6
+        unlocks: double-slit-fringe-spacing
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: thermal-wavelength and double-slit-fringe-spacing are the same physical quantity, not only both [length] · needs a representative magnitude for: thermal-wavelength, double-slit-fringe-spacing · needs a stated scale regime for: double-slit-fringe-spacing · needs a stated force regime for: thermal-wavelength, double-slit-fringe-spacing · needs a consequence that re-derives a known law]
+        [observation: measure thermal-wavelength and double-slit-fringe-spacing in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     thermal-wavelength ≟ droplet-radius                  [[length]]  score 6
         unlocks: droplet-radius
         [consequence: inconclusive]
@@ -861,6 +1477,13 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: thermal-wavelength and droplet-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: thermal-wavelength, droplet-radius · needs a stated scale regime for: droplet-radius · needs a stated force regime for: thermal-wavelength, droplet-radius · needs a consequence that re-derives a known law]
         [observation: measure thermal-wavelength and droplet-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    thermal-wavelength ≟ enclosing-radius                [[length]]  score 6
+        unlocks: enclosing-radius
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: thermal-wavelength and enclosing-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: thermal-wavelength, enclosing-radius · needs a stated scale regime for: enclosing-radius · needs a stated force regime for: thermal-wavelength, enclosing-radius · needs a consequence that re-derives a known law]
+        [observation: measure thermal-wavelength and enclosing-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     thermal-wavelength ≟ hubble-distance                 [[length]]  score 6
         unlocks: hubble-distance
         [consequence: inconclusive]
@@ -868,6 +1491,27 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: thermal-wavelength and hubble-distance are the same physical quantity, not only both [length] · needs a representative magnitude for: thermal-wavelength · needs a stated scale regime for: hubble-distance · needs a stated force regime for: thermal-wavelength, hubble-distance · needs a consequence that re-derives a known law]
         [observation: measure thermal-wavelength and hubble-distance in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    thermal-wavelength ≟ image-distance                  [[length]]  score 6
+        unlocks: image-distance
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: thermal-wavelength and image-distance are the same physical quantity, not only both [length] · needs a representative magnitude for: thermal-wavelength, image-distance · needs a stated scale regime for: image-distance · needs a stated force regime for: thermal-wavelength, image-distance · needs a consequence that re-derives a known law]
+        [observation: measure thermal-wavelength and image-distance in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    thermal-wavelength ≟ object-distance                 [[length]]  score 6
+        unlocks: object-distance
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: thermal-wavelength and object-distance are the same physical quantity, not only both [length] · needs a representative magnitude for: thermal-wavelength, object-distance · needs a stated scale regime for: object-distance · needs a stated force regime for: thermal-wavelength, object-distance · needs a consequence that re-derives a known law]
+        [observation: measure thermal-wavelength and object-distance in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    thermal-wavelength ≟ paraxial-focal-length           [[length]]  score 6
+        unlocks: paraxial-focal-length
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: thermal-wavelength and paraxial-focal-length are the same physical quantity, not only both [length] · needs a representative magnitude for: thermal-wavelength, paraxial-focal-length · needs a stated scale regime for: paraxial-focal-length · needs a stated force regime for: thermal-wavelength, paraxial-focal-length · needs a consequence that re-derives a known law]
+        [observation: measure thermal-wavelength and paraxial-focal-length in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     thermal-wavelength ≟ scale-factor                    [[length]]  score 6
         unlocks: scale-factor
         [consequence: inconclusive]
@@ -875,6 +1519,27 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: thermal-wavelength and scale-factor are the same physical quantity, not only both [length] · needs a representative magnitude for: thermal-wavelength, scale-factor · needs a stated scale regime for: scale-factor · needs a stated force regime for: thermal-wavelength, scale-factor · needs a consequence that re-derives a known law]
         [observation: measure thermal-wavelength and scale-factor in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    thermal-wavelength ≟ screen-distance                 [[length]]  score 6
+        unlocks: screen-distance
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: thermal-wavelength and screen-distance are the same physical quantity, not only both [length] · needs a representative magnitude for: thermal-wavelength, screen-distance · needs a stated scale regime for: screen-distance · needs a stated force regime for: thermal-wavelength, screen-distance · needs a consequence that re-derives a known law]
+        [observation: measure thermal-wavelength and screen-distance in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    thermal-wavelength ≟ slit-separation                 [[length]]  score 6
+        unlocks: slit-separation
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: thermal-wavelength and slit-separation are the same physical quantity, not only both [length] · needs a representative magnitude for: thermal-wavelength, slit-separation · needs a stated scale regime for: slit-separation · needs a stated force regime for: thermal-wavelength, slit-separation · needs a consequence that re-derives a known law]
+        [observation: measure thermal-wavelength and slit-separation in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    thermal-wavelength ≟ slit-width                      [[length]]  score 6
+        unlocks: slit-width
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: thermal-wavelength and slit-width are the same physical quantity, not only both [length] · needs a representative magnitude for: thermal-wavelength, slit-width · needs a stated scale regime for: slit-width · needs a stated force regime for: thermal-wavelength, slit-width · needs a consequence that re-derives a known law]
+        [observation: measure thermal-wavelength and slit-width in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     thermal-wavelength ≟ standard-deviation              [[length]]  score 6
         unlocks: standard-deviation
         [consequence: inconclusive]
@@ -910,9 +1575,10 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: work and rydberg-energy are the same physical quantity, not only both [energy] · needs a representative magnitude for: work · needs a stated scale regime for: work, rydberg-energy · needs a stated force regime for: work, rydberg-energy · needs a consequence that re-derives a known law]
         [observation: measure work and rydberg-energy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
-  adjudicated: 2 of the 128 promising, magnitude unchecked carry recorded verdicts (1 decoy, 1 entailed) — folded; --show-adjudicated to list
+  adjudicated: 2 of the 223 promising, magnitude unchecked carry recorded verdicts (1 decoy, 1 entailed) — folded; --show-adjudicated to list
 
   MAGNITUDE-CLASH (representative values differ by > N orders — a falsifier; p is the falsifier's strength at the values' stated σ, 2Φ(−orders/√(σa²+σb²)), not a credibility score):
+    A ≟ thomson-cross-section                            ~36.2 orders apart, p = 1.2e-144  (anchor-derived)
     bohr-radius ≟ compton-wavelength-full                ~61.7 orders apart, p < 1e-300  (anchor-derived)
     classical-electron-radius ≟ bohr-radius              ~4.27 orders apart, p = 0.00251
     classical-electron-radius ≟ compton-wavelength-full  ~57.4 orders apart, p < 1e-300  (anchor-derived)
@@ -941,22 +1607,36 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
 
   SUBSUMING (generic ≟ specialization — tautological, barred from promising):
     compton-wavelength ≟ compton-wavelength-shift        [[length]]
+    density ≟ mass-energy-density                        [[L^-3 M]]
     distance ≟ hubble-distance                           [[length]]
+    distance ≟ image-distance                            [[length]]
+    distance ≟ object-distance                           [[length]]
+    distance ≟ screen-distance                           [[length]]
     energy ≟ internal-energy-change                      [[energy]]
+    energy ≟ mean-energy-above-ground                    [[energy]]
     energy ≟ photoelectron-max-energy                    [[energy]]
     energy ≟ photon-energy                               [[energy]]
     energy ≟ rydberg-energy                              [[energy]]
+    energy ≟ system-energy                               [[energy]]
     force ≟ lorentz-force                                [[force]]
     frequency ≟ photon-frequency                         [[frequency]]
     heat ≟ heat-added                                    [[energy]]
+    length ≟ paraxial-focal-length                       [[length]]
     length ≟ planck-length                               [[length]]
+    mass ≟ enclosed-mass                                 [[mass]]
     planck-time ≟ time                                   [[time]]
+    pressure ≟ fluid-pressure                            [[L^-1 M T^-2]]
     pressure ≟ laplace-pressure                          [[L^-1 M T^-2]]
+    radius ≟ areal-radius                                [[length]]
     radius ≟ droplet-radius                              [[length]]
+    radius ≟ enclosing-radius                            [[length]]
     temperature ≟ cold-reservoir-temperature             [[temperature]]
     temperature ≟ hot-reservoir-temperature              [[temperature]]
     time ≟ elapsed-time                                  [[time]]
+    time ≟ orthogonalization-time-lower-bound            [[time]]
+    time ≟ time-interval                                 [[time]]
     wavelength ≟ compton-wavelength-shift                [[length]]
+    wavelength ≟ optical-wavelength                      [[length]]
     work ≟ work-done-by-system                           [[energy]]
     work ≟ work-function                                 [[energy]]
 

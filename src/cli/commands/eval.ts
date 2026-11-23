@@ -6,7 +6,7 @@
  * `--debug` out of by hand are already clean — the `expr`/`name=value`
  * positional-parsing contract is otherwise unchanged.
  */
-import type { FlagSpec } from '../args.js';
+import { shellQuote, type FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { emitJson } from '../output.js';
@@ -14,7 +14,7 @@ import { CliError, UsageError } from '../errors.js';
 import { formulaParserLabel } from '../version.js';
 import { FormulaUsageError } from '../euler-guard.js';
 import { splitAssignments } from '../bindings.js';
-import { primaryUnitLabel } from '../expr-print.js';
+import { compactFormulaUnit } from '../expr-print.js';
 import type { UnitMode } from '../../dimensional/natural-units.js';
 import type { Dimension } from '../../dimensional/types.js';
 
@@ -108,12 +108,50 @@ const HELP = `upt eval "<formula>" name=value ...
         compares unlike dimensions is refused (exit 1). A bare number has no
         dimension check. The value is converted to SI. When every bound name the
         formula uses has a unit, the SI unit of the result follows the value.
-        A bare number has no unit, and the result then shows the value only.
+        Mixed bare and dimensioned inputs are evaluated with a warning when
+        the dimension check is skipped. This command checks arithmetic and
+        dimensions where available. Physical validity domains are checked by
+        upt evaluate or upt explain for a registered relation.
         --natural and --geometrized show the value only.
         An unknown function fails and names a documented equivalent where one
         exists (lg → log10).
         e.g.  upt eval "hbar*c^3/(8*pi*G*M*k_B)" M=1.989e30
               (hbar, c, G and k_B are registered constants; M is bound)`;
+
+function bindingCommand(formula: string, bindings: readonly string[]): string {
+  return ['upt', 'eval', formula, ...bindings].map(shellQuote).join(' ');
+}
+
+/** Use the binding reader to check a suspected quantity before suggesting a rewrite. */
+function unitBindingHint(api: CommandCtx['api'], expr: string, bindings: readonly string[]): string {
+  try {
+    const literal = api.readQuantityLiteral(expr);
+    if (literal !== null && literal.unit !== '') {
+      return ` '${expr}' reads as a quantity. A unit goes in a binding.\n  ${bindingCommand('x', [`x=${expr}`])}\n`;
+    }
+  } catch (error) {
+    if (!(error instanceof api.UnitError)) throw error;
+  }
+  const quantity = /(?<![\p{L}\p{N}_.])(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?[ \t]*[\p{L}°µΩ]+/gu;
+  for (const possible of expr.matchAll(quantity)) {
+    const token = possible[0];
+    try {
+      const literal = api.readQuantityLiteral(token);
+      if (literal === null || literal.unit === '') continue;
+    } catch (error) {
+      if (!(error instanceof api.UnitError)) throw error;
+      continue;
+    }
+    let name = 'x';
+    for (let index = 1; new RegExp(`\\b${name}\\b`).test(expr) || bindings.some((b) => b.startsWith(`${name}=`)); index++) {
+      name = `x${index}`;
+    }
+    const start = possible.index;
+    const formula = expr.slice(0, start) + name + expr.slice(start + token.length);
+    return ` Units belong in bindings.\n  ${bindingCommand(formula, [`${name}=${token}`, ...bindings])}\n`;
+  }
+  return '';
+}
 
 async function run(ctx: CommandCtx): Promise<number> {
   const { args, api, out, err } = ctx;
@@ -143,7 +181,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     cf = parser.parse(expr);
   } catch (e) {
     // The parser's message carries its own `parse error:` label.
-    throw new FormulaUsageError((e as Error).message, kind);
+    throw new FormulaUsageError((e as Error).message + unitBindingHint(api, expr, positionals.slice(1)), kind);
   }
 
   if (args.flags.has('geometrized') && args.flags.has('natural')) {
@@ -162,19 +200,14 @@ async function run(ctx: CommandCtx): Promise<number> {
     const energyHint = missing.includes('E')
       ? ' E is energy. The binding is its own argument: upt eval E E=1eV.'
       : '';
-    // The binding reader accepts a number with a unit and the formula reader
-    // cannot. A unit error (unknown, ambiguous, refused) means no hint.
-    let literalHint = '';
-    try {
-      if (api.readQuantityLiteral(expr) !== null) {
-        const binding = /\s/.test(expr) ? `"x=${expr}"` : `x=${expr}`;
-        literalHint = ` '${expr}' reads as a quantity. A unit goes in a binding: upt eval x ${binding}.`;
-      }
-    } catch (e) {
-      if (!(e instanceof api.UnitError)) throw e;
-    }
+    const literalHint = unitBindingHint(api, expr, positionals.slice(1));
+    const unitNames = missing.filter((name) => api.unitRows().has(name));
+    const unitHint = literalHint !== '' || unitNames.length === 0 ? '' :
+      ` Units belong in bindings.\n  ${bindingCommand(expr, [
+        ...unitNames.map((name) => `${name}=1${name}`), ...positionals.slice(1),
+      ])}\n`;
     throw new FormulaUsageError(
-      `missing values for: ${missing.join(', ')}   (free variables: ${cf.variables.join(', ') || 'none'}).${energyHint}${literalHint}`,
+      `missing values for: ${missing.join(', ')}   (free variables: ${cf.variables.join(', ') || 'none'}).${energyHint}${literalHint}${unitHint}`,
       kind,
     );
   }
@@ -214,6 +247,18 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
 
   const notes: string[] = [...parsed.notes];
+  const evaluationNotes: string[] = [];
+  const formulaNames = /(?<![\p{L}\p{N}_])e(?![\p{L}\p{N}_])/u.test(expr)
+    ? [...new Set([...cf.variables, 'e'])] : cf.variables;
+  const dimensioned = formulaNames.some((name) => {
+    const dim = parsed.dims[name] ?? (name in parsed.scope ? undefined : api.constantRecord(name)?.dim);
+    return dim !== undefined && Object.values(dim).some((power) => power !== 0);
+  });
+  if (mode === 'si' && dimensioned) {
+    const bare = formulaNames.filter((name) => name in parsed.scope && !(name in parsed.dims));
+    if (bare.length > 0) evaluationNotes.push(`warning: skipped the dimension check with bare bindings ${bare.join(', ')} mixed with dimensioned inputs.`);
+    evaluationNotes.push('note: eval does not check physical validity domains. Use evaluate or explain for a registered relation.');
+  }
   if (mode === 'si') for (const note of api.constantNotes(cf.variables)) notes.push(`note: ${note}`);
   for (const note of notes) err(note);
 
@@ -227,8 +272,9 @@ async function run(ctx: CommandCtx): Promise<number> {
     throw new FormulaUsageError((e as Error).message, kind);
   }
 
-  const label = resultDim === undefined ? '1' : primaryUnitLabel(api, '', resultDim);
+  const label = resultDim === undefined ? '1' : compactFormulaUnit(api, resultDim);
   if (isJson) {
+    notes.push(...evaluationNotes);
     emitJson(
       {
         command: 'eval',
@@ -244,6 +290,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
 
   out(label === '1' ? String(value) : `${value} ${label}`);
+  for (const note of evaluationNotes) err(note);
   return 0;
 }
 

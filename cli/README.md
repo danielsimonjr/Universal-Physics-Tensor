@@ -479,8 +479,8 @@ Every flag a registered command parses, written by `bun scripts/cli-reference.ts
 | `--around` | `map` | Keep edges within --depth shared-quantity hops of QUANTITY. |
 | `--assume` | `regime` | Record a prose premise as your declaration. It is not evidence and it is not evaluated. |
 | `--at` | `path`, `regime` | State one regime coordinate as group=value. A value may be an expression such as pi/2. |
-| `--bind-short` | `map` | Bind a one-letter catalog name in --equation. Without it, those names are reported and not bound. |
-| `--bounds` | `probe` | Bounds for design, as the design subverb reads them. |
+| `--bind-short` | `map` | Bind an exact one-letter catalog name beyond those resolved by the equation context. |
+| `--bounds` | `probe` | Design bounds JSON file with variables mapped to {min, max, steps?}. |
 | `--bridge` | `confront` | Select one bridge id, the same selection as a positional be-XX. |
 | `--budget-ms` | `probe` | Wall-clock cap in milliseconds. |
 | `--communities` | `map` | Also print the layout communities (Louvain, heuristic) of the largest component. A drawing aid, not physics. |

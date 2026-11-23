@@ -155,6 +155,7 @@ export interface BridgeEdge {
     readonly from: string;
     readonly to: string;
     readonly rationale: string;
+    readonly confidence?: EdgeConfidence;
     readonly citation?: string;
   };
   /**

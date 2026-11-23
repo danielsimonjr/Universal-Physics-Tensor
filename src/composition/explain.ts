@@ -24,13 +24,13 @@
  * @module composition/explain
  */
 
-import type { BridgeEdge } from './edge.js';
+import type { BridgeEdge, EdgeConfidence } from './edge.js';
 import type { QuantityIdentification } from './compose.js';
-import { QUANTITY_IDENTIFICATIONS } from './compose.js';
+import { minConfidence, QUANTITY_IDENTIFICATIONS } from './compose.js';
 import type { IdentifiabilityResult } from './identifiability.js';
 import { classifyIdentifiability, forwardClosure } from './identifiability.js';
 import { fixedPoint } from '../canonical/fixed-points.js';
-import type { RetrodictionResult } from './retrodiction.js';
+import type { RecoveryStep, RetrodictionResult } from './retrodiction.js';
 import { retrodictNode } from './retrodiction.js';
 import type { Dimension } from '../dimensional/types.js';
 import { CANONICAL_GROUP_PREFACTORS } from './canonical-prefactors.js';
@@ -81,6 +81,16 @@ export interface DerivationExplanation {
   };
   /** Value recovered via this derivation (only when values were given). */
   readonly value?: number;
+  /** Whether the value bounds the physical observable. */
+  readonly bound?: 'lower' | 'upper';
+  /** Executed operations in dependency order, including any identification. */
+  readonly route?: readonly RecoveryStep[];
+  /** Weakest confidence among the operations that produced the value. */
+  readonly confidence?: EdgeConfidence;
+}
+
+function routeConfidence(route: readonly RecoveryStep[]): EdgeConfidence {
+  return route.reduce<EdgeConfidence>((grade, step) => minConfidence(grade, step.confidence), 'established');
 }
 
 /** Options for {@link explainQuantity}. @public */
@@ -108,6 +118,8 @@ export interface QuantityExplanation {
   readonly consistency?: RetrodictionResult;
   /** Agreed recovered value (consistent or single), when values supplied. */
   readonly recoveredValue?: number;
+  /** Weakest confidence among the routes contributing to the recovered value. */
+  readonly confidence?: EdgeConfidence;
   /**
    * Where the numeric factor came from. `unset` is not the same as a
    * missing `recoveredValue`: the inputs were read and the factor has
@@ -457,7 +469,7 @@ export function explainQuantity(
   let consistency: RetrodictionResult | undefined;
   let refusals: RetrodictionResult['refusals'];
   let recoveredValue: number | undefined;
-  const valueByEdge = new Map<string, number>();
+  const predictionByEdge = new Map<string, RetrodictionResult['predictions'][number]>();
   if (values) {
     const references =
       target in values ? { [target]: values[target] } : undefined;
@@ -465,9 +477,10 @@ export function explainQuantity(
       identifications,
       tolerance: opts.tolerance,
       references,
+      includeRoutes: true,
     });
     refusals = retro.refusals;
-    for (const p of retro.predictions) valueByEdge.set(p.edge, p.value);
+    for (const p of retro.predictions) predictionByEdge.set(p.edge, p);
     if (retro.predictions.length >= 2) consistency = retro;
     if (
       (retro.outcome === 'consistent' || retro.outcome === 'single') &&
@@ -537,6 +550,10 @@ export function explainQuantity(
           };
         }
       }
+      const prediction = predictionByEdge.get(eid);
+      const bound = canonicalById(eid)?.bound;
+      const route = prediction?.route;
+      const confidence = route === undefined ? undefined : routeConfidence(route);
       return {
         edge: eid,
         beId: e?.beId ?? null,
@@ -544,10 +561,25 @@ export function explainQuantity(
         sources,
         leafInputs,
         ...(dimensionalForm ? { dimensionalForm } : {}),
-        ...(valueByEdge.has(eid) ? { value: valueByEdge.get(eid) } : {}),
+        ...(prediction === undefined ? {} : { value: prediction.value }),
+        ...(bound === undefined ? {} : { bound }),
+        ...(route === undefined ? {} : { route }),
+        ...(confidence === undefined ? {} : { confidence }),
       };
     },
   );
+
+  for (const prediction of predictionByEdge.values()) {
+    const last = prediction.route?.at(-1);
+    if (last?.kind !== 'identification' || prediction.route === undefined) continue;
+    const steps = prediction.route;
+    const leaves = new Set(steps.flatMap((step) => step.kind === 'edge' ? step.inputs : [step.from]));
+    derivations.push({
+      edge: prediction.edge, beId: null, label: last.rationale, sources: [last.from],
+      leafInputs: knownNames.filter((name) => leaves.has(name)),
+      value: prediction.value, route: steps, confidence: routeConfidence(steps),
+    });
+  }
 
   // Dimensional sufficiency of the KNOWN set, independent of the graph.
   // A dimensionless count is stripped before Buckingham (it is a π-group and
@@ -671,6 +703,9 @@ export function explainQuantity(
       ? ''
       : ` No recovered value: ${domainRefusals.map((r) => r.reason).join('; ')}.`;
 
+  const grades = derivations.flatMap((d) => d.confidence === undefined ? [] : [d.confidence]);
+  const confidence = recoveredValue === undefined || grades.length === 0
+    ? undefined : grades.reduce(minConfidence, 'established');
   return {
     target,
     known: knownNames,
@@ -678,6 +713,7 @@ export function explainQuantity(
     derivations,
     ...(consistency ? { consistency } : {}),
     ...(recoveredValue !== undefined ? { recoveredValue } : {}),
+    ...(confidence === undefined ? {} : { confidence }),
     ...(coefficient !== undefined ? { coefficient } : {}),
     ...(dimensional ? { dimensional } : {}),
     ...(refusals !== undefined ? { refusals } : {}),

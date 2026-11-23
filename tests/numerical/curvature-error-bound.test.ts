@@ -145,11 +145,12 @@ describe('finite-difference Riemann error bound', () => {
 });
 
 describe('curvatureReport bounds', () => {
-  it('Minkowski is unresolved, not refused', () => {
+  it('Minkowski reports the exact Ricci zero independently of the numerical bounds', () => {
     const rep = curvatureReport('minkowski');
     expect(rep.kretschmann).toBe(0);
     expect(rep.kretschmannResolved).toBe(false);
-    expect(rep.ricciScalarResolved).toBe(false);
+    expect(rep.ricciScalarResolved).toBe(true);
+    expect(rep.ricciScalarSource).toBe('closed-form');
     expect(rep.kretschmannBound).toBeGreaterThanOrEqual(0);
   });
 
@@ -158,7 +159,8 @@ describe('curvatureReport bounds', () => {
     const K = rep.closedForm.kretschmann!;
     expect(rep.kretschmannResolved).toBe(true);
     expect(Math.abs(rep.kretschmann - K)).toBeLessThanOrEqual(rep.kretschmannBound);
-    expect(rep.ricciScalarResolved).toBe(false);
+    expect(rep.ricciScalarResolved).toBe(true);
+    expect(rep.ricciScalarSource).toBe('closed-form');
   });
 
   it('Kerr and FLRW defaults: K is resolved', () => {

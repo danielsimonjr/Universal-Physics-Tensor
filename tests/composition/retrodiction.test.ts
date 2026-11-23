@@ -65,6 +65,27 @@ describe('retrodictNode — relativeSpread is robust to sign cancellation', () =
   });
 });
 
+describe('retrodictNode masks the target across identifications and edges', () => {
+  const identification = { from: 'a', to: 't', rationale: 'controlled identity' };
+  const edges = [
+    edge('read-target', ['t'], 's', (i) => i['t'] * 3),
+    edge('recreate-target', ['s'], 't', (i) => i['s'] * 3),
+  ];
+
+  it('recovers the identification independently of its circular route and of tracing', () => {
+    const result = retrodictNode(edges, { a: 1, t: 9 }, 't', { identifications: [identification] });
+    expect(result.predictions).toEqual([{ edge: 'identify:a:t', value: 1 }]);
+  });
+
+  it('compares independent edges and identifications without letting either mask a contradiction', () => {
+    const direct = edge('independent', ['a'], 't', (i) => i['a'] * 2);
+    const result = retrodictNode([...edges, direct], { a: 1 }, 't', { identifications: [identification], includeRoutes: true });
+    expect(result.outcome).toBe('inconsistent');
+    expect(result.predictions.map((prediction) => prediction.value)).toEqual([2, 1]);
+    expect(result.predictions[1]?.route).toMatchObject([{ kind: 'identification', from: 'a', to: 't' }]);
+  });
+});
+
 describe('unit-convention copy', () => {
   it('scales a bit into nats and leaves a same-convention identification at 1', () => {
     const scaled = forwardEvaluate([], { 'intrinsic-information': 1 }, [

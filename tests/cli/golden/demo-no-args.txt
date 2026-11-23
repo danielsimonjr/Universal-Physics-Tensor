@@ -1,10 +1,11 @@
 upt — bridge-inference CLI. Demo (run `upt help` for usage):
 
 ● hawking-temperature  [source: catalog (160-bridge)]
-  'hawking-temperature' is over-determined from {mass}: 2 derivation routes (be-42, be-42-via-rs) restate ONE bridge (BE-42). They agree (relative spread 0.0e+0) — agreement by construction, not an independent check. Recovered value: 6.16842971641034e-8. Dimensionally, those inputs alone do not fix it — the encoded formula carries dimensionful constants.
+  'hawking-temperature' is over-determined from {mass}: 2 derivation routes (be-42, be-42-via-rs) restate ONE bridge (BE-42). They agree (relative spread 0.0e+0) — agreement by construction, not an independent check. Recovered value: 6.16842971641034e-8 K [highly-speculative]. Dimensionally, those inputs alone do not fix it — the encoded formula carries dimensionful constants.
   derivations:
-    - be-42 (Hawking temperature T_H = ℏc³/(8πGMk_B)) = 6.16842971641034e-8
-    - be-42-via-rs (Hawking temperature T_H = ℏc/(4π k_B r_s)) = 6.16842971641034e-8  [from leaves: mass]
+    - be-42 (Hawking temperature T_H = ℏc³/(8πGMk_B)) = 6.16842971641034e-8 K [highly-speculative]
+    - be-42-via-rs (Hawking temperature T_H = ℏc/(4π k_B r_s)) = 6.16842971641034e-8 K [highly-speculative]  [from leaves: mass]
+        route: law-schwarzschild-radius [established] >> be-42-via-rs [highly-speculative]
 
 Bridge triage — structural decidability against established physics
 (review/confrontation priority — NOT a credibility ranking)
@@ -15,7 +16,7 @@ Bridge triage — structural decidability against established physics
    ── Tier 1: anchored + grounded/tractable — confront first
    T1     0   grounded     0        be-12                speculative
    T1     0   grounded     0        be-16                speculative
-   T1     0   grounded     0        be-42-via-rs         highly-speculative
+   T1     0   grounded     0        be-42-via-rs         highly-speculative  (route of be-42)
    T1     0   empirical    0  DATA  be-48                speculative
    T1     0   decoy        0        be-27                speculative
    T1     0   decoy        0        be-42                highly-speculative
@@ -37,7 +38,7 @@ Bridge triage — structural decidability against established physics
    T3     ∞   open         1        be-18                speculative
    T3     ∞   open         1        be-19                speculative
    T3     ∞   open         1        be-24                speculative
-   T3     ∞   open         1        be-26-wkb            speculative
+   T3     ∞   open         1        be-26-wkb            speculative  (route of be-26)
    T3     ∞   open         1        be-30                speculative
    T3     ∞   open         1        be-50                highly-speculative
    T3     ∞   open         1        be-54                speculative
@@ -52,5 +53,6 @@ Bridge triage — structural decidability against established physics
    T3     ∞   open         5        be-39                speculative
    T3     ∞   open         6        be-47                speculative
 
-   Tiers: {"1":9,"2":4,"3":21}  (of 34 non-established bridges)
+   Tiers: {"1":9,"2":4,"3":21}  (34 graph routes for 32 of 36 non-established catalog bridges)
+   No encoded composition route: be-28, be-29, be-32, be-44
    Reminder: tier ranks decidability/anchoring, not truth.

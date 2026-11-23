@@ -10,6 +10,12 @@ from v0.1.0 onward.
 
 ### Fixed
 
+- Graph reports distinguish catalog entries from encoded routes, show discovery verdicts and candidate dimensions, and separate audit eligibility from reconstruction outcomes.
+- Kerr reports identify the geometrized time coordinate, horizons and orbit radii. Geodesic starts use the radial and polar turning conditions, and the report states elapsed proper time. Exact vacuum Ricci scalars identify their closed form.
+- Scalar evaluation suggests copyable unit bindings and reports skipped checks. Formula retrieval ranks typed solved forms, and probe studies use registered constants and distinguish search termination from held-out evidence.
+- Explain prints units, constant substitutions and graded execution routes. Map resolves declared symbols in context, tensor queries validate their axes, and path reports state the tested horizon thresholds.
+- The canonical registry adds textbook optics, induction, orbital and quantum relations, including a mass-to-horizon-area route for Schwarzschild entropy. With the Unruh identification the largest layout component holds 51 catalog quantities, 133 canonical quantities, and 193 across both graphs.
+
 - Unit expressions accept fractional powers, square roots, and temperature intervals in products and quotients. The unit registry provides engineering aliases and `upt help units`. Dimension specifications recognize momentum and resistivity and preserve unrecognized names in diagnostics.
 
 - Regime checks derive the chain coordinate from wavenumber and spacing, and atlas listings identify domains with no models or bridges. The damped-spring report identifies what its bound supremum measures. Hermite crossing keeps the sign bracket and handles stationary roots.

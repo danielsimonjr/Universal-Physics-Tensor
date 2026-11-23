@@ -137,7 +137,7 @@ export const STATUS_GLOSSARY: readonly StatusDefinition[] = [
   },
   {
     key: 'decoy',
-    words: ['DECOY', 'decoy'],
+    words: ['DIMENSIONAL-RECONSTRUCTION MISMATCH'],
     meaning:
       'a set of constants closes the dimensions, but its monomial does not reproduce the evaluator: a failed ' +
       'dimensional reconstruction, not a physical refutation of the formula',
@@ -155,13 +155,19 @@ export const STATUS_GLOSSARY: readonly StatusDefinition[] = [
     key: 'not-a-monomial',
     words: ['NOT A MONOMIAL'],
     meaning:
-      'the encoded formula adds dimensionful terms, so it is not a proportionality. A monomial reconstruction ' +
+      'the encoded formula adds dimensionful terms or is a standalone transcendental, so it is not a proportionality. A monomial reconstruction ' +
       'does not apply. This is not a failed reconstruction of a monomial, and not a physical refutation',
     commands: ['audit'],
   },
   {
+    key: 'not-unique',
+    words: ['NOT UNIQUE'],
+    meaning: 'the target is in the span of the declared variables, which leave free dimensionless groups',
+    commands: ['audit'],
+  },
+  {
     key: 'adjudicated-decoy',
-    words: ['decoy'],
+    words: ['RECORDED CANDIDATE DECOY'],
     meaning:
       'a recorded adjudication of the identification a ≡ b found a dimensional coincidence with no mechanism ' +
       '(trivial and definitional identifications included). Folded out of the PROMISING list by default. Not ' +

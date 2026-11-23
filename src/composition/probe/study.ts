@@ -37,6 +37,7 @@ import { readFileSync } from 'node:fs';
 import { DIMENSIONLESS, type Dimension } from '../../dimensional/types.js';
 import type { ExprNode } from '../../dimensional/ast-types.js';
 import { equals, format } from '../../dimensional/algebra.js';
+import { constantRecord, constantScope } from '../../dimensional/symbolic-constants.js';
 import { convertValue, parseUnit, UnitError } from '../../dimensional/units.js';
 
 /**
@@ -272,12 +273,21 @@ function parseBaselines(raw: unknown, target: StudyQuantity, governing: readonly
     } catch (e) {
       refuse(where, (e as Error).message);
     }
-    const unknown = vars.filter((v) => !(v in dims));
+    const unknown = vars.filter((v) => !Object.hasOwn(dims, v) && constantRecord(v) === undefined);
     if (unknown.length > 0) refuse(where, `formula reads undeclared input(s) ${unknown.join(', ')}`);
-    const check = checker.check(b.formula, dims);
+    const declared = { ...dims };
+    for (const v of vars) {
+      const constant = constantRecord(v);
+      if (constant !== undefined) declared[v] ??= constant.dim;
+    }
+    const check = checker.check(b.formula, declared);
     if (!check.ok || !check.dim) refuse(where, check.error ?? 'not dimensionally homogeneous');
     if (!equals(check.dim, target.dim)) {
-      refuse(where, `formula is ${format(check.dim)}, but the target '${target.name}' is ${format(target.dim)}`);
+      const literals = b.formula.match(/(?<![\p{L}\p{N}_.])(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?/gu);
+      const hint = literals?.length
+        ? ` Numeric literals (${[...new Set(literals)].join(', ')}) are dimensionless. Use a registered constant name for a dimensioned constant.`
+        : '';
+      refuse(where, `formula is ${format(check.dim)}, but the target '${target.name}' is ${format(target.dim)}.${hint}`);
     }
     if (b.fitPrefactor !== undefined && typeof b.fitPrefactor !== 'boolean') {
       refuse(`${where}.fitPrefactor`, 'must be true or false');
@@ -1557,10 +1567,11 @@ export async function runProbeStudy(study: ProbeStudy, opts: ProbeStudyOptions =
     .sort((a, b) => (b.model.test.exploratory!.p! - a.model.test.exploratory!.p!) || a.complexity - b.complexity);
   const chosen = credibleOnes[0];
 
+  const constants = constantScope();
   const baselines = study.baselines.map((b) => {
     const f = parseFormula(b.formula);
     return scoreModel(
-      { id: `baseline:${b.name}`, kind: 'baseline', label: b.name, basis: [(x) => f.evaluate({ ...x })], fit: b.fitPrefactor },
+      { id: `baseline:${b.name}`, kind: 'baseline', label: b.name, basis: [(x) => f.evaluate({ ...constants, ...x })], fit: b.fitPrefactor },
       sets,
       alpha,
       true,

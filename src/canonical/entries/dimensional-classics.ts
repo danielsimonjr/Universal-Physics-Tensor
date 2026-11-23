@@ -45,6 +45,7 @@ const l0 = (
     | 'conventionNote'
     | 'conventionGroup'
     | 'targetAliases'
+    | 'searchTerms'
   >,
 ): CanonicalEquation => ({
   epistemicStatus: 'dimensional',
@@ -79,6 +80,7 @@ export const DIMENSIONAL_CLASSICS: readonly CanonicalEquation[] = [
   }),
   l0({
     id: 'CE-kepler-third',
+    searchTerms: ['orbit', 'orbital period', 'law of periods'],
     prefactor: {
       value: 2 * Math.PI,
       quote: String.raw`\frac{a^3}{T^2} = \frac{G(M + m)}{4\pi^2} \approx \frac{GM}{4\pi^2}`,

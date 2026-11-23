@@ -45,16 +45,16 @@ describe('canonical audit G-closures', () => {
     expect(derived).toMatch(/CE-rydberg-energy\s+\+\[ℏ,e,epsilon_0,m_e\]\s+×0\.00316628698882306 \(= 1\/\(32π²\)\)$/m);
     // A closure that names G is never derived.
     for (const id of SPURIOUS) expect(derived, id).not.toMatch(new RegExp(`${id}\\s+\\+\\[[^\\]]*\\bG\\b`));
-    expect(text.stdout).toMatch(/CE-wien\s+\+\[ℏ,c,k_B\]\s+×1\.26546641505411\s+\(empirical\/tuned constant\)/);
+    expect(text.stdout).toMatch(/CE-wien\s+\+\[ℏ,c,k_B\]\s+×1\.26546641505411\s+\(prefactor without a recognized exact form\)/);
     expect(text.stdout).toMatch(/CE-planck-einstein\s+\+\[ℏ\]\s+×6\.28318530717959 \(= 2π\)$/m);
     expect(text.stdout).toMatch(/CE-de-broglie\s+\+\[ℏ\]\s+×6\.28318530717959 \(= 2π\)$/m);
-    // Hawking, light deflection, perihelion and Bekenstein–Hawking: the only closure the search
-    // accepts does not reproduce the evaluator, so they stay DECOY. The Rydberg energy left the
-    // list when the rule named its 1/(32π²) (header).
-    const decoy = text.stdout.split('OPEN (')[0]?.split('DIMENSIONAL-RECONSTRUCTION')[1] ?? '';
-    expect(decoy).toMatch(/CE-hawking-temperature, CE-light-deflection, CE-perihelion-precession, CE-bekenstein-hawking/);
-    expect(decoy).not.toContain('CE-rydberg-energy');
-    expect(decoy).not.toContain('CE-stefan-boltzmann');
+    const groups = JSON.parse((await audit(['--json'])).stdout).result;
+    expect(groups.notUnique.map((row: { id: string }) => row.id)).toEqual(expect.arrayContaining([
+      'CE-hawking-temperature', 'CE-light-deflection', 'CE-perihelion-precession', 'CE-bekenstein-hawking',
+      'CE-lorentz-factor', 'CE-capacitance-parallel-plate',
+    ]));
+    expect(groups.notAMonomial.map((row: { id: string }) => row.id)).toContain('CE-boltzmann-factor');
+    expect(groups.decoy).toEqual([]);
   });
 
   it('keeps the catalog empirical scale of be-48', async () => {
@@ -63,6 +63,13 @@ describe('canonical audit G-closures', () => {
     const env = JSON.parse(cap.lines.join('')) as {
       result: { derived: { id: string; cleanPrefactor: boolean }[] };
     };
+    expect(env).toMatchObject({
+      coverage: {
+        total: 160,
+        withoutRoutes: ['be-28', 'be-29', 'be-32', 'be-35', 'be-44'],
+        nonBridgeLaws: ['law-schwarzschild-radius'],
+      },
+    });
     const be48 = env.result.derived.find((d) => d.id === 'be-48');
     expect(be48?.cleanPrefactor).toBe(false);
   });

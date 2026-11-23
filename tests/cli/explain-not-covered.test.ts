@@ -62,7 +62,7 @@ describe('upt explain — not covered vs not derivable', () => {
     const json = await run(['explain', 'hawking_temperature', 'mass=1.989e30', '--json']);
     const raw = (JSON.parse(json.text) as { result: { recoveredValue: number } }).result.recoveredValue;
     expect(Math.abs(raw - 6.1684e-8) / 6.1684e-8).toBeLessThan(1e-4);
-    expect(r.text).toContain(`Recovered value: ${formatQuantity(raw)}.`);
+    expect(r.text).toContain(`Recovered value: ${formatQuantity(raw)} K [highly-speculative].`);
     expect(r.text).not.toContain('6.1684e-8');
   });
 
@@ -97,4 +97,33 @@ describe('audit I5 residual: a law or model name is pointed to upt search', () =
     const q = await run(['explain', 'qwertyuiop']);
     expect(q.text).not.toMatch(/upt search/);
   });
+});
+
+it('recovers units and source-free canonical values', async () => {
+  const kinetic = await run(['explain', 'kinetic-energy', 'mass=2kg', 'speed=3m/s', '--source=canonical', '--json']);
+  expect(JSON.parse(kinetic.text).result).toMatchObject({ recoveredValue: 9, unit: 'J', confidence: 'established' });
+  for (const [name, expected] of [
+    ['bohr-radius', 5.29177210544346e-11],
+    ['rydberg-energy', 2.17987236109917e-18],
+    ['position-momentum-uncertainty-product', 5.27285908823078e-35],
+  ] as const) {
+    const report = await run(['explain', name, '--source=canonical', '--json']);
+    expect(JSON.parse(report.text).result.recoveredValue / expected).toBeCloseTo(1, 10);
+  }
+});
+
+it('reports the executed upstream routes and constant substitutions', async () => {
+  const landauer = await run(['explain', 'landauer-erasure-energy', 'mass=1Msun', '--json']);
+  const result = JSON.parse(landauer.text).result;
+  expect(result.confidence).toBe('highly-speculative');
+  expect(result.derivations[0].route).toMatchObject([
+    { kind: 'edge', id: 'be-42', confidence: 'highly-speculative' },
+    { kind: 'identification', from: 'hawking-temperature', to: 'temperature', confidence: 'established' },
+    { kind: 'edge', id: 'be-16' },
+  ]);
+  const field = await run(['explain', 'magnetic-field', 'current=10A', 'distance=0.05m', '--source=canonical', '--json']);
+  expect(JSON.parse(field.text).result.recoveredValue).toBeCloseTo(4e-5, 13);
+  const epsilon = await run(['explain', 'field-energy-density', 'electric-field=1000V/m', 'epsilon_0=8.854e-12F/m', '--source=canonical']);
+  expect(epsilon.text).toContain('Entered epsilon_0 = 8.854e-12 SI. Used registered epsilon_0 = 8.8541878188e-12 SI');
+  expect(epsilon.text).toContain('0.5% relative tolerance');
 });

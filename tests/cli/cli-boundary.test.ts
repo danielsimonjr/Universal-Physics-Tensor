@@ -127,11 +127,11 @@ describe('physics and numerics live in the library', () => {
     expect(correlationIsPositiveSemidefinite([], new Map())).toBe(true);
   });
   it('a stated constant is checked against the registry by the library', () => {
-    expect(constantAgreement('b', 2.9e-3)).toBe('b');
-    expect(constantAgreement('wien-constant', 2.897771955e-3)).toBe('b');
+    expect(constantAgreement('b', 2.9e-3)).toMatchObject({ name: 'b', tolerance: 0.005 });
+    expect(constantAgreement('wien-constant', 2.897771955e-3)).toMatchObject({ name: 'b' });
     expect(constantAgreement('not-a-constant', 1)).toBeNull();
     expect(() => constantAgreement('b', 3.5e-3)).toThrow(ConstantDisagreementError);
-    expect(code('cli/commands/explain.ts')).not.toMatch(/CONSTANT_AGREEMENT|constantRecord\(/);
+    expect(code('cli/commands/explain.ts')).not.toMatch(/CONSTANT_AGREEMENT/);
   });
   it('the primary output is the value; no key-suffix heuristic picks it', () => {
     expect(code('composition/evaluate-relation.ts')).not.toMatch(/suffixDimensions|_per_|parseUnit/);

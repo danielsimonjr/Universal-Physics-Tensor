@@ -93,6 +93,7 @@ export type {
   RetrodictionRefusal,
   RetrodictionReport,
   RetrodictionOptions,
+  RecoveryStep,
 } from './retrodiction.js';
 export { retrodict, retrodictNode } from './retrodiction.js';
 

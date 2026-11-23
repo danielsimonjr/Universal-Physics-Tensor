@@ -7,6 +7,7 @@
  *
  * @module cli/commands/metric
  */
+import { METRIC_TOPICS } from '../metric-topics.js';
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
@@ -24,7 +25,7 @@ const FLAGS: FlagSpec[] = [
   },
 ];
 
-const NAMES = ['minkowski', 'schwarzschild', 'flrw', 'kerr'] as const;
+const NAMES = Object.keys(METRIC_TOPICS) as Array<keyof typeof METRIC_TOPICS>;
 
 const HELP = `upt metric <minkowski|schwarzschild|flrw|kerr> [key=value ...] [--geodesic] [--json]
         Christoffel symbols, the Ricci tensor, the Ricci scalar and the
@@ -33,16 +34,16 @@ const HELP = `upt metric <minkowski|schwarzschild|flrw|kerr> [key=value ...] [--
         signature as the canonical Einstein-equation metric node.
         Schwarzschild Kretschmann is checked against 48 G² M² / (c⁴ r⁶).
         FLRW prints the Friedmann equation including the curvature term
-        −k c²/a² and Λ. Kerr Kretschmann uses the Boyer–Lindquist closed form.
+        −k c²/a² and Λ. Kerr uses T = ct in metres for tensor components.
+        For |a/M| ≤ 1 it reports both horizons in metres and prograde and
+        retrograde ISCO and photon radii in r/M.
         --geodesic integrates a short Schwarzschild circular orbit, or a Kerr
         geodesic (equatorial and circular at θ = π/2; inclined, with that
         polar turning point, at any other θ). Kerr's a is a length in metres;
-        the report prints a/M = a/(GM/c²). A Ricci scalar that has a closed
-        form is that form; a vacuum finite-difference residual is not listed
-        as Ricci. Each Ricci component, the Ricci scalar and the Kretschmann
-        scalar carry an upper bound of their finite-difference error; a
-        value within its bound is marked "unresolved: |R| <= bound" (|K|
-        for the Kretschmann scalar). A
+        the report prints a/M = a/(GM/c²). Exact vacuum and trace-free Ricci
+        scalars are labeled as closed forms. The numerical tensors also carry
+        finite-difference error bounds. A numerical value within its bound
+        is marked unresolved. A
         parameter is a number, a unit (M=1Msun, r=1km) or a
         constant expression (theta=pi/2). A bare number is already in the
         parameter's SI unit; a dimensioned quantity must match it.
@@ -102,6 +103,7 @@ async function run(ctx: CommandCtx): Promise<number> {
         readonly thetaEnd?: number;
         readonly phiAdvance: number;
         readonly steps: number;
+        readonly properTimeSeconds?: number;
         readonly E0?: number;
         readonly EEnd?: number;
         readonly L0?: number;
@@ -110,7 +112,6 @@ async function run(ctx: CommandCtx): Promise<number> {
         readonly QEnd?: number;
         readonly norm0?: number;
         readonly normEnd?: number;
-        readonly note?: string;
       }
     | undefined;
   if (args.flags.has('geodesic')) {
@@ -134,39 +135,21 @@ async function run(ctx: CommandCtx): Promise<number> {
         const rOverM = (r ?? 10 * Mgeom) / Mgeom;
         const aOverM = a / Mgeom;
         if (!(Math.abs(aOverM) <= 1)) throw new CliError('upt metric: Kerr geodesic wants |a| ≤ GM/c²');
-        const equatorial = Math.abs(theta - Math.PI / 2) < 1e-6;
-        if (a === 0) {
-          // At a = 0 the Kerr metric is Schwarzschild. The Boyer–Lindquist integrator refuses the
-          // circular start there ("radial potential is negative at the start"): the two terms of
-          // its radial potential cancel to below its tolerance at a = 0, and only at a = 0. The
-          // equatorial circular orbit is the Schwarzschild one and is integrated as that, so the
-          // default parameters (a = 0) run. An inclined start has no Schwarzschild routine here.
-          if (!equatorial) {
-            throw new CliError(
-              'upt metric: at a = 0 an inclined Kerr orbit is a tilted Schwarzschild circular orbit, and this integrator needs a ≠ 0 for an inclined start; give a, or theta=pi/2',
-            );
-          }
-          const M = report.parameters.M;
-          geodesic = {
-            kind: 'circular' as const,
-            note: 'a = 0: the Kerr metric is Schwarzschild; the equatorial circular orbit is integrated by the Schwarzschild routine',
-            ...api.schwarzschildCircularOrbit({ ...(M === undefined ? {} : { M }), ...(r === undefined ? {} : { r }) }),
-          };
-        } else {
-        const shared = { M: Mgeom, aOverM, rOverM, fraction: 0.005, steps: 40 };
-        geodesic =
-          equatorial
-            ? { kind: 'circular' as const, ...api.kerrEquatorialCircular(shared) }
-            : {
-                kind: 'inclined' as const,
-                ...api.kerrGeodesic({
-                  ...shared,
-                  theta,
-                  ...api.kerrTurningPointOrbit({ M: Mgeom, aOverM, rOverM, theta }),
-                  mu2: 1,
-                }),
-              };
-        }
+        const equatorial = theta === Math.PI / 2;
+        const shared = { M: Mgeom, aOverM, rOverM, fraction: 0.005, steps: 40, prograde: a >= 0 };
+        const orbit = equatorial
+          ? api.kerrEquatorialCircular(shared)
+          : api.kerrGeodesic({
+              ...shared,
+              theta,
+              ...api.kerrTurningPointOrbit({ ...shared, theta }),
+              mu2: 1,
+            });
+        geodesic = {
+          kind: equatorial ? 'circular' : 'inclined',
+          ...orbit,
+          properTimeSeconds: orbit.affineLength / (report.parameters.c ?? 1),
+        };
       } else {
         throw new UsageError('upt metric: --geodesic is for schwarzschild or kerr.');
       }
@@ -191,21 +174,24 @@ async function run(ctx: CommandCtx): Promise<number> {
   out('  Ricci (nonzero):');
   if (report.ricci.length === 0) out('    (none)');
   for (const c of report.ricci) out(`    ${c.index} = ${c.value}${boundText(c.bound, c.resolved)}`);
-  out(`  Ricci scalar R = ${report.ricciScalar}${boundText(report.ricciScalarBound, report.ricciScalarResolved)}`);
+  const ricciSource = report.ricciScalarSource === 'closed-form'
+    ? '  (exact closed form)'
+    : boundText(report.ricciScalarBound, report.ricciScalarResolved);
+  out(`  Ricci scalar R = ${report.ricciScalar}${ricciSource}`);
   out(`  Kretschmann K = ${report.kretschmann}${boundText(report.kretschmannBound, report.kretschmannResolved, 'K')}`);
   out('  closed form: ' + Object.entries(report.closedForm).map(([k, v]) => `${k}=${v}`).join(' '));
   if (geodesic) {
     const cons =
       geodesic.E0 === undefined
         ? ''
-        : ` E ${geodesic.E0}→${geodesic.EEnd} L ${geodesic.L0}→${geodesic.LEnd} Q ${geodesic.Q0}→${geodesic.QEnd} norm ${geodesic.norm0}→${geodesic.normEnd}`;
+        : ` E [dimensionless] ${geodesic.E0}→${geodesic.EEnd} L [m] ${geodesic.L0}→${geodesic.LEnd} Q [m²] ${geodesic.Q0}→${geodesic.QEnd} norm ${geodesic.norm0}→${geodesic.normEnd}`;
     const polar =
       geodesic.theta0 === undefined ? '' : ` θ ${geodesic.theta0}→${geodesic.thetaEnd}`;
     const label = geodesic.kind === 'inclined' ? 'inclined orbit' : 'circular orbit';
+    const span = geodesic.properTimeSeconds === undefined ? '' : ` over ${geodesic.properTimeSeconds} s of proper time`;
     out(
-      `  geodesic: ${label} r0=${geodesic.r0} rEnd=${geodesic.rEnd}${polar} Δφ=${geodesic.phiAdvance} over ${geodesic.steps} steps${cons}`,
+      `  geodesic: ${label} r0=${geodesic.r0} rEnd=${geodesic.rEnd}${polar} Δφ=${geodesic.phiAdvance} in ${geodesic.steps} steps${span}${cons}`,
     );
-    if (geodesic.note !== undefined) out(`    ${geodesic.note}`);
   }
   return 0;
 }

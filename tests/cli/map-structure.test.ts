@@ -47,11 +47,11 @@ describe('upt map structure sections (opt-in)', () => {
   it('--json carries the three under their own keys, and only when asked', async () => {
     const asked = await json(['map', '--source=catalog', '--communities', '--cycles', '--rank-hubs']);
     expect(asked.result.communities.method).toBe('layout communities (Louvain, heuristic)');
-    expect(asked.result.communities.componentSize).toBe(50);
-    expect(asked.result.communities.communities.map((c: { size: number }) => c.size)).toEqual([16, 12, 8, 6, 5, 3]);
+    expect(asked.result.communities.componentSize).toBe(51);
+    expect(asked.result.communities.communities.map((c: { size: number }) => c.size)).toEqual([16, 13, 8, 6, 5, 3]);
     expect(asked.result.cycles).toEqual([]);
     expect(asked.result.hubs[0].quantity).toBe('temperature');
-    expect(asked.result.hubs[0].degree).toBe(17);
+    expect(asked.result.hubs[0].degree).toBe(18);
     expect(asked.result.linkage).toBeDefined();
     const plain = await json(['map', '--source=catalog']);
     expect(plain.result).not.toHaveProperty('communities');

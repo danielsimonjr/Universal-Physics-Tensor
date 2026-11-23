@@ -133,12 +133,12 @@ function cellToEmergence(cell: EmergenceCell): EmergentPhenomenon {
  * Refuse a configured axis value the registry does not name. `admitted` is the
  * registry namespace for that axis (`Axes.scale`, …), whose keys are the values.
  */
-function requireAxisValues(field: string, values: readonly unknown[], admitted: Readonly<Record<string, unknown>>): void {
-  if (!Array.isArray(values)) throw new TypeError(`TensorConfig.${field} must be an array`);
+function requireAxisValues(field: string, values: readonly unknown[], admitted: Readonly<Record<string, unknown>>, owner = 'TensorConfig'): void {
+  if (!Array.isArray(values)) throw new TypeError(`${owner}.${field} must be an array`);
   const known = Object.keys(admitted);
   for (const value of values) {
     if (typeof value !== 'string' || !known.includes(value)) {
-      throw new RangeError(`TensorConfig.${field}: '${String(value)}' is not an axis value; the registry names ${known.join(', ')}`);
+      throw new RangeError(`${owner}.${field}: '${String(value)}' is not an axis value; the registry names ${known.join(', ')}`);
     }
   }
 }
@@ -722,6 +722,10 @@ export class UniversalTensor {
    * Query tensor for laws applicable to specific regime
    */
   public queryLaws(indices: TensorIndices): PhysicalLaw[] {
+    for (const key of ['scale', 'force', 'symmetry', 'information'] as const) {
+      const value = indices[key];
+      if (value !== undefined) requireAxisValues(key, [value], Axes[key], 'queryLaws');
+    }
     const results: PhysicalLaw[] = [];
 
     for (const law of this.knownLaws.values()) {

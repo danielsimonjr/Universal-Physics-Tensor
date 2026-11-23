@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 17.0.0
-  totalFiles: 393
+  totalFiles: 395
   totalModules: 13
-  totalExports: 2874
+  totalExports: 2881
 entryPoints:
   - file: src/index.ts
     type: main
@@ -93,6 +93,21 @@ modules:
         - file: ./leakage.js
           imports:
             - leakageKey
+        - file: ../../dimensional/algebra.js
+          imports:
+            - BASES
+            - exactlyEquals
+        - file: ../../dimensional/ast-leaves.js
+          imports:
+            - ALL_SCALAR_ARMS
+            - forEachScalarLeaf
+            - isDecimalLiteral
+        - file: ../../dimensional/symbolic-constants.js
+          imports:
+            - constantRecord
+        - file: ../../composition/formula-shape.js
+          imports:
+            - monomialExponentsExact
       exports:
         - rankByTextOverlap
         - rankBySymbolOverlap
@@ -4884,6 +4899,52 @@ modules:
         - STATISTICAL_MECHANICS
       constants:
         - STATISTICAL_MECHANICS
+    src/canonical/entries/textbook-coverage.ts:
+      description: textbook-coverage module
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../canonical-equation.js
+          imports:
+            - CanonicalEquation
+          typeOnly: true
+        - file: ../../dimensional/ast-types.js
+          imports:
+            - ExprNode
+          typeOnly: true
+        - file: ../../dimensional/algebra.js
+          imports:
+            - divide
+        - file: ../../dimensional/types.js
+          imports:
+            - ACCELERATION
+            - ACTION
+            - AREA
+            - CHARGE
+            - DIMENSIONLESS
+            - ENERGY
+            - ENTROPY
+            - FREQUENCY
+            - GRAVITATIONAL_CONSTANT
+            - LENGTH
+            - MASS
+            - MASS_DENSITY
+            - PERMITTIVITY
+            - PRESSURE
+            - TEMPERATURE
+            - TIME
+            - VELOCITY
+            - Dimension
+        - file: ./_l1-build.js
+          imports:
+            - dim
+            - l1
+            - op
+            - pow
+      exports:
+        - TEXTBOOK_COVERAGE
+      constants:
+        - TEXTBOOK_COVERAGE
     src/canonical/entries/thermo-nuclear-cosmo.ts:
       description: L1 (scalar-AST) canonical entries — thermodynamic, statistical, nuclear, and
       externalDependencies: []
@@ -5083,6 +5144,9 @@ modules:
         - file: ./entries/statistical-mechanics.js
           imports:
             - STATISTICAL_MECHANICS
+        - file: ./entries/textbook-coverage.js
+          imports:
+            - TEXTBOOK_COVERAGE
         - file: ./entries/nonmonomial.js
           imports:
             - NONMONOMIAL
@@ -5568,6 +5632,7 @@ modules:
       exports:
         - END_OF_OPTIONS
         - NO_POSITIONALS
+        - shellQuote
         - optionTokens
         - refuseExtraPositionals
         - parseArgs
@@ -5582,6 +5647,7 @@ modules:
       constants:
         - END_OF_OPTIONS
         - NO_POSITIONALS
+        - shellQuote
     src/cli/bindings.ts:
       description: The one reader of `name=value` tokens for every command that takes them
       externalDependencies: []
@@ -5882,6 +5948,7 @@ modules:
             - sourceFlag
         - file: ../graphs.js
           imports:
+            - catalogGraphCoverage
             - resolveGraph
         - file: ../output.js
           imports:
@@ -6209,8 +6276,8 @@ modules:
       internalDependencies:
         - file: ../args.js
           imports:
+            - shellQuote
             - FlagSpec
-          typeOnly: true
         - file: ../command.js
           imports:
             - registerCommand
@@ -6238,7 +6305,7 @@ modules:
             - splitAssignments
         - file: ../expr-print.js
           imports:
-            - primaryUnitLabel
+            - compactFormulaUnit
         - file: ../../dimensional/natural-units.js
           imports:
             - UnitMode
@@ -6311,6 +6378,9 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
+        - file: ../expr-print.js
+          imports:
+            - primaryUnitLabel
         - file: ../args.js
           imports:
             - FlagSpec
@@ -6629,6 +6699,9 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
+        - file: ../metric-topics.js
+          imports:
+            - METRIC_TOPICS
         - file: ../args.js
           imports:
             - FlagSpec
@@ -6778,6 +6851,7 @@ modules:
             - sourceFlag
         - file: ../graphs.js
           imports:
+            - catalogGraphCoverage
             - resolveGraph
         - file: ../output.js
           imports:
@@ -7168,12 +7242,14 @@ modules:
         - latexName
         - printLatex
         - primaryUnitLabel
+        - compactFormulaUnit
       interfaces:
         - CoherentUnit
       functions:
         - latexName
         - printLatex
         - primaryUnitLabel
+        - compactFormulaUnit
       constants:
         - EVAL_STUBS
         - printDisplay
@@ -7245,6 +7321,7 @@ modules:
             - CliError
       exports:
         - resolveGraph
+        - catalogGraphCoverage
         - groundTruthAnchor
         - coreAnchor
         - groundTruthLine
@@ -7253,6 +7330,7 @@ modules:
         - AnchorScope
       functions:
         - resolveGraph
+        - catalogGraphCoverage
         - groundTruthAnchor
         - coreAnchor
         - groundTruthLine
@@ -7365,6 +7443,15 @@ modules:
       functions:
         - deriveEdgeEvidence
         - withCatalogEvidence
+    src/cli/metric-topics.ts:
+      description: metric-topics module
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - METRIC_TOPICS
+      constants:
+        - METRIC_TOPICS
     src/cli/numeric-flag.ts:
       description: The one reader of a numeric flag value for the UPT CLI.
       externalDependencies: []
@@ -7550,6 +7637,7 @@ modules:
         - file: ./args.js
           imports:
             - parseArgs
+            - shellQuote
         - file: ./command.js
           imports:
             - resolveCommand
@@ -7606,6 +7694,9 @@ modules:
           imports:
             - CommandCtx
           typeOnly: true
+        - file: ./metric-topics.js
+          imports:
+            - METRIC_TOPICS
       exports:
         - SEARCH_SECTIONS
         - STOP_WORDS
@@ -7886,6 +7977,10 @@ modules:
             - AppliedCase
             - CaseCheck
             - CaseResult
+          reExport: true
+        - file: ./dimensional/unit-convention.js
+          imports:
+            - quantityConventionUnit
           reExport: true
         - file: ./dimensional/units.js
           imports:
@@ -8432,6 +8527,7 @@ modules:
         - runAppliedCase
         - CASE_CONTRACTS
         - slotForSpelling
+        - quantityConventionUnit
         - convertValue
         - readQuantityLiteral
         - UnitError
@@ -8720,6 +8816,7 @@ modules:
         - AppliedCase
         - CaseCheck
         - CaseResult
+        - quantityConventionUnit
         - convertValue
         - readQuantityLiteral
         - UnitError
@@ -9126,6 +9223,9 @@ modules:
         - file: ../dimensional/symbolic-constants.js
           imports:
             - constantRecord
+        - file: ../canonical/registry.js
+          imports:
+            - canonicalById
         - file: ../canonical/fixed-points.js
           imports:
             - constantRatio
@@ -9301,6 +9401,7 @@ modules:
             - NAME_TABLE
         - file: ./user-equation.js
           imports:
+            - equationSymbolBindings
             - parseUserEquation
         - file: ../dimensional/formula-names.js
           imports:
@@ -10243,6 +10344,7 @@ modules:
         - file: ./edge.js
           imports:
             - BridgeEdge
+            - EdgeConfidence
           typeOnly: true
         - file: ./compose.js
           imports:
@@ -10250,6 +10352,7 @@ modules:
           typeOnly: true
         - file: ./compose.js
           imports:
+            - minConfidence
             - QUANTITY_IDENTIFICATIONS
         - file: ./identifiability.js
           imports:
@@ -10264,6 +10367,7 @@ modules:
             - fixedPoint
         - file: ./retrodiction.js
           imports:
+            - RecoveryStep
             - RetrodictionResult
           typeOnly: true
         - file: ./retrodiction.js
@@ -10475,9 +10579,9 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
-        - file: ./bridge-analysis.js
+        - file: ./discovery.js
           imports:
-            - proposeLinkCandidates
+            - rankDiscoveries
         - file: ../bridges/catalog-load.js
           imports:
             - catalogEntries
@@ -10505,7 +10609,6 @@ modules:
           imports:
             - listConfrontations
       exports:
-        - CANDIDATE_NOT_A_BRIDGE_REASON
         - CONTESTED_BRIDGE_IDS
         - marksFromEntries
         - accountFromGraph
@@ -10523,7 +10626,6 @@ modules:
         - catalogFrontierAccount
         - formatFrontierAccount
       constants:
-        - CANDIDATE_NOT_A_BRIDGE_REASON
         - CONTESTED_BRIDGE_IDS
     src/composition/graph-structure.ts:
       description: Map structure from graph algorithms, over the QUANTITY graph of a composition graph.
@@ -10809,6 +10911,7 @@ modules:
             - RetrodictionRefusal
             - RetrodictionReport
             - RetrodictionOptions
+            - RecoveryStep
           reExport: true
         - file: ./retrodiction.js
           imports:
@@ -10975,6 +11078,7 @@ modules:
         - RetrodictionRefusal
         - RetrodictionReport
         - RetrodictionOptions
+        - RecoveryStep
         - DerivationExplanation
         - ExplainOptions
         - QuantityExplanation
@@ -11049,6 +11153,7 @@ modules:
         - RetrodictionRefusal
         - RetrodictionReport
         - RetrodictionOptions
+        - RecoveryStep
         - retrodict
         - retrodictNode
         - DerivationExplanation
@@ -12825,6 +12930,10 @@ modules:
           imports:
             - equals
             - format
+        - file: ../../dimensional/symbolic-constants.js
+          imports:
+            - constantRecord
+            - constantScope
         - file: ../../dimensional/units.js
           imports:
             - convertValue
@@ -13226,6 +13335,7 @@ modules:
         - file: ./edge.js
           imports:
             - BridgeEdge
+            - EdgeConfidence
           typeOnly: true
         - file: ./canonical-prefactors.js
           imports:
@@ -13377,6 +13487,7 @@ modules:
         - rewriteCatalogHyphens
         - hyphenSubtractHint
         - parseUserEquation
+        - equationSymbolBindings
         - suggestQuantities
         - suggestByDimension
         - equationLanding
@@ -13395,6 +13506,7 @@ modules:
       functions:
         - hyphenSubtractHint
         - parseUserEquation
+        - equationSymbolBindings
         - suggestQuantities
         - suggestByDimension
         - equationLanding
@@ -19660,6 +19772,7 @@ dependencyGraph:
         - src/canonical/entries/nonmonomial.ts
         - src/canonical/entries/relativity.ts
         - src/canonical/entries/statistical-mechanics.ts
+        - src/canonical/entries/textbook-coverage.ts
         - src/canonical/entries/thermo-nuclear-cosmo.ts
         - src/canonical/fixed-points.ts
         - src/canonical/linkage.ts
@@ -19727,6 +19840,7 @@ dependencyGraph:
         - src/cli/library-defaults.ts
         - src/cli/main.ts
         - src/cli/map-evidence.ts
+        - src/cli/metric-topics.ts
         - src/cli/numeric-flag.ts
         - src/cli/output.ts
         - src/cli/published-url.ts
@@ -19960,18 +20074,18 @@ dependencyGraph:
         - src/relations/regime.ts
         - src/relations/types.ts
 statistics:
-  totalTypeScriptFiles: 393
+  totalTypeScriptFiles: 395
   totalModules: 13
-  totalLinesOfCode: 90648
-  totalExports: 2874
+  totalLinesOfCode: 91370
+  totalExports: 2881
   totalClasses: 86
   totalInterfaces: 523
-  totalFunctions: 962
+  totalFunctions: 965
   totalTypeGuards: 17
   totalEnums: 0
-  totalConstants: 402
-  totalReExports: 1415
-  totalTypeOnlyImports: 543
+  totalConstants: 404
+  totalReExports: 1417
+  totalTypeOnlyImports: 544
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 0
