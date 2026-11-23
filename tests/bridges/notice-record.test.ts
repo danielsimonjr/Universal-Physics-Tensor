@@ -25,9 +25,9 @@ const SUN = 1.989e30;
 const INSIDE = 20000;
 
 describe('a notice is data (issue: notice strings were an id switch)', () => {
-  it('every notice is an object with text, and only the Jeans relation carries one', () => {
+  it('each recorded notice states the scope of its relation', () => {
     const withNotice = catalogRelations().filter((r) => r.notice !== undefined);
-    expect(withNotice.map((r) => r.id)).toEqual(['be-65']);
+    expect(withNotice.map((r) => r.id).sort()).toEqual(['be-113', 'be-120', 'be-142', 'be-168', 'be-170', 'be-56', 'be-65', 'be-66']);
     for (const r of withNotice) expect(typeof r.notice!.text).toBe('string');
   });
 
