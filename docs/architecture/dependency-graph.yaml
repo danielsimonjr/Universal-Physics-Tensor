@@ -3,7 +3,7 @@ metadata:
   version: 17.0.0
   totalFiles: 393
   totalModules: 13
-  totalExports: 2869
+  totalExports: 2870
 entryPoints:
   - file: src/index.ts
     type: main
@@ -6126,9 +6126,6 @@ modules:
           imports:
             - Dimension
           typeOnly: true
-        - file: ../../numerical/formula-dimension.js
-          imports:
-            - formulaHasBareE
         - file: ../library-defaults.js
           imports:
             - NAMED_DIMENSIONS_HELP
@@ -8316,6 +8313,7 @@ modules:
         - file: ./numerical/formula-dimension.js
           imports:
             - builtinFormulaDimensionChecker
+            - formulaHasBareE
           reExport: true
         - file: ./bridges/expr-parse.js
           imports:
@@ -8569,6 +8567,7 @@ modules:
         - fetchOnnxModel
         - onnxEmbedder
         - builtinFormulaDimensionChecker
+        - formulaHasBareE
         - parseDeclaredExpression
         - missingEvaluatorMessage
         - relationNotices
@@ -8895,6 +8894,7 @@ modules:
         - fetchOnnxModel
         - onnxEmbedder
         - builtinFormulaDimensionChecker
+        - formulaHasBareE
         - parseDeclaredExpression
         - missingEvaluatorMessage
         - relationNotices
@@ -13302,6 +13302,9 @@ modules:
           imports:
             - CONSTANTS
             - isRegisteredConstant
+        - file: ./canonical-prefactors.js
+          imports:
+            - CANONICAL_GROUP_PREFACTORS
         - file: ../dimensional/formula-names.js
           imports:
             - formulaNameDimensions
@@ -19935,15 +19938,15 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 393
   totalModules: 13
-  totalLinesOfCode: 90471
-  totalExports: 2869
+  totalLinesOfCode: 90478
+  totalExports: 2870
   totalClasses: 86
   totalInterfaces: 523
   totalFunctions: 960
   totalTypeGuards: 17
   totalEnums: 0
   totalConstants: 402
-  totalReExports: 1412
+  totalReExports: 1413
   totalTypeOnlyImports: 543
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0

@@ -11755,7 +11755,7 @@
           "key": "n",
           "quantity": "shockley-ideality",
           "symbol": "n",
-          "unit": "1",
+          "unit": "",
           "meaning": "diode ideality factor; the primary current uses n = 1",
           "sign": "positive"
         }

@@ -6,7 +6,7 @@
  * with a wrong exponent on any input returns the same number. A reference
  * whose value is 0 cannot either, since the comparison rescales a zero. Before
  * 9.0.1, 63 references used all-ones inputs and 10 had value 0. Now every
- * input of every reference is off 0 and ±1, every value is finite and
+ * input read by the reference expression is off 0 and ±1, every value is finite and
  * nonzero, and the control below mutates one literal exponent of each
  * expression and shows the stored reference moves.
  *
@@ -23,7 +23,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import { catalogRelations } from '../../src/bridges/catalog-load.js';
-import { evaluateFormula } from '../../src/bridges/expr-parse.js';
+import { evaluateFormula, expressionNames } from '../../src/bridges/expr-parse.js';
 import { catalogEdge } from '../../src/composition/catalog-graph.js';
 import { evaluateEdge } from '../../src/composition/edge.js';
 import { CENSUS } from '../helpers/census.js';
@@ -52,12 +52,12 @@ describe('catalog reference goldens', () => {
     for (const id of constants) expect(relations.find((r) => r.id === id)!.reference!.inputs).toEqual({});
   });
 
-  it('every reference input is off 0 and ±1, so a wrong exponent on any input moves the value', () => {
+  it('every expression input is off 0 and ±1, so a wrong exponent on any read input moves the value', () => {
     const trivial = relations
       .filter((relation) => relation.sources.length > 0)
       .flatMap((relation) =>
         Object.entries(relation.reference!.inputs)
-          .filter(([, value]) => value === 0 || Math.abs(value) === 1)
+          .filter(([name, value]) => (value === 0 || Math.abs(value) === 1) && expressionNames(relation.expression).has(name.replaceAll('-', '_')))
           .map(([name, value]) => `${relation.id}: ${name} = ${value}`),
       );
     expect(trivial).toEqual([]);

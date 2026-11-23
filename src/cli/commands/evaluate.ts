@@ -483,7 +483,7 @@ async function evaluate(ctx: CommandCtx): Promise<number> {
   // SI unit, else the base form. The JSON is the library result itself, whose `unit` is the base
   // form `parseUnit` reads back.
   const label = evaluation.kind === 'unset' ? undefined : primaryUnitLabel(api, evaluation.name, evaluation.dimension);
-  const unused = api.unusedInputKeys(spec);
+  const unused = api.unusedInputKeys(spec).filter((key) => spec.inputKeys.includes(key));
   if (args.flags.has('json')) {
     emitJson(
       {

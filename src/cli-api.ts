@@ -355,7 +355,7 @@ export { fetchOnnxModel, onnxEmbedder } from './atlas/benchmark/onnx-embedder.js
  *
  * @internal
  */
-export { builtinFormulaDimensionChecker } from './numerical/formula-dimension.js';
+export { builtinFormulaDimensionChecker, formulaHasBareE } from './numerical/formula-dimension.js';
 
 /**
  * Query-formula parser for `upt retrieve --formula`.

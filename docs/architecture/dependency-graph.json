@@ -4,7 +4,7 @@
     "version": "17.0.0",
     "totalFiles": 393,
     "totalModules": 13,
-    "totalExports": 2869
+    "totalExports": 2870
   },
   "entryPoints": [
     {
@@ -8937,12 +8937,6 @@
             "typeOnly": true
           },
           {
-            "file": "../../numerical/formula-dimension.js",
-            "imports": [
-              "formulaHasBareE"
-            ]
-          },
-          {
             "file": "../library-defaults.js",
             "imports": [
               "NAMED_DIMENSIONS_HELP"
@@ -12444,7 +12438,8 @@
           {
             "file": "./numerical/formula-dimension.js",
             "imports": [
-              "builtinFormulaDimensionChecker"
+              "builtinFormulaDimensionChecker",
+              "formulaHasBareE"
             ],
             "reExport": true
           },
@@ -12725,6 +12720,7 @@
           "fetchOnnxModel",
           "onnxEmbedder",
           "builtinFormulaDimensionChecker",
+          "formulaHasBareE",
           "parseDeclaredExpression",
           "missingEvaluatorMessage",
           "relationNotices",
@@ -13052,6 +13048,7 @@
           "fetchOnnxModel",
           "onnxEmbedder",
           "builtinFormulaDimensionChecker",
+          "formulaHasBareE",
           "parseDeclaredExpression",
           "missingEvaluatorMessage",
           "relationNotices",
@@ -19659,6 +19656,12 @@
             "imports": [
               "CONSTANTS",
               "isRegisteredConstant"
+            ]
+          },
+          {
+            "file": "./canonical-prefactors.js",
+            "imports": [
+              "CANONICAL_GROUP_PREFACTORS"
             ]
           },
           {
@@ -28775,15 +28778,15 @@
   "statistics": {
     "totalTypeScriptFiles": 393,
     "totalModules": 13,
-    "totalLinesOfCode": 90471,
-    "totalExports": 2869,
+    "totalLinesOfCode": 90478,
+    "totalExports": 2870,
     "totalClasses": 86,
     "totalInterfaces": 523,
     "totalFunctions": 960,
     "totalTypeGuards": 17,
     "totalEnums": 0,
     "totalConstants": 402,
-    "totalReExports": 1412,
+    "totalReExports": 1413,
     "totalTypeOnlyImports": 543,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,

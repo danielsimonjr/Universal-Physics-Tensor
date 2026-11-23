@@ -120,7 +120,7 @@ export function unusedInputKeys(spec: EvaluatorSpec): string[] {
     .filter((parameter) => {
       const source = sourceOfParameter(relation, parameter);
       // A parameter that owns no relation source is read only by an extra output.
-      return parameter.optional !== true && (source === undefined || !used.has(source)) && !readByOutput(parameter.key);
+      return (source === undefined || !used.has(source)) && !readByOutput(parameter.key);
     })
     .map((parameter) => parameter.key);
 }

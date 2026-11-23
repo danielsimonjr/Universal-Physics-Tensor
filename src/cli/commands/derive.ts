@@ -15,7 +15,6 @@ import { classifyDetermination } from '../determination.js';
 import { formulaParserLabel } from '../version.js';
 import { FormulaUsageError } from '../euler-guard.js';
 import type { Dimension } from '../../dimensional/types.js';
-import { formulaHasBareE } from '../../numerical/formula-dimension.js';
 import { NAMED_DIMENSIONS_HELP } from '../library-defaults.js';
 
 /** The parser's symbol for a declared name. A hyphen is subtraction, so a
@@ -193,7 +192,7 @@ async function run(ctx: CommandCtx): Promise<number> {
       const formulaVariables = new Set(cf.variables);
       // The evaluator provides elementary charge by default, but a declaration
       // explicitly supplies its dimension and scope value.
-      if (formulaHasBareE(formulaSymbols)) formulaVariables.add('e');
+      if (api.formulaHasBareE(formulaSymbols)) formulaVariables.add('e');
       used = governing.filter((g) => formulaVariables.has(formulaSymbol(g.name)));
       unused = governing.filter((g) => !used.includes(g));
       if (unused.length > 0) det = api.dimensionallyDetermines(target, used);

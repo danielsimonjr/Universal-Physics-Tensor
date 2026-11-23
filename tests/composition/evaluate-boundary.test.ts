@@ -107,11 +107,13 @@ describe('a required input that does not enter the formula is said so (issue 451
     const rows = [...BRIDGE_EVALUATORS].filter(([, spec]) => unusedInputKeys(spec).length > 0).map(([id]) => id);
     expect(rows).toEqual([170]);
   });
-  it('the CLI prints the note for the evaluator that still has an unused input', async () => {
-    const key = unusedInputKeys(BRIDGE_EVALUATORS.get(170)!)[0]!;
-    const cap = capture();
-    // B_T is a validity condition (|B| <= 1 pT), not a term of the value
-    await runCli(['evaluate', 'be-170', 'L12=3', 'B_T=0'], cap.io);
-    expect(cap.lines.join('')).toMatch(new RegExp(`${key}.*does not enter`));
+  it('defaults the zero-field domain input and explains the finite-field refusal', async () => {
+    const defaulted = capture();
+    expect(await runCli(['evaluate', 'be-170', 'L12=3'], defaulted.io)).toBe(0);
+    expect(defaulted.lines.join('')).toContain('default: 0');
+    expect(defaulted.lines.join('')).toContain('onsager-l21 [1] = 3');
+    const finiteField = capture();
+    expect(await runCli(['evaluate', 'be-170', 'L12=3', 'B_T=1T'], finiteField.io)).toBe(1);
+    expect(finiteField.lines.join('')).toContain('Onsager–Casimir');
   });
 });

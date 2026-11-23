@@ -2646,7 +2646,6 @@ The codebase is organized into the following modules:
 | `../version.js` | `formulaParserLabel` | Import |
 | `../euler-guard.js` | `FormulaUsageError` | Import |
 | `../../dimensional/types.js` | `Dimension` | Import (type-only) |
-| `../../numerical/formula-dimension.js` | `formulaHasBareE` | Import |
 | `../library-defaults.js` | `NAMED_DIMENSIONS_HELP` | Import |
 | `../conventions.js` | `*` | Import |
 
@@ -3534,7 +3533,7 @@ The codebase is organized into the following modules:
 | `./dimensional/formula-names.js` | `SynonymDisagreementError` | Re-export |
 | `./atlas/benchmark/hybrid-retrieval.js` | `canonicalRetrievalCorpus, EmbeddingUnavailable, ollamaEmbedder, retrieveHybrid` | Re-export |
 | `./atlas/benchmark/onnx-embedder.js` | `fetchOnnxModel, onnxEmbedder` | Re-export |
-| `./numerical/formula-dimension.js` | `builtinFormulaDimensionChecker` | Re-export |
+| `./numerical/formula-dimension.js` | `builtinFormulaDimensionChecker, formulaHasBareE` | Re-export |
 | `./bridges/expr-parse.js` | `parseDeclaredExpression` | Re-export |
 | `./bridges/evaluators.js` | `missingEvaluatorMessage` | Re-export |
 | `./bridges/notices.js` | `relationNotices` | Re-export |
@@ -3601,9 +3600,9 @@ The codebase is organized into the following modules:
   escapeRegExp, rewriteCatalogHyphens, candidateIdIfSlug, resolveQuantityName, evaluateResolved,
   resolveEvaluable, siUnitOf, unusedInputKeys, SynonymDisagreementError, canonicalRetrievalCorpus,
   EmbeddingUnavailable, ollamaEmbedder, retrieveHybrid, fetchOnnxModel, onnxEmbedder,
-  builtinFormulaDimensionChecker, parseDeclaredExpression, missingEvaluatorMessage, relationNotices,
-  constantNotes, constantRecord, BridgeEdge, VizJunction, VizModel, EvidenceTag, RelationType,
-  EquationAnalysis
+  builtinFormulaDimensionChecker, formulaHasBareE, parseDeclaredExpression, missingEvaluatorMessage,
+  relationNotices, constantNotes, constantRecord, BridgeEdge, VizJunction, VizModel, EvidenceTag,
+  RelationType, EquationAnalysis
   ```
 
 
@@ -5379,6 +5378,7 @@ The codebase is organized into the following modules:
 | `../numerical/formula-dimension.js` | `formulaSymbolDimension` | Import |
 | `../dimensional/constant-rows.js` | `rewriteConstantSpellings` | Import |
 | `../dimensional/symbolic-constants.js` | `CONSTANTS, isRegisteredConstant` | Import |
+| `./canonical-prefactors.js` | `CANONICAL_GROUP_PREFACTORS` | Import |
 | `../dimensional/formula-names.js` | `formulaNameDimensions` | Import |
 | `../dimensional/natural-units.js` | `naturalNote, naturalPowers, UnitMode` | Import |
 | `./aliases.js` | `aliasesForTarget, editDistance, symbolIndex` | Import |
@@ -7854,9 +7854,9 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 393 |
 | Total Modules | 13 |
-| Total Lines of Code | 90471 |
-| Total Exports | 2869 |
-| Total Re-exports | 1412 |
+| Total Lines of Code | 90478 |
+| Total Exports | 2870 |
+| Total Re-exports | 1413 |
 | Total Classes | 86 |
 | Total Interfaces | 523 |
 | Total Functions | 960 |

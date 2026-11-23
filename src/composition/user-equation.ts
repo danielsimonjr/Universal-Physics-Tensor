@@ -23,6 +23,7 @@ import { getFormulaParser, parsePhysics } from '../numerical/formula-registry.js
 import { formulaSymbolDimension } from '../numerical/formula-dimension.js';
 import { rewriteConstantSpellings } from '../dimensional/constant-rows.js';
 import { CONSTANTS, isRegisteredConstant } from '../dimensional/symbolic-constants.js';
+import { CANONICAL_GROUP_PREFACTORS } from './canonical-prefactors.js';
 import { formulaNameDimensions } from '../dimensional/formula-names.js';
 import { naturalNote, naturalPowers, type UnitMode } from '../dimensional/natural-units.js';
 import { aliasesForTarget, editDistance, symbolIndex } from './aliases.js';
@@ -473,6 +474,7 @@ export async function analyzeUserEquation(
   // placeholder so the RHS still parses.
   const dims: Record<string, Dimension> = {};
   for (const [name, c] of Object.entries(CONSTANTS)) dims[name] = c.dim;
+  const dimensionlessGroups = new Set(CANONICAL_GROUP_PREFACTORS.map((prefactor) => prefactor.group));
   const placeholders: string[] = [];
   for (const source of eq.sources) {
     const resolved = resolve(source);
@@ -480,7 +482,7 @@ export async function analyzeUserEquation(
       ? dimsIn.get(resolved)
       : !bindShort && literalShort(source) !== null
         ? undefined
-        : formulaSymbolDimension(source);
+        : dimensionlessGroups.has(source) ? DIMENSIONLESS : formulaSymbolDimension(source);
     if (knownDimension === undefined) placeholders.push(source);
     dims[source] = knownDimension ?? DIMENSIONLESS;
   }
