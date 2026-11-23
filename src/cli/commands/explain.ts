@@ -289,11 +289,24 @@ async function run(ctx: CommandCtx): Promise<number> {
     return 0;
   }
 
-  const { graph, label, source } = resolveGraph(api, args.flags);
-  // A name that is not a quantity of this graph is NOT COVERED (persona finding
-  // C4). It used to get the same "no derivation path" answer as a real quantity
-  // the inputs cannot reach, and exit 0. Underscores resolve like hyphens.
-  const names = new Set(graph.flatMap((e) => [e.target.name, ...e.sources.map((s) => s.name)]));
+  const quantityNames = (edges: ReturnType<typeof resolveGraph>['graph']) =>
+    new Set(edges.flatMap((edge) => [edge.target.name, ...edge.sources.map((quantity) => quantity.name)]));
+  let selected = resolveGraph(api, args.flags);
+  let names = quantityNames(selected.graph);
+  let resolvedTarget = api.resolveQuantityName(target, names);
+  // Prefer an exact canonical match to a catalog spelling suggestion. An explicit
+  // source is a restriction and applies to the target as well as the derivation.
+  if (resolvedTarget === null && !args.flags.has('source')) {
+    const canonical = resolveGraph(api, new Map([['source', ['canonical']]]));
+    const canonicalNames = quantityNames(canonical.graph);
+    const canonicalTarget = api.resolveQuantityName(target, canonicalNames);
+    if (canonicalTarget !== null) {
+      selected = canonical;
+      names = canonicalNames;
+      resolvedTarget = canonicalTarget;
+    }
+  }
+  const { graph, label, source } = selected;
   // A dimensionless group the equation multiplies (sound-speed's gamma) is an
   // optional input, not a graph node. It resolves as a binding and not as a target.
   const inputNames = new Set(names);
@@ -301,7 +314,6 @@ async function run(ctx: CommandCtx): Promise<number> {
   for (const group of api.CANONICAL_GROUP_PREFACTORS) {
     if (edgeIds.has(group.id)) inputNames.add(group.group);
   }
-  let resolvedTarget = api.resolveQuantityName(target, names);
   if (resolvedTarget === null) {
     const near = api.nearQuantityNames(target, names);
     // A single token one edit from exactly one quantity is that quantity.

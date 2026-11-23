@@ -10,6 +10,8 @@ from v0.1.0 onward.
 
 ### Fixed
 
+- `upt explain` looks up exact canonical quantities absent from the default catalog. Explicit source selections restrict lookup and derivation.
+
 - An unbounded coarse-graining path reports no numeric error estimate instead of a zero identity bound.
 
 - Grid partial derivatives preserve the grid shape through tensor construction and reject insufficient clamp samples or invalid spacing. Explicit finite-difference steps must produce distinct representable coordinates.

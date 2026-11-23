@@ -31,6 +31,19 @@ describe('upt explain — not covered vs not derivable', () => {
     expect(r.text).toMatch(/'qwertyuiop' is not a quantity in the catalog graph: NOT COVERED/);
   });
 
+  it('uses canonical coverage for an exact quantity absent from the default catalog', async () => {
+    const inputs = ['kinetic-energy', 'mass=2kg', 'speed=3m/s'];
+    const implicit = await run(['explain', ...inputs, '--json']);
+    const canonical = await run(['explain', ...inputs, '--source=canonical', '--json']);
+    expect(implicit.code).toBe(0);
+    expect(JSON.parse(implicit.text)).toEqual(JSON.parse(canonical.text));
+    expect(JSON.parse(implicit.text)).toMatchObject({ source: 'canonical', result: { recoveredValue: 9 } });
+
+    const catalog = await run(['explain', ...inputs, '--source=catalog']);
+    expect(catalog.code).toBe(1);
+    expect(catalog.text).toContain('NOT COVERED');
+  });
+
   it('suggests near names for a misspelling', async () => {
     const r = await run(['explain', 'hawkng-temperature']);
     expect(r.code).toBe(1);
