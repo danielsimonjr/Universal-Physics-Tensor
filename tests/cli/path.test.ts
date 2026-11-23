@@ -516,12 +516,9 @@ describe('upt path', () => {
       expect(r.path.map((s: { id: string }) => s.id)).toEqual(['ab-langevin-diffusion']);
       expect(r.path.some((s: { id: string }) => s.id === 'ab-stokes-einstein')).toBe(false);
       expect(r.multiPremise.map((m: { id: string }) => m.id)).toEqual(['ab-stokes-einstein']);
-      expect(r.kind).toBe('bound');
-      expect(r.relation).toBe('coarse-graining');
-      // The coarse-graining states no Lipschitz constant, so the claim is the
-      // identity on the empty prefix. The hyperedge's 6πηa is not a factor.
-      expect(r.bound).toEqual({ K: 1, delta: 0 });
-      expect(r.terminal).toBe(true);
+      expect(r.kind).toBe('no-claim');
+      expect(r.reason).toBe('bound-not-stated');
+      expect(r.bound).toBeUndefined();
       expect(r.crossFamily).toBe(false);
       expect(r.modelFamilies).toEqual(['diffusion']);
       expect(r.path[0]).toMatchObject({
@@ -578,7 +575,7 @@ describe('upt path', () => {
       { args: ['model-klein-gordon', 'model-schrodinger-free'], exit: 0, kind: 'bound', regimes: 'unknown' },
       { args: ['model-klein-gordon', 'model-fick'], exit: 0, kind: 'no-claim', reason: 'no-composite-claim' },
       { args: ['model-klein-gordon', 'model-lc'], exit: 0, kind: 'no-claim', reason: 'missing-lipschitz' },
-      { args: ['model-langevin', 'model-fick'], exit: 0, kind: 'bound' },
+      { args: ['model-langevin', 'model-fick'], exit: 0, kind: 'no-claim', reason: 'bound-not-stated' },
       { args: ['model-stokes-drag', 'model-fick'], exit: 0, kind: 'missing-chain' },
     ];
     for (const c of cases) {
