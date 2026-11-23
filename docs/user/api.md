@@ -32,7 +32,7 @@ equations expressed as ExprNode trees. See src/dimensional/README.md. Every symb
 | `TEMPERATURE` | `const` | `export const TEMPERATURE:   Dimension = { L: 0, M: 0, T: 0, I: 0, Theta: 1, N: 0, J: 0 };` | Thermodynamic temperature, kelvin. |
 | `TIME` | `const` | `export const TIME:          Dimension = { L: 0, M: 0, T: 1, I: 0, Theta: 0, N: 0, J: 0 };` | Time, second. |
 | `UnitError` | `class` | `export class UnitError extends Error {` | The base of every error the unit readers throw: `parseUnit` for text that is not a unit expression (for example a number with a unit), `convertValue` for text that is not a number with a unit, for an affine target, and for a dimension mismatch. The subclasses name an unknown, refused or ambiguous unit. |
-| `UnitRefusedError` | `class` | `export class UnitRefusedError extends UnitError {` | A unit the reader recognizes and refuses: a logarithmic or ratio unit, an ambiguous name such as `ton`, or an affine temperature inside a compound. |
+| `UnitRefusedError` | `class` | `export class UnitRefusedError extends UnitError {` | A unit the reader recognizes and refuses: a logarithmic or ratio unit, an ambiguous name such as `ton`, or an invalid temperature spelling. |
 | `UnknownUnitError` | `class` | `export class UnknownUnitError extends UnitError {` | A symbol no table row and no prefix spells. |
 | `VELOCITY` | `const` | `export const VELOCITY:      Dimension = { L: 1, M: 0, T: -1, I: 0, Theta: 0, N: 0, J: 0 };` | Velocity, metre per second. |
 | `add` | `function` | `export function add(a: Dimension, b: Dimension): Dimension {` | Dimensional sum: requires equal dimensions, else throws `DimensionMismatchError`. |

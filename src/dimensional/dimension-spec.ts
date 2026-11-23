@@ -115,6 +115,8 @@ const NAMED_DIMS: Readonly<Record<NamedDimensionName, Dimension>> = {
   permittivity: unitDimension('F/m'),
   conductance: unitDimension('S'),
   magnetic_flux: unitDimension('Wb'),
+  momentum: multiply(MASS, VELOCITY),
+  resistivity: unitDimension('ohm*m'),
 };
 
 /**
@@ -239,7 +241,11 @@ function dimensionOf(node: FormulaPNode, spec: string): Dimension {
   switch (node.kind) {
     case 'sym': {
       const found = resolveAtom(node.name) ?? baseAtom(node.name);
-      if (found === null) throw unknownTerm(node.name);
+      if (found === null) {
+        const written = spec.match(/[A-Za-zΘ_][A-Za-zΘ_0-9-]*/g)
+          ?.find((name) => name.replaceAll('-', '_') === node.name);
+        throw unknownTerm(written ?? node.name);
+      }
       return { ...found };
     }
     case 'num':

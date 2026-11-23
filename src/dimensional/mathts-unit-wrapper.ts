@@ -7,9 +7,8 @@
  *
  * 1. `ton` and `tons` — MathTS names them ambiguous; UPT refuses them with its own
  *    message (`data/units.json`, `tests/dimensional/unit-wrapper-refusal.test.ts`).
- * 2. An affine temperature inside a compound — MathTS refuses `degC/s` but parses the
- *    spaced `deg C/s`; UPT refuses both (`localUnitReadings`,
- *    `tests/dimensional/mathts-unit-gaps.test.ts`).
+ * 2. In compounds, an affine spelling denotes an interval. UPT's unit grammar
+ *    applies the scale with no offset and requires the letters to be contiguous.
  * 3. `pc` prefixes — MathTS admits only k and up (`SHORT_UP_ONLY`); UPT's
  *    prefix table applies to every prefixable row, so `mpc` stays on the local
  *    grammar (`isSubKiloParsec`, `tests/dimensional/unit-override-parsec.test.ts`).

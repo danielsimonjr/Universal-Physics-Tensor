@@ -182,7 +182,8 @@ Flags:
         entropy, charge, current, electric_current, amount,
         amount_of_substance, luminous_intensity, pressure, viscosity,
         resistance, magnetic_field, permeability, voltage, capacitance,
-        inductance, permittivity, conductance, magnetic_flux.
+        inductance, permittivity, conductance, magnetic_flux, momentum,
+        resistivity.
         In --formula, a bare e is the elementary charge and E is energy.
         A name from a dimension argument is one symbol, hyphens included.
         A hyphen between other names is subtraction.
@@ -1044,6 +1045,7 @@ Flags:
                   Show one command's usage and flags.
   upt help statuses
                   Define every status word the commands print.
+  upt help units  Show accepted unit spellings and syntax.
   upt version     Show the installed CLI/package version.
 
 Run with no arguments for a short demo.

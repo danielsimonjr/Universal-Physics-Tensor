@@ -20,6 +20,8 @@ Code review is a standing gate. ~~The owner's rule (2026-10-06): Tom deep-review
 
 ## Open tasks, easiest first
 
+- [x] F15: read standard unit names, fractional unit powers and temperature intervals through the shared unit grammar (#740, #765–#767, #769).
+
 - [x] F12: preserve regime coordinates, bound meaning, and crossing brackets (#791, #793, #795, #835).
 
 - [x] F11: align catalog and test-plan wording with their encoded evidence (#763, #777, #799).

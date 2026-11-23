@@ -10,6 +10,8 @@ from v0.1.0 onward.
 
 ### Fixed
 
+- Unit expressions accept fractional powers, square roots, and temperature intervals in products and quotients. The unit registry provides engineering aliases and `upt help units`. Dimension specifications recognize momentum and resistivity and preserve unrecognized names in diagnostics.
+
 - Regime checks derive the chain coordinate from wavenumber and spacing, and atlas listings identify domains with no models or bridges. The damped-spring report identifies what its bound supremum measures. Hermite crossing keeps the sign bracket and handles stationary roots.
 
 - Catalog descriptions identify the encoded holographic area law and the thermoelectric Onsager premise. Test plans report the correct RC pole, measurement provenance, and the recorded comparison criterion.

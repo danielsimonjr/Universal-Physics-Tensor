@@ -219,6 +219,10 @@ async function dispatch(argv: string[], io: Io): Promise<number> {
       if (rest.length > 1) throw new UsageError('upt help takes at most one command name');
       // `upt help -h` and `upt help --help` ask for the command list, as `upt help` does.
       const target = rest[0] === '--help' || rest[0] === '-h' ? undefined : rest[0];
+      if (target === 'units') {
+        out((await loadApi()).unitHelpText());
+        return 0;
+      }
       if (target === 'statuses') {
         out(glossaryText());
         return 0;

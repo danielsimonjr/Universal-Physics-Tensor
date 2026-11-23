@@ -21,6 +21,7 @@ const DISPATCH_VERBS = `  upt help        Show this message.
                   Show one command's usage and flags.
   upt help statuses
                   Define every status word the commands print.
+  upt help units  Show accepted unit spellings and syntax.
   upt version     Show the installed CLI/package version.
 
 Run with no arguments for a short demo.`;
