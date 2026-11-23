@@ -140,7 +140,7 @@ export const DIMENSIONAL_CLASSICS: readonly CanonicalEquation[] = [
     domain: 'mechanics',
     formula_latex: 'v = \\sqrt{F/\\mu}',
     dimensional: {
-      target: { name: 'speed', dim: VELOCITY },
+      target: { name: 'speed', dim: VELOCITY, identity: 'string-phase-speed' },
       governing: [
         { name: 'tension', dim: FORCE },
         { name: 'linear-density', dim: LIN_DENSITY },

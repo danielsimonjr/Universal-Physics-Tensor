@@ -475,6 +475,7 @@ function toEdge(eq: CanonicalEquation): BridgeEdge {
   const attributes = attributesOf(eq);
   const target: Quantity = {
     name: eq.dimensional.target.name,
+    ...(eq.dimensional.target.identity === undefined ? {} : { identity: eq.dimensional.target.identity }),
     symbol: eq.dimensional.target.name,
     dim: eq.dimensional.target.dim,
     attributes,

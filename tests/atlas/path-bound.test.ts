@@ -670,3 +670,9 @@ describe('boundPath — a cross-family norm needs a transport (Tier 10 M2)', () 
     expect(Object.hasOwn(result, 'bound')).toBe(false);
   });
 });
+it('does not synthesize a numeric bound for a single unbounded coarse-graining', () => {
+  const result = boundPath([bridgeOf('no-error-estimate', 'coarse-graining', undefined)]);
+  expect(result.kind).toBe('no-claim');
+  if (result.kind !== 'no-claim') throw new Error('unexpected numeric bound');
+  expect(result.reason).toBe('bound-not-stated');
+});

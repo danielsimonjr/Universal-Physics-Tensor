@@ -388,3 +388,29 @@ describe('evaluateEdge / consistencyRatio (domain checking)', () => {
     );
   });
 });
+
+describe('composition junction physical identity', () => {
+  it('refuses a wave phase speed as a particle speed', () => {
+    const wave = CANONICAL_GRAPH.find(e => e.id === 'CE-string-wave-speed')!;
+    const kinetic = CANONICAL_GRAPH.find(e => e.id === 'CE-kinetic-energy')!;
+    expect(() => composeEdges(wave, kinetic)).toThrow(CompositionJunctionError);
+  });
+  it('refuses a stellar limiting mass as a particle mass', () => {
+    expect(() => composeEdges(CATALOG_GRAPH.find(e => e.id === 'be-63')!, CATALOG_GRAPH.find(e => e.id === 'be-12')!)).toThrow(CompositionJunctionError);
+  });
+  it('names a missing operand', () => {
+    expect(() => composeEdges(undefined as unknown as BridgeEdge, CATALOG_GRAPH[0]!)).toThrow(/first must be a bridge edge/);
+  });
+});
+
+describe('explicit identity assertions', () => {
+  it('allows a reviewed identification of an otherwise distinct port', () => {
+    const wave = CANONICAL_GRAPH.find(e => e.id === 'CE-string-wave-speed')!;
+    const kinetic = CANONICAL_GRAPH.find(e => e.id === 'CE-kinetic-energy')!;
+    const composed = composeEdges(wave, kinetic, {
+      identifications: [{ from: 'speed', to: 'speed', rationale: 'This experiment sets the particle speed equal to the string phase speed.' }],
+    });
+    expect(composed.identificationUsed?.rationale).toContain('This experiment');
+    expect(composed.evaluate({tension: 2, 'linear-density': 2, mass: 2})).toBeCloseTo(1, 12);
+  });
+});
