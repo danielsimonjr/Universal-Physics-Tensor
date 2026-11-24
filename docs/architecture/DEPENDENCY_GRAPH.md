@@ -5006,7 +5006,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `PowerLawExponent`, `PowerLawFit`, `Rational`, `PiStructure`, `LogDesign`
-- Functions: `rationalCandidates`, `rationalizeExponent`, `piStructure`, `logDesign`, `logDesignRank`, `powerLawDetermination`, `powerLawWording`
+- Functions: `rationalCandidates`, `rationalizeExponent`, `piStructure`, `monomialValue`, `logDesign`, `logDesignRank`, `powerLawDetermination`, `powerLawWording`
 - Constants: `MAX_EXPONENT_DENOMINATOR`
 
 ---
@@ -5199,6 +5199,7 @@ The codebase is organized into the following modules:
 | `../../dimensional/algebra.js` | `equals, format` | Import |
 | `../../dimensional/symbolic-constants.js` | `constantRecord, constantScope` | Import |
 | `../../dimensional/units.js` | `convertValue, parseUnit, UnitError` | Import |
+| `../../numerical/formula-contract.js` | `FormulaValueError` | Import |
 | `../../numerical/formula-mathts.js` | `parseFormula` | Import |
 | `../../numerical/formula-dimension.js` | `builtinFormulaDimensionChecker` | Import |
 | `../expr-eval.js` | `evalExpr` | Import |
@@ -5208,6 +5209,7 @@ The codebase is organized into the following modules:
 | `./frontier.js` | `problemFromResidualGap` | Import |
 | `./problem.js` | `isGapKind, makeResidualGap` | Import |
 | `./pipeline.js` | `NO_HOLDOUT_WORDING, runProbeSearch` | Import |
+| `./power-law.js` | `monomialValue, piStructure` | Import |
 | `./fingerprint.js` | `bodyExpression` | Import |
 | `./serialize.js` | `canonicalJson, hashCanonical` | Import |
 
@@ -7925,12 +7927,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 396 |
 | Total Modules | 13 |
-| Total Lines of Code | 91839 |
-| Total Exports | 2890 |
+| Total Lines of Code | 91957 |
+| Total Exports | 2891 |
 | Total Re-exports | 1421 |
 | Total Classes | 86 |
 | Total Interfaces | 526 |
-| Total Functions | 970 |
+| Total Functions | 971 |
 | Total Type Guards | 17 |
 | Total Enums | 0 |
 | Type-only Imports | 546 |

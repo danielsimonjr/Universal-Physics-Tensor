@@ -4,7 +4,7 @@
     "version": "18.1.1",
     "totalFiles": 396,
     "totalModules": 13,
-    "totalExports": 2890
+    "totalExports": 2891
   },
   "entryPoints": [
     {
@@ -18645,6 +18645,7 @@
           "rationalCandidates",
           "rationalizeExponent",
           "piStructure",
+          "monomialValue",
           "logDesign",
           "logDesignRank",
           "powerLawDetermination",
@@ -18661,6 +18662,7 @@
           "rationalCandidates",
           "rationalizeExponent",
           "piStructure",
+          "monomialValue",
           "logDesign",
           "logDesignRank",
           "powerLawDetermination",
@@ -19226,6 +19228,12 @@
             ]
           },
           {
+            "file": "../../numerical/formula-contract.js",
+            "imports": [
+              "FormulaValueError"
+            ]
+          },
+          {
             "file": "../../numerical/formula-mathts.js",
             "imports": [
               "parseFormula"
@@ -19281,6 +19289,13 @@
             "imports": [
               "NO_HOLDOUT_WORDING",
               "runProbeSearch"
+            ]
+          },
+          {
+            "file": "./power-law.js",
+            "imports": [
+              "monomialValue",
+              "piStructure"
             ]
           },
           {
@@ -29138,11 +29153,11 @@
   "statistics": {
     "totalTypeScriptFiles": 396,
     "totalModules": 13,
-    "totalLinesOfCode": 91839,
-    "totalExports": 2890,
+    "totalLinesOfCode": 91957,
+    "totalExports": 2891,
     "totalClasses": 86,
     "totalInterfaces": 526,
-    "totalFunctions": 970,
+    "totalFunctions": 971,
     "totalTypeGuards": 17,
     "totalEnums": 0,
     "totalConstants": 404,

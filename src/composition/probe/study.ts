@@ -47,6 +47,7 @@ import { convertValue, parseUnit, UnitError } from '../../dimensional/units.js';
  * @internal
  */
 export { DEFAULT_ALPHA, MAX_CORRECTION_TERMS };
+import { FormulaValueError } from '../../numerical/formula-contract.js';
 import { parseFormula } from '../../numerical/formula-mathts.js';
 import { builtinFormulaDimensionChecker } from '../../numerical/formula-dimension.js';
 import { evalExpr } from '../expr-eval.js';
@@ -56,6 +57,7 @@ import { datasetFromRows } from './dataset.js';
 import { problemFromResidualGap } from './frontier.js';
 import { isGapKind, makeResidualGap } from './problem.js';
 import { NO_HOLDOUT_WORDING, runProbeSearch } from './pipeline.js';
+import { monomialValue, piStructure } from './power-law.js';
 import { bodyExpression } from './fingerprint.js';
 import { canonicalJson, hashCanonical } from './serialize.js';
 
@@ -911,6 +913,9 @@ export interface ModelTest {
   readonly exploratory: SetTest | null;
   readonly holdout: SetTest | null;
   readonly replication: SetTest | null;
+  /** A frozen model that cannot predict the whole withheld partition fails it. */
+  readonly holdoutError?: string;
+  readonly replicationError?: string;
   readonly error?: string;
 }
 
@@ -973,7 +978,13 @@ function testRows(rows: readonly StudyObservation[], predict: Predictor, fitted:
   let maxAbsZ = 0;
   let worstRow: string | null = null;
   for (const r of rows) {
-    const z = (r.observed - predict(r.inputs)) / effectiveSigma(r, predict);
+    let z: number;
+    try {
+      z = (r.observed - predict(r.inputs)) / effectiveSigma(r, predict);
+    } catch (error) {
+      if (!(error instanceof FormulaValueError)) throw error;
+      throw new RangeError(`prediction is not finite on row ${r.id}: ${error.message}`, { cause: error });
+    }
     if (!Number.isFinite(z)) throw new RangeError(`prediction is not finite on row ${r.id}`);
     chi2 += z * z;
     if (Math.abs(z) > maxAbsZ) {
@@ -1143,6 +1154,82 @@ interface ModelSpec {
 }
 
 /**
+ * Search nested total-degree polynomial spaces in the dimensionless groups.
+ * Each term is multiplied by the target's dimensional base. Three groups and
+ * cubic degree bound the search at three fits of at most twenty coefficients.
+ */
+function polynomialModels(study: ProbeStudy, rowCount: number): ModelSpec[] {
+  const { base, groups } = piStructure(study.target, study.governing);
+  if (base === null || groups.length === 0 || groups.length > 3) return [];
+
+  // Orient each basis group so its last participating input has positive
+  // exponent. The nullspace solver may otherwise return the reciprocal.
+  const powers = groups.map(({ exponents }) => {
+    let sign = 1;
+    for (const { name } of study.governing) {
+      const exponent = exponents[name];
+      if (exponent) sign = Math.sign(exponent);
+    }
+    return Object.entries(exponents).map(([name, exponent]) => [name, sign * exponent] as const);
+  });
+  const terms = [{ exponents: base, lastGroup: 0 }];
+  const models: ModelSpec[] = [];
+  let layer = terms;
+  for (let degree = 1; degree <= 3; degree++) {
+    layer = layer.flatMap(({ exponents, lastGroup }) =>
+      powers.slice(lastGroup).map((group, index) => {
+        const next = { ...exponents };
+        for (const [name, exponent] of group) {
+          next[name] = (next[name] ?? 0) + exponent;
+        }
+        return { exponents: next, lastGroup: lastGroup + index };
+      }),
+    );
+    terms.push(...layer);
+    if (terms.length >= rowCount) break;
+    const basis = terms.map(({ exponents }) => (inputs: StudyObservation['inputs']) => monomialValue(exponents, inputs));
+    const formulas = terms.map(({ exponents }) => Object.entries(exponents)
+      .filter(([, exponent]) => exponent !== 0)
+      .map(([name, exponent]) => exponent === 1 ? name : `${name}^${exponent}`)
+      .join(' · ') || '1');
+    models.push({
+      id: `pi-polynomial-${degree}`,
+      kind: 'candidate',
+      label: formulas.map((formula, index) => `c${index} · ${formula}`).join(' + '),
+      fit: true,
+      basis,
+    });
+  }
+  return models;
+}
+
+/** Score each withheld partition using the exploratory predictor as fitted. */
+function scoreWithheld(model: FittedModel, sets: Split, alpha: number): ModelTest {
+  const { predict, test } = model;
+  if (predict === null) return test;
+
+  const on = (rows: readonly StudyObservation[]): { score: SetTest | null; error?: string } => {
+    if (rows.length === 0) return { score: null };
+    try {
+      return { score: testRows(rows, predict, 0, alpha) };
+    } catch (error) {
+      if (!(error instanceof RangeError)) throw error;
+      return { score: null, error: error.message };
+    }
+  };
+
+  const holdout = on(sets.holdout);
+  const replication = on(sets.replication);
+  return {
+    ...test,
+    holdout: holdout.score,
+    replication: replication.score,
+    ...(holdout.error !== undefined && { holdoutError: holdout.error }),
+    ...(replication.error !== undefined && { replicationError: replication.error }),
+  };
+}
+
+/**
  * Fit a model's coefficients on the exploratory rows, then (only if asked)
  * score it on the withheld rows with them frozen.
  */
@@ -1164,9 +1251,8 @@ function scoreModel(spec: ModelSpec, sets: Split, alpha: number, withheld: boole
     }
     const { coef, covariance } = sol;
     const predict = combine(spec.basis, coef);
-    const on = (rows: readonly StudyObservation[]) => (withheld && rows.length > 0 ? testRows(rows, predict, 0, alpha) : null);
     const v00 = covariance?.[0]?.[0];
-    return {
+    const model: FittedModel = {
       test: {
         id,
         kind,
@@ -1175,13 +1261,14 @@ function scoreModel(spec: ModelSpec, sets: Split, alpha: number, withheld: boole
         prefactor: coef[0]!,
         prefactorStderr: v00 !== undefined && v00 >= 0 ? Math.sqrt(v00) : null,
         exploratory: sets.exploratory.length > 0 ? testRows(sets.exploratory, predict, k, alpha) : null,
-        holdout: on(sets.holdout),
-        replication: on(sets.replication),
+        holdout: null,
+        replication: null,
       },
       predict,
       coef,
       covariance,
     };
+    return withheld ? { ...model, test: scoreWithheld(model, sets, alpha) } : model;
   } catch (e) {
     return failed((e as Error).message);
   }
@@ -1297,6 +1384,8 @@ export type ReplicationOutcome =
 export interface CandidateTest extends ModelTest {
   readonly credible: boolean;
   readonly credibility: string;
+  /** Ordered coefficients of a dimensionally homogeneous polynomial, in SI. */
+  readonly coefficients?: readonly number[];
   /** Set on a candidate from the declared correction families: m(x)·(1 + Σ c_k·u_k^p_k). */
   readonly correction?: {
     readonly base: string;
@@ -1553,7 +1642,7 @@ export async function runProbeStudy(study: ProbeStudy, opts: ProbeStudyOptions =
     s: (typeof specs)[number],
     coef: readonly number[] | null,
     covariance: readonly (readonly number[])[] | null,
-  ): Pick<CandidateTest, 'correction'> => {
+  ): Pick<CandidateTest, 'correction' | 'coefficients'> => {
     if (!('correction' in s) || !s.correction || !coef) return {};
     const a0 = coef[0]!;
     return {
@@ -1584,12 +1673,28 @@ export async function runProbeStudy(study: ProbeStudy, opts: ProbeStudyOptions =
   };
   const scored = specs.map((s) => {
     const m = scoreModel(s.spec, sets, alpha, false);
-    return { model: m, spec: s.spec, complexity: s.complexity, extra: correctionOf(s, m.coef, m.covariance), ...credibility(m.test, nullModel, alpha) };
+    return { model: m, complexity: s.complexity, extra: correctionOf(s, m.coef, m.covariance), ...credibility(m.test, nullModel, alpha) };
   });
   const credibleOnes = scored
     .filter((s) => s.credible)
     .sort((a, b) => (b.model.test.exploratory!.p! - a.model.test.exploratory!.p!) || a.complexity - b.complexity);
-  const chosen = credibleOnes[0];
+  // Prefer the native model space when it explains the data. Otherwise try
+  // increasingly complex sums and freeze the first credible fit.
+  let chosen = credibleOnes[0];
+  let polynomialTrials = 0;
+  if (!chosen && !corr && nullModel.exploratory?.pass === false) {
+    for (const spec of polynomialModels(study, sets.exploratory.length)) {
+      polynomialTrials++;
+      const model = scoreModel(spec, sets, alpha, false);
+      const extra: Pick<CandidateTest, 'correction' | 'coefficients'> = model.coef === null ? {} : { coefficients: model.coef };
+      const entry = { model, complexity: spec.basis.length, extra, ...credibility(model.test, nullModel, alpha) };
+      scored.push(entry);
+      if (entry.credible) {
+        chosen = entry;
+        break;
+      }
+    }
+  }
 
   const constants = constantScope();
   const baselines = study.baselines.map((b) => {
@@ -1615,19 +1720,22 @@ export async function runProbeStudy(study: ProbeStudy, opts: ProbeStudyOptions =
 
   if (!chosen) {
     verdict = 'no-credible-candidate';
-    if (fitted.length === 0) {
+    if (scored.length === 0) {
       verdictReasons.push(`the search produced no candidate that could be fit (search stop: ${search.stopReason})`);
     } else {
       for (const s of scored) verdictReasons.push(`${s.model.test.id}: ${s.credibility}`);
     }
     verdictReasons.push('the withheld rows were not consulted for any candidate');
   } else {
-    const withheld = scoreModel(chosen.spec, sets, alpha, true).test;
+    const withheld = scoreWithheld(chosen.model, sets, alpha);
     selected = { ...withheld, credible: true, credibility: chosen.credibility, ...chosen.extra };
     const i = candidates.findIndex((c) => c.id === selected!.id);
     candidates[i] = selected;
     const h = selected.holdout;
-    if (!h) {
+    if (selected.holdoutError !== undefined) {
+      verdict = 'refuted-on-holdout';
+      verdictReasons.push(`the frozen model could not predict the holdout: ${selected.holdoutError}`);
+    } else if (!h) {
       verdict = 'untested-on-holdout';
       verdictReasons.push('the file has no holdout rows; the candidate is credible on exploratory data only');
     } else if (h.pass) {
@@ -1642,7 +1750,8 @@ export async function runProbeStudy(study: ProbeStudy, opts: ProbeStudyOptions =
       );
     }
     const rep = selected.replication;
-    if (rep) replication = rep.pass ? 'survives-replication' : 'refuted-on-replication';
+    if (selected.replicationError !== undefined) replication = 'refuted-on-replication';
+    else if (rep) replication = rep.pass ? 'survives-replication' : 'refuted-on-replication';
   }
   // Rows closer to the study's than independent data can be are not a replication, whatever they agree with.
   const independence = replicationIndependence(study.observations, alpha);
@@ -1722,7 +1831,10 @@ export async function runProbeStudy(study: ProbeStudy, opts: ProbeStudyOptions =
       fitted: fitted.length,
       rejected: search.rejections.length,
       // The search is given no withheld rows by design; the study tests them itself.
-      notes: [...new Set(search.wording)].filter((w) => w !== NO_HOLDOUT_WORDING),
+      notes: [
+        ...(polynomialTrials > 0 ? [`Exploratory polynomial fits tried: ${polynomialTrials}.`] : []),
+        ...[...new Set(search.wording)].filter((w) => w !== NO_HOLDOUT_WORDING),
+      ],
     },
     nullModel,
     candidates,
@@ -1745,6 +1857,11 @@ function setLine(name: string, t: SetTest | null): string {
   const verdict = t.pass === null ? 'undecidable (ν < 1)' : t.pass ? 'pass' : 'FAIL';
   const nu = t.dof >= 1 ? `χ²/ν = ${(t.chi2 / t.dof).toPrecision(3)} (ν = ${t.dof})` : `χ² = ${t.chi2.toPrecision(3)}`;
   return `${name}: ${nu}, p = ${fmtP(t.p)}, max |z| = ${t.maxAbsZ.toPrecision(3)}${t.worstRow ? ` at ${t.worstRow}` : ''} — ${verdict}`;
+}
+
+function withheldLine(name: 'holdout' | 'replication', test: ModelTest): string {
+  const error = name === 'holdout' ? test.holdoutError : test.replicationError;
+  return error === undefined ? setLine(name, test[name]) : `${name}: FAIL — ${error}`;
 }
 
 function fmtPoint(point: Readonly<Record<string, number>>, governing: ProbeStudyResult['governing']): string {
@@ -1803,8 +1920,9 @@ export function formatProbeStudy(r: ProbeStudyResult): string {
   L.push('');
   const pm = (stderr: number | null) => (stderr === null ? '' : ` ± ${stderr.toPrecision(2)}`);
   for (const c of r.candidates) {
-    const pre = c.prefactor === null ? '' : `, ĉ = ${c.prefactor.toPrecision(5)}${pm(c.prefactorStderr)} (SI)`;
+    const pre = c.prefactor === null || c.coefficients ? '' : `, ĉ = ${c.prefactor.toPrecision(5)}${pm(c.prefactorStderr)} (SI)`;
     L.push(`  candidate ${c.id}: ${c.label}${pre}`);
+    if (c.coefficients) L.push(`    coefficients (SI): ${c.coefficients.map((value) => value.toPrecision(5)).join(', ')}`);
     if (c.correction) {
       const term = (t: CorrectionCoefficient, j: number): string => {
         const against =
@@ -1818,8 +1936,8 @@ export function formatProbeStudy(r: ProbeStudyResult): string {
     L.push(`    ${setLine('exploratory', c.exploratory)}`);
     L.push(`    ${c.credible ? 'credible' : 'not credible'}: ${c.credibility}`);
     if (c.id === r.selected) {
-      L.push(`    ${setLine('holdout', c.holdout)}`);
-      L.push(`    ${setLine('replication', c.replication)}`);
+      L.push(`    ${withheldLine('holdout', c)}`);
+      L.push(`    ${withheldLine('replication', c)}`);
     }
   }
   if (r.candidates.length === 0) L.push('  no candidate could be fit.');
@@ -1833,9 +1951,9 @@ export function formatProbeStudy(r: ProbeStudyResult): string {
         L.push(`      not evaluable: ${b.error}`);
         continue;
       }
-      for (const [name, t] of [['exploratory', b.exploratory], ['holdout', b.holdout], ['replication', b.replication]] as const) {
-        L.push(`      ${setLine(name, t)}`);
-      }
+      L.push(`      ${setLine('exploratory', b.exploratory)}`);
+      L.push(`      ${withheldLine('holdout', b)}`);
+      L.push(`      ${withheldLine('replication', b)}`);
     }
   }
   L.push('');

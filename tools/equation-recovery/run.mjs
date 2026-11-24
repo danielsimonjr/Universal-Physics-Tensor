@@ -39,6 +39,7 @@ function observations(rows, role, variables) {
 
 function outcome(model) {
   if (!model?.exploratory?.pass) return 'abstained';
+  if (model.holdoutError !== undefined) return 'refuted';
   if (!model.holdout) throw new Error('eligible model has no challenge score');
   return model.holdout.pass ? 'survived' : 'refuted';
 }
@@ -70,13 +71,17 @@ async function runCase(raw, fold) {
     baselines: monomial ? [{ name: 'dimensional', formula: monomial, fitPrefactor: true }] : [],
   });
   const selected = result.candidates.find(({ id }) => id === result.selected);
+  const dimensional = result.baselines[0];
   return {
     id,
     engine: outcome(selected),
-    dimensional: result.nullModel.exploratory?.pass === false ? outcome(result.baselines[0]) : 'abstained',
+    dimensional: result.nullModel.exploratory?.pass === false ? outcome(dimensional) : 'abstained',
     selected: selected?.label ?? null,
     prefactor: selected?.prefactor ?? null,
-    challenge: { engine: selected?.holdout ?? null, dimensional: result.baselines[0]?.holdout ?? null },
+    ...(selected?.coefficients && { coefficients: selected.coefficients }),
+    ...(selected?.holdoutError && { holdoutError: selected.holdoutError }),
+    ...(dimensional?.holdoutError && { dimensionalHoldoutError: dimensional.holdoutError }),
+    challenge: { engine: selected?.holdout ?? null, dimensional: dimensional?.holdout ?? null },
     stopReason: result.search.stopReason,
     ...(graph && {
       graph: result.nullModel.exploratory?.pass === false ? graph.outcome : 'abstained',

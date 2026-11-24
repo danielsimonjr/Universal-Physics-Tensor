@@ -126,8 +126,8 @@ export function piStructure(target: DimensionalVariableRef, governing: readonly 
   return { groups, base: null };
 }
 
-/** `Π row[name]^exp` over the non-zero exponents; NaN when a name is missing. */
-function monomialValue(exponents: Readonly<Record<string, number>>, row: ObservationRow): number {
+/** `Π row[name]^exp` over the non-zero exponents; NaN when a name is missing. @internal */
+export function monomialValue(exponents: Readonly<Record<string, number>>, row: ObservationRow): number {
   let v = 1;
   for (const [name, e] of Object.entries(exponents)) {
     if (e === 0) continue;
