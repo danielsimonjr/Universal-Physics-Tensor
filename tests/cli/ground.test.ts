@@ -1,5 +1,7 @@
 /** `upt ground` verifies ledger content, computed absence and graph scope. */
 import '../helpers/dist.js';
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it, vi } from 'vitest';
 import '../../dist/cli/commands/ground.js';
 import { resolveCommand, type CommandCtx } from '../../dist/cli/command.js';
@@ -163,4 +165,40 @@ it('includes substitution evidence in discovery JSON only when requested', async
   expect(withEvidence?.substitutions).toEqual(expect.arrayContaining([
     expect.objectContaining({ edgeId: 'be-26-wkb', status: 'refused' }),
   ]));
+}, FUNNEL_MS);
+
+
+it('grounds a catalog discovery pair under its emitted and raw alias names', async () => {
+  const report = await json(['discover', '--source=catalog']);
+  const pair = (report.result as { a: string; b: string; verdict: string }[])
+    .find(({ a, b }) => a === 'thermal-wavelength' && b === 'biot-length');
+  expect(pair).toBeDefined();
+  for (const name of ['thermal-wavelength', 'thermal-de-broglie-wavelength']) {
+    const grounded = await json(['ground', '--source=catalog', name, 'biot-length']);
+    expect(grounded.result).toMatchObject({ a: pair!.a, b: pair!.b, verdict: pair!.verdict });
+  }
+}, FUNNEL_MS);
+
+it('emits a pasteable alternate-source command for unit-bearing spaced anchors', async () => {
+  const args = ['ground', '--anchor=mass=1 kg', 'compton-wavelength', 'hubble-distance'];
+  const text = await runText(args);
+  const report = await json(args);
+  const retry = report.result.note.split(': ').at(-1);
+  expect(retry).toBe("upt ground --source=canonical '--anchor=mass=1 kg' compton-wavelength hubble-distance");
+  expect(text.text).toContain(retry);
+
+  const cli = fileURLToPath(new URL('../../bin/upt.mjs', import.meta.url));
+  const executed = spawnSync('bash', ['-c', `upt() { "$UPT_TEST_NODE" "$UPT_TEST_CLI" "$@"; }; ${retry}`], {
+    env: { ...process.env, UPT_TEST_NODE: process.execPath, UPT_TEST_CLI: cli },
+    encoding: 'utf8',
+  });
+  if (executed.error && 'code' in executed.error && executed.error.code === 'ENOENT') return;
+  expect(executed.status, executed.stderr).toBe(0);
+  expect(executed.stdout).toMatch(/compton-wavelength ≟ hubble-distance.*\[source: canonical/);
+}, FUNNEL_MS);
+
+it('keeps an explicit anchor when choosing a compatible alternate scope', async () => {
+  const report = await json(['ground', '--anchor=parker-sound=1', 'compton-wavelength', 'hubble-distance']);
+  expect(report.result.elsewhere).toEqual(['canonical', 'both']);
+  expect(report.result.note).toContain('upt ground --source=both --anchor=parker-sound=1');
 }, FUNNEL_MS);

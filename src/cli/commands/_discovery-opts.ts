@@ -16,6 +16,7 @@ import { CliError, UsageError } from '../errors.js';
 import { realFlag } from '../numeric-flag.js';
 import type { DiscoveryOptions, VettedCandidate } from '../../composition/discovery.js';
 import type { Dimension } from '../../dimensional/types.js';
+import { resolveGraph } from '../graphs.js';
 
 /** Read the `--max-orders` and `--anchor` flags into discovery options. A bad value throws. */
 export function parseDiscoveryOpts(api: CommandCtx['api'], flags: ParsedArgs['flags']): DiscoveryOptions {
@@ -33,7 +34,6 @@ export function parseDiscoveryOpts(api: CommandCtx['api'], flags: ParsedArgs['fl
     opts.maxOrdersOfMagnitude = n;
   }
 
-  const gt: Record<string, number> = {};
   const pairs: { name: string; raw: string; pair: string }[] = [];
   for (const x of flags.get('anchor') ?? []) {
     for (const pair of x.split(',')) {
@@ -47,39 +47,54 @@ export function parseDiscoveryOpts(api: CommandCtx['api'], flags: ParsedArgs['fl
       pairs.push({ name: k, raw: v, pair });
     }
   }
-  const seenAnchor = new Set<string>();
-  for (const p of pairs) {
-    if (seenAnchor.has(p.name)) throw new CliError(`upt: --anchor '${p.name}' is given twice ('${p.pair}'); give one value per name`);
-    seenAnchor.add(p.name);
-  }
-  const siblings = pairs.map((p) => ({ name: p.name, raw: p.raw }));
-  // Every quantity either graph names, with its dimension: an anchor is a value of one of them.
+  if (pairs.length === 0) return opts;
+
+  const { graph, source } = resolveGraph(api, flags);
   const quantities = new Map<string, Dimension>();
-  for (const edge of [...api.CATALOG_GRAPH, ...api.CANONICAL_GRAPH]) {
-    for (const q of [edge.target, ...edge.sources]) quantities.set(q.name, q.dim);
+  for (const { target, sources } of graph) {
+    for (const quantity of [target, ...sources]) quantities.set(quantity.name, quantity.dim);
   }
   const quantityNames = new Set(quantities.keys());
-  const rawValues: Record<string, number> = {};
-  for (const p of pairs) {
+  const resolvedNames = new Map<string, string>();
+  const scopedPairs = pairs.map((p) => {
     const resolved = api.resolveQuantityName(p.name, quantityNames);
-    const dim = resolved === null ? undefined : quantities.get(resolved);
-    if (resolved === null || dim === undefined) {
-      // An anchor on a name no graph holds would be read, printed as the anchor, and change nothing.
-      throw new CliError(`upt: --anchor '${p.pair}': '${p.name}' is not a quantity in either graph (\`upt search ${p.name}\` looks for one)`);
+    if (resolved === null) {
+      const allNames = new Set(
+        [...api.CATALOG_GRAPH, ...api.CANONICAL_GRAPH].flatMap(({ target, sources }) =>
+          [target.name, ...sources.map(({ name }) => name)]),
+      );
+      const availableElsewhere = api.resolveQuantityName(p.name, allNames) !== null;
+      const where = availableElsewhere ? `in the selected ${source} graph` : 'in either graph';
+      throw new CliError(`upt: --anchor '${p.pair}': '${p.name}' is not a quantity ${where} (\`upt search ${p.name}\` looks for one)`);
     }
+    const previous = resolvedNames.get(resolved);
+    if (previous === p.name) {
+      throw new CliError(`upt: --anchor '${p.name}' is given twice ('${p.pair}'); give one value per name`);
+    }
+    if (previous !== undefined) {
+      throw new CliError(`upt: --anchor '${p.name}' resolves to '${resolved}', which is already bound by '${previous}'`);
+    }
+    resolvedNames.set(resolved, p.name);
+    return { ...p, resolved };
+  });
+  const siblings = scopedPairs.map(({ resolved, raw }) => ({ name: resolved, raw }));
+  const values = new Map<string, number>();
+  for (const p of scopedPairs) {
+    const { resolved } = p;
+    const dim = quantities.get(resolved)!;
     try {
-      const read = api.readNamedBinding(p.name, p.raw, { siblings });
+      const read = api.readNamedBinding(resolved, p.raw, { siblings });
       if (!Number.isFinite(read.value)) {
         throw new CliError(`upt: --anchor expects k=v with a finite numeric value, got "${p.pair}".`);
       }
-      // A bare number is already in SI. A value with a unit must be the quantity's dimension:
-      // `mass=1s` is not a mass of 1 kg.
+      // A bare value is already in the resolved quantity's evaluator unit.
+      // A unit-bearing value still has to match its dimension.
       if (read.dimensioned && !api.dimensionsEqual(read.dimension, dim)) {
         throw new CliError(
           `upt: --anchor '${p.pair}' is ${api.format(read.dimension)}, but ${resolved} is ${api.format(dim)}`,
         );
       }
-      rawValues[p.name] = read.value;
+      values.set(resolved, read.value);
     } catch (e) {
       // A bad value is exit 1 on every command; a missing `=` was refused as usage above.
       if (e instanceof CliError) throw e;
@@ -97,17 +112,14 @@ export function parseDiscoveryOpts(api: CommandCtx['api'], flags: ParsedArgs['fl
       throw e;
     }
   }
+  const groundTruth = Object.fromEntries(values);
   try {
-    api.assertSynonymAgreement(rawValues);
+    api.assertSynonymAgreement(groundTruth);
   } catch (e) {
     if (e instanceof api.SynonymDisagreementError) throw new CliError(`upt: ${e.message}`);
     throw e;
   }
-  for (const [name, value] of Object.entries(rawValues)) {
-    const key = api.resolveQuantityName(name, quantityNames) ?? name;
-    gt[key] = value;
-  }
-  if (Object.keys(gt).length) opts.groundTruth = gt;
+  opts.groundTruth = groundTruth;
 
   return opts;
 }

@@ -10,7 +10,7 @@
  * looked up in the others, and a hit is named: a candidate of another scope
  * must not be reported as though it never existed.
  */
-import type { FlagSpec } from '../args.js';
+import { shellQuote, type FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG, sourceFlag } from '../flag-help.js';
 import { resolveGraph, groundTruthAnchor, groundTruthLine, type SourceName } from '../graphs.js';
@@ -62,36 +62,54 @@ async function run(ctx: CommandCtx): Promise<number> {
     throw new UsageError('upt ground needs two quantity names (a b). See `upt help`.');
   }
 
-  const pairs = (c: { a: string; b: string }) => (c.a === a && c.b === b) || (c.a === b && c.b === a);
-  const quantities = (edges: readonly { target: { name: string }; sources: readonly { name: string }[] }[]): Set<string> =>
-    new Set(edges.flatMap((e) => [e.target.name, ...e.sources.map((q) => q.name)]));
-  const bothNamed = (edges: Parameters<typeof quantities>[0]): boolean => {
-    const names = quantities(edges);
-    return names.has(a) && names.has(b);
+  // The proposer folds registered identifications before publishing endpoint names.
+  // Ground accepts both those emitted names and the raw names on the same graph.
+  const canonicalize = api.quantityCanonicalizer();
+  const scopes = ALL_SOURCES.map((s) => {
+    const edges = s === source ? graph : resolveGraph(api, new Map([['source', [s]]])).graph;
+    const rawNames = edges.flatMap(({ target, sources }) => [target.name, ...sources.map(({ name }) => name)]);
+    return { source: s, graph: edges, rawNames, names: new Set(rawNames.map(canonicalize)) };
+  });
+  const vocabulary = new Set(scopes.flatMap(({ rawNames, names }) => [...rawNames, ...names]));
+  const resolveEndpoint = (name: string): string => {
+    const resolved = api.resolveQuantityName(name, vocabulary);
+    if (resolved === null) throw new CliError(`upt ground: '${name}' is not a quantity of any graph (${ALL_SOURCES.join(', ')})`);
+    return canonicalize(resolved);
   };
-  // A name no graph holds is a bad argument (exit 1). A pair every graph holds and no
-  // funnel pairs is a computed absence: exit 0 with its envelope, the rule `search` with no
-  // match and `confront` with a refusal follow (Tom's review of #502).
-  const graphs = ALL_SOURCES.map((s) => (s === source ? graph : resolveGraph(api, new Map([['source', [s]]])).graph));
-  const held = new Set(graphs.flatMap((g) => [...quantities(g)]));
-  for (const name of [a, b]) {
-    if (!held.has(name)) throw new CliError(`upt ground: '${name}' is not a quantity of any graph (${ALL_SOURCES.join(', ')})`);
-  }
-  const proposal = bothNamed(graph) ? api.proposeLinkCandidates(graph).find(pairs) : undefined;
+  const keyA = resolveEndpoint(a);
+  const keyB = resolveEndpoint(b);
+  const matches = (c: { a: string; b: string }) =>
+    (c.a === keyA && c.b === keyB) || (c.a === keyB && c.b === keyA);
+  const proposalIn = (scope: (typeof scopes)[number]) =>
+    scope.names.has(keyA) && scope.names.has(keyB) ? api.proposeLinkCandidates(scope.graph).find(matches) : undefined;
+  const proposal = proposalIn(scopes.find((s) => s.source === source)!);
   const cand = proposal && api.vetLinkCandidate(graph, proposal, { ...opts, includeSubstitutions: true });
   if (!cand) {
-    const elsewhere = ALL_SOURCES.filter((s) => s !== source).filter((s) => {
-      const other = graphs[ALL_SOURCES.indexOf(s)]!;
-      return bothNamed(other) && api.proposeLinkCandidates(other).some(pairs);
-    });
-    const anchorFlags = (args.flags.get('anchor') ?? []).map((v) => ` --anchor=${v}`).join('');
-    const ordersFlag = args.flags.has('max-orders') ? ` --max-orders=${args.flags.get('max-orders')!.at(-1)}` : '';
-    const sentence =
-      elsewhere.length > 0
-        ? `'${a}' ≟ '${b}' is not a candidate in the ${source} graph, but it is in ` +
-          `${elsewhere.join(' and ')}: upt ground --source=${elsewhere[0]}${anchorFlags}${ordersFlag} ${a} ${b}`
-        : `no discovery candidate pairs '${a}' with '${b}' in any of ${ALL_SOURCES.join(', ')} — ` +
-          'they may not share a dimension, or are already connected (not a cross-cluster coincidence).';
+    const elsewhere = scopes.filter((s) => s.source !== source && proposalIn(s)).map((s) => s.source);
+    let sentence = `no discovery candidate pairs '${a}' with '${b}' in any of ${ALL_SOURCES.join(', ')} — ` +
+      'they may not share a dimension, or are already connected (not a cross-cluster coincidence).';
+    if (elsewhere.length > 0) {
+      sentence = `'${a}' ≟ '${b}' is not a candidate in the ${source} graph, but it is in ${elsewhere.join(' and ')}`;
+      const retry = elsewhere.find((s) => {
+        if (opts.groundTruth === undefined) return true;
+        try {
+          parseDiscoveryOpts(api, new Map([...args.flags, ['source', [s]]]));
+          return true;
+        } catch (error) {
+          if (!(error instanceof CliError)) throw error;
+          return false;
+        }
+      });
+      if (retry === undefined) {
+        sentence += '. Choose an anchor available in the alternate graph.';
+      } else {
+        const anchors = (args.flags.get('anchor') ?? []).map((v) => `--anchor=${v}`);
+        const maxOrders = args.flags.get('max-orders')?.at(-1);
+        const command = ['upt', 'ground', `--source=${retry}`, ...anchors,
+          ...(maxOrders === undefined ? [] : [`--max-orders=${maxOrders}`]), a, b];
+        sentence += `: ${command.map(shellQuote).join(' ')}`;
+      }
+    }
     if (args.flags.has('json')) {
       emitJson(
         {

@@ -49,6 +49,8 @@ export {
   proposeLinkCandidates,
   proposeOrphanConnectors,
 } from './composition/bridge-analysis.js';
+/** Fold registered identification names when looking up discovery proposals. */
+export { quantityCanonicalizer } from './composition/quantity-clusters.js';
 
 // Other internal modules the CLI drives.
 export {
