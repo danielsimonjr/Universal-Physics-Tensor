@@ -96,7 +96,7 @@ export const TEXTBOOK_COVERAGE: readonly CanonicalEquation[] = [
     // occupation correction y(1 + coth y) exp(−2y), where y = hν/(2kT).
     // Apply the exponentials separately to retain representable Wien tails.
     scalarAst: times(
-      literal('8pi'), over(thermalEnergy, C), pow(over(frequency, C), '2'),
+      literal('8pi'), over(thermalEnergy, C), over(frequency, C), over(frequency, C),
       op('+', [halfPlanckExponent, over(halfPlanckExponent, {
         kind: 'transcendental', fn: 'tanh', arg: halfPlanckExponent,
       })]),

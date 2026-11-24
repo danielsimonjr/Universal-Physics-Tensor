@@ -109,4 +109,14 @@ it('retains the physical scale across the thermal limits', () => {
   expect(capacity(300, 1e-15) / (3 * K_B_SI)).toBeCloseTo(1, 14);
   expect(capacity(1, 700)).toBe(2.001e-321);
   expect(capacity(1, 1000)).toBe(0);
+  expect(capacity(1e308, 1) / (3 * K_B_SI)).toBeCloseTo(1, 14);
+  expect(capacity(1, 1e160)).toBe(0);
+  const tinyFrequency = 1e-180;
+  const highTemperature = 1e100;
+  const speedRatio = tinyFrequency / C_SI;
+  const tinyExpected = 8 * Math.PI * (K_B_SI * highTemperature / C_SI) * speedRatio * speedRatio;
+  expect(evaluate('CE-planck-blackbody-spectrum', { frequency: tinyFrequency, temperature: highTemperature }) /
+    tinyExpected).toBeCloseTo(1, 12);
+  expect(evaluateEdge(planck, { 'planck-frequency': tinyFrequency, 'planck-warmth': highTemperature }) /
+    tinyExpected).toBeCloseTo(1, 12);
 });
