@@ -29,6 +29,8 @@
  * @module composition/representative-values
  */
 
+import { C_SI, H_SI, HBAR_SI, M_E_SI } from '../core/constants.js';
+
 /** A sourced order-of-magnitude value for one quantity. @internal */
 export interface RepresentativeValue {
   /** Order-of-magnitude value in the quantity's SI unit (good to ~1 order). */
@@ -135,8 +137,12 @@ export const REPRESENTATIVE_VALUES: Readonly<
   // a 1/mass quantity like the Compton wavelength absurdly small (~10⁻⁷³ m) and
   // produces a spurious clash against the (fixed) Bohr radius.
   'compton-wavelength': {
-    value: 2.426e-12,
-    source: 'electron Compton wavelength λ_C = h/(m_e c) = 2.43e-12 m (CODATA)',
+    value: HBAR_SI / (M_E_SI * C_SI),
+    source: 'CE-compton-wavelength at the electron mass: reduced λ̄_C = ℏ/(m_e c) (SI/CODATA)',
+  },
+  'compton-wavelength-full': {
+    value: H_SI / (M_E_SI * C_SI),
+    source: 'CE-compton-wavelength-full at the electron mass: λ_C = h/(m_e c) (SI/CODATA)',
   },
   'bohr-radius': { value: 5.292e-11, source: 'Bohr radius a_0 = 5.29e-11 m (CODATA)' },
 

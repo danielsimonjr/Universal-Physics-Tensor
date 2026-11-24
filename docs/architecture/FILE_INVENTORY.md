@@ -12,9 +12,9 @@ The census is the set of source files that git tracks. Build output, `node_modul
 ignored scratch files are absent because git does not track them. The tool does not guess
 from a directory name.
 
-The scope of this document is the **whole repository**: 1279 source files. The library
-alone is smaller. `src/` holds 395 TypeScript files, and `bun run docs:deps` counts the same
-395. The zone `src` below counts 397 files: the 395 files under `src/`, the launcher
+The scope of this document is the **whole repository**: 1280 source files. The library
+alone is smaller. `src/` holds 396 TypeScript files, and `bun run docs:deps` counts the same
+396. The zone `src` below counts 398 files: the 396 files under `src/`, the launcher
 `bin/upt.mjs` and the smoke entry `test-example.js`.
 
 ## By zone
@@ -22,15 +22,15 @@ alone is smaller. `src/` holds 395 TypeScript files, and `bun run docs:deps` cou
 | Zone | Files | What lives here |
 |---|---|---|
 | `tests` | 820 | The vitest suite under `tests/` |
-| `src` | 397 | The library, the CLI and the physics catalog code, plus `bin/upt.mjs` and `test-example.js` |
+| `src` | 398 | The library, the CLI and the physics catalog code, plus `bin/upt.mjs` and `test-example.js` |
 | `tools` | 42 | Repository tooling: 21 files under `tools/` and 21 files under `scripts/` |
 | `benchmarks` | 17 | `bench/*.bench.ts` and their fixture, run by `npm run bench` |
 | `examples` | 1 | `examples/basic-usage.ts` |
 | `docs` | 1 | One script under `docs/persona-sessions/` |
 | `config` | 1 | `vitest.config.ts` |
-| **Total** | **1279** | |
+| **Total** | **1280** | |
 
-**Tests outnumber source files: 820 against 397.** The ratio fits a repository whose claims
+**Tests outnumber source files: 820 against 398.** The ratio fits a repository whose claims
 are physical: a wrong number is a wrong prediction, not a cosmetic defect.
 
 ## The two orphans, and why neither is dead code
@@ -59,7 +59,7 @@ Regenerate: `repo-tools map <repo> --out=<dir>` · Check: `repo-tools check <rep
 
 | Claim | Value | Source |
 |---|---|---|
-| totalSourceFiles | 1279 | `dependency-graph.json` `statistics.totalSourceFiles` |
+| totalSourceFiles | 1280 | `dependency-graph.json` `statistics.totalSourceFiles` |
 
 The claim counts every tracked source file, tests and tools included. The `dependency-graph.json` in the Source column is the output of `repo-tools map`. The committed `docs/architecture/dependency-graph.json` is a different file, which `bun run docs:deps` writes for `src/`.
 

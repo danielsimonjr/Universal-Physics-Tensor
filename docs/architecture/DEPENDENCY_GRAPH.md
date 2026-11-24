@@ -44,7 +44,7 @@ The codebase is organized into the following modules:
 - **cases**: 7 files
 - **cli**: 60 files
 - **root**: 1 file
-- **composition**: 84 files
+- **composition**: 85 files
 - **core**: 18 files
 - **diff**: 3 files
 - **dimensional**: 46 files
@@ -2499,11 +2499,11 @@ The codebase is organized into the following modules:
 | `../command.js` | `CommandCtx` | Import (type-only) |
 | `../errors.js` | `CliError, UsageError` | Import |
 | `../numeric-flag.js` | `realFlag` | Import |
-| `../../composition/discovery.js` | `DiscoveryOptions` | Import (type-only) |
+| `../../composition/discovery.js` | `DiscoveryOptions, VettedCandidate` | Import (type-only) |
 | `../../dimensional/types.js` | `Dimension` | Import (type-only) |
 
 **Exports:**
-- Functions: `parseDiscoveryOpts`
+- Functions: `parseDiscoveryOpts`, `formatSubstitution`
 
 ---
 
@@ -2687,7 +2687,8 @@ The codebase is organized into the following modules:
 | `../flag-help.js` | `commandHelp, JSON_FLAG, sourceFlag` | Import |
 | `../graphs.js` | `resolveGraph, groundTruthAnchor, groundTruthLine` | Import |
 | `../output.js` | `emitJson` | Import |
-| `./_discovery-opts.js` | `parseDiscoveryOpts` | Import |
+| `./_discovery-opts.js` | `formatSubstitution, parseDiscoveryOpts` | Import |
+| `../errors.js` | `UsageError` | Import |
 | `../../composition/discovery.js` | `VettedCandidate` | Import (type-only) |
 | `../../composition/adjudication.js` | `AnnotatedCandidate` | Import (type-only) |
 | `../../bridges/catalog-types.js` | `AdjudicationVerdict` | Import (type-only) |
@@ -2791,7 +2792,7 @@ The codebase is organized into the following modules:
 | `../graphs.js` | `resolveGraph, groundTruthAnchor, groundTruthLine, SourceName` | Import |
 | `../output.js` | `emitJson` | Import |
 | `../errors.js` | `UsageError, CliError` | Import |
-| `./_discovery-opts.js` | `parseDiscoveryOpts` | Import |
+| `./_discovery-opts.js` | `formatSubstitution, parseDiscoveryOpts` | Import |
 | `../library-defaults.js` | `DISCOVER_MAX_ORDERS_DEFAULT` | Import |
 
 **Exports:**
@@ -3810,6 +3811,26 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/composition/candidate-substitution.ts` - Counterfactual evaluations of the first equations that consume either
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../bridges/evaluation-errors.js` | `DomainViolationError` | Import |
+| `../dimensional/algebra.js` | `equals, siUnitOf` | Import |
+| `../dimensional/types.js` | `DIMENSIONLESS, Dimension` | Import |
+| `../dimensional/unit-convention.js` | `conventionScaleToSI, quantityConventionUnit` | Import |
+| `./canonical-prefactors.js` | `CANONICAL_GROUP_PREFACTORS` | Import |
+| `./edge.js` | `evaluateEdge, BridgeEdge` | Import |
+| `./retrodiction.js` | `evaluationInputs, refusesThePoint` | Import |
+| `./representative-values.js` | `REPRESENTATIVE_VALUES, RepresentativeValue` | Import |
+
+**Exports:**
+- Interfaces: `SubstitutionScenario`, `CandidateSubstitution`, `SubstitutionContext`
+- Functions: `defaultSubstitutionScenarios`, `buildSubstitutionContext`, `candidateSubstitutions`
+
+---
+
 ### `src/composition/canonical-compare.ts` - Compare a user's formula with the canonical (textbook) equation it restates.
 
 **External Dependencies:**
@@ -4170,6 +4191,8 @@ The codebase is organized into the following modules:
 | `../dimensional/algebra.js` | `format` | Import |
 | `./own-equation-magnitude.js` | `deriveOwnEquationMagnitudes` | Import |
 | `./own-equation-magnitude.js` | `DerivedMagnitudes` | Import (type-only) |
+| `./candidate-substitution.js` | `buildSubstitutionContext, candidateSubstitutions, defaultSubstitutionScenarios` | Import |
+| `./candidate-substitution.js` | `CandidateSubstitution, SubstitutionContext, SubstitutionScenario` | Import (type-only) |
 | `./discovery-defaults.js` | `DEFAULT_MAX_ORDERS_OF_MAGNITUDE` | Import |
 
 **Exports:**
@@ -5360,6 +5383,11 @@ The codebase is organized into the following modules:
 ---
 
 ### `src/composition/representative-values.ts` - Order-of-magnitude representative values for the discovery falsifier.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../core/constants.js` | `C_SI, H_SI, HBAR_SI, M_E_SI` | Import |
 
 **Exports:**
 - Interfaces: `RepresentativeValue`
@@ -6683,6 +6711,7 @@ The codebase is organized into the following modules:
 | `./composition/grounding.js` | `CandidateGrounding` | Re-export |
 | `./composition/discovery.js` | `rankDiscoveries` | Re-export |
 | `./composition/discovery.js` | `VettedCandidate` | Re-export |
+| `./composition/candidate-substitution.js` | `CandidateSubstitution, SubstitutionScenario` | Re-export |
 | `./bridges/observations/types.js` | `residualInSigma, combineInQuadrature, consistencyComparison` | Re-export |
 | `./bridges/observations/types.js` | `ConsistencyComparison, ObservationProvenance, SigmaComponent, ObservationKind, ConfrontationOutcome, ConfrontationDataHandling, ConfrontationPreprocessing, ConfrontationIndependence, SourceRef, SourceRefs` | Re-export |
 | `./bridges/coefficient-statement.js` | `oneLoopCoefficientStatement` | Re-export |
@@ -6796,22 +6825,22 @@ The codebase is organized into the following modules:
   ADJUDICATIONS, adjudicationFor, annotateAdjudications, AnnotatedCandidate, AdjudicationVerdict,
   CatalogAdjudication, annotateConsequences, classifyProposal, ConsequenceAnnotatedCandidate,
   ConsequenceSignal, ConsequenceEvidence, describeGrounding, CandidateGrounding, rankDiscoveries,
-  VettedCandidate, residualInSigma, combineInQuadrature, consistencyComparison, ConsistencyComparison,
-  ObservationProvenance, SigmaComponent, ObservationKind, ConfrontationOutcome,
-  ConfrontationDataHandling, ConfrontationPreprocessing, ConfrontationIndependence, SourceRef,
-  SourceRefs, oneLoopCoefficientStatement, OneLoopCoefficientStatement, OneLoopCoefficientSign,
-  CONFRONTATIONS, listConfrontations, runConfrontation, CONFRONTATION_RIGOR, confrontationRigor,
-  rigorDistribution, ConfrontationEntry, RigorTier, decidingMeasurement, Elasticity, UPTError,
-  UnitMode, Variance, Role, TensorIndex, UpperIndex, CovariantIndex, TensorSymbolNode,
-  TensorProductNode, MetricTensorNode, KroneckerDeltaNode, TensorPartialDerivativeNode,
-  RiemannTensorNode, WeylTensorNode, KillingVectorNode, ConservedChargeNode, StressEnergyTensorNode,
-  CosmologicalConstantNode, CurvatureCompositeNode, CurvatureKind, FluxRuleKind, ScaleAxes, ForceAxes,
-  SymmetryAxes, InformationAxes, AxisConvenience, ShapiroInput, PerihelionInput, HawkingInput,
-  DecoherenceInput, EinsumContraction, EinsumFreeAxis, KillingFn, KillingMetricFn, ChristoffelAtFn,
-  RelationContract, Conventions, ScaleAxis, ForceAxis, InformationAxis, SymmetryAxis, TopologyAxis,
-  StatisticsAxis, EnumerationOptions, UncertaintyOptions, AnalyzeUserEquationOptions, ShortBinding,
-  ConstantDef, ProposedBridge, DiscoveryOptions, RepresentativeValue, SourcedPrefactor,
-  SourcedGroupPrefactor
+  VettedCandidate, CandidateSubstitution, SubstitutionScenario, residualInSigma, combineInQuadrature,
+  consistencyComparison, ConsistencyComparison, ObservationProvenance, SigmaComponent,
+  ObservationKind, ConfrontationOutcome, ConfrontationDataHandling, ConfrontationPreprocessing,
+  ConfrontationIndependence, SourceRef, SourceRefs, oneLoopCoefficientStatement,
+  OneLoopCoefficientStatement, OneLoopCoefficientSign, CONFRONTATIONS, listConfrontations,
+  runConfrontation, CONFRONTATION_RIGOR, confrontationRigor, rigorDistribution, ConfrontationEntry,
+  RigorTier, decidingMeasurement, Elasticity, UPTError, UnitMode, Variance, Role, TensorIndex,
+  UpperIndex, CovariantIndex, TensorSymbolNode, TensorProductNode, MetricTensorNode,
+  KroneckerDeltaNode, TensorPartialDerivativeNode, RiemannTensorNode, WeylTensorNode,
+  KillingVectorNode, ConservedChargeNode, StressEnergyTensorNode, CosmologicalConstantNode,
+  CurvatureCompositeNode, CurvatureKind, FluxRuleKind, ScaleAxes, ForceAxes, SymmetryAxes,
+  InformationAxes, AxisConvenience, ShapiroInput, PerihelionInput, HawkingInput, DecoherenceInput,
+  EinsumContraction, EinsumFreeAxis, KillingFn, KillingMetricFn, ChristoffelAtFn, RelationContract,
+  Conventions, ScaleAxis, ForceAxis, InformationAxis, SymmetryAxis, TopologyAxis, StatisticsAxis,
+  EnumerationOptions, UncertaintyOptions, AnalyzeUserEquationOptions, ShortBinding, ConstantDef,
+  ProposedBridge, DiscoveryOptions, RepresentativeValue, SourcedPrefactor, SourcedGroupPrefactor
   ```
 
 
@@ -7807,7 +7836,7 @@ graph TD
         N33[aliases]
         N34[audit-coverage]
         N35[axes]
-        N36[...79 more]
+        N36[...80 more]
     end
 
     subgraph Core
@@ -7894,17 +7923,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 395 |
+| Total TypeScript Files | 396 |
 | Total Modules | 13 |
-| Total Lines of Code | 91508 |
-| Total Exports | 2884 |
-| Total Re-exports | 1419 |
+| Total Lines of Code | 91839 |
+| Total Exports | 2890 |
+| Total Re-exports | 1421 |
 | Total Classes | 86 |
-| Total Interfaces | 523 |
-| Total Functions | 966 |
+| Total Interfaces | 526 |
+| Total Functions | 970 |
 | Total Type Guards | 17 |
 | Total Enums | 0 |
-| Type-only Imports | 545 |
+| Type-only Imports | 546 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

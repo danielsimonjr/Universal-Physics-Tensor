@@ -419,7 +419,7 @@ describe('the Lean manifest', () => {
     // The counts are the record at this pin; the keys come from the manifest.
     expect(ofKind(...COUNTED_KINDS)).toHaveLength(28);
     expect(ofKind('cross-check')).toHaveLength(2);
-    expect(ofKind('property')).toHaveLength(3);
+    expect(ofKind('property')).toHaveLength(4);
     for (const key of ofKind(...COUNTED_KINDS, 'cross-check', 'property')) {
       expect(physjsFormalRef(key).kind, key).toBe(manifest.entries.find((entry) => entry.key === key)!.kind);
     }

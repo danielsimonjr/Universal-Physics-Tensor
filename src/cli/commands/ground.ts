@@ -16,7 +16,7 @@ import { commandHelp, JSON_FLAG, sourceFlag } from '../flag-help.js';
 import { resolveGraph, groundTruthAnchor, groundTruthLine, type SourceName } from '../graphs.js';
 import { emitJson } from '../output.js';
 import { UsageError, CliError } from '../errors.js';
-import { parseDiscoveryOpts } from './_discovery-opts.js';
+import { formatSubstitution, parseDiscoveryOpts } from './_discovery-opts.js';
 import { DISCOVER_MAX_ORDERS_DEFAULT } from '../library-defaults.js';
 
 const FLAGS: FlagSpec[] = [
@@ -44,7 +44,9 @@ const HELP = `upt ground <quantityA> <quantityB> [--source=catalog|canonical|bot
         mechanism test, no data test (permanent for a dimensional candidate;
         real mechanism/data live in \`upt confront\`).
         Pass the same --source (default catalog), --anchor and --max-orders
-        as the \`upt discover\` run that listed the pair.`;
+        as the \`upt discover\` run that listed the pair.
+        Includes downstream substitutions at representative operating points,
+        with their inputs, outcomes and any failed conditions.`;
 
 const EPISTEMICS =
   '(candidate grounding is a review surface; mechanism/data live in `upt confront`, not candidate space)';
@@ -76,7 +78,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     if (!held.has(name)) throw new CliError(`upt ground: '${name}' is not a quantity of any graph (${ALL_SOURCES.join(', ')})`);
   }
   const proposal = bothNamed(graph) ? api.proposeLinkCandidates(graph).find(pairs) : undefined;
-  const cand = proposal && api.vetLinkCandidate(graph, proposal, opts);
+  const cand = proposal && api.vetLinkCandidate(graph, proposal, { ...opts, includeSubstitutions: true });
   if (!cand) {
     const elsewhere = ALL_SOURCES.filter((s) => s !== source).filter((s) => {
       const other = graphs[ALL_SOURCES.indexOf(s)]!;
@@ -116,7 +118,7 @@ async function run(ctx: CommandCtx): Promise<number> {
         source,
         anchor: { groundTruth: groundTruthAnchor(api, opts) },
         options: { ...opts },
-        result: { a: cand.a, b: cand.b, verdict: cand.verdict, grounding: g, magnitudeDerived: cand.magnitudeDerived ?? [] },
+        result: { a: cand.a, b: cand.b, verdict: cand.verdict, grounding: g, magnitudeDerived: cand.magnitudeDerived ?? [], substitutions: cand.substitutions ?? [] },
       },
       ctx.write,
     );
@@ -128,6 +130,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   out(EPISTEMICS + '\n');
   out(`  passed:  ${g.passed.join(', ') || '—'}`);
   out(`  gaps:    ${g.gaps.join(', ') || '—'}`);
+  for (const check of cand.substitutions ?? []) out(`  ${formatSubstitution(check)}`);
   // A magnitude-clash row's grounding states no magnitude line, so where a magnitude came from its
   // own equation is said here, for every verdict.
   if ((cand.magnitudeDerived ?? []).length > 0) {

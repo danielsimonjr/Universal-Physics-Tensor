@@ -262,6 +262,8 @@ Flags:
         List candidates a physicist has already adjudicated, with the recorded verdict.
   --require-falsifier
         Hide promising rows (either tier) that no independent falsifier ran on and survived, counted per tier.
+  --substitutions
+        Include downstream evaluation, domain refusals and abstentions for representative inputs.
   --json
         Write a JSON envelope to stdout instead of the text report.
 
@@ -413,6 +415,8 @@ Flags:
         real mechanism/data live in `upt confront`).
         Pass the same --source (default catalog), --anchor and --max-orders
         as the `upt discover` run that listed the pair.
+        Includes downstream substitutions at representative operating points,
+        with their inputs, outcomes and any failed conditions.
 Flags:
   --source=VALUE
         Which graph to read: catalog, canonical, or both. Use the same value as the discover run. Default: catalog.

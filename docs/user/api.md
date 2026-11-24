@@ -575,7 +575,7 @@ K = R_{ρσμν} R^{ρσμν} is the canonical curvature invariant; scalar (rank
 
 ## Root type exports (`universal-physics-tensor`)
 
-249 type exports of the package root.
+251 type exports of the package root.
 
 | Name | Kind | Declaration | Summary |
 |---|---|---|---|
@@ -609,6 +609,7 @@ K = R_{ρσμν} R^{ρσμν} is the canonical curvature invariant; scalar (rank
 | `CallerTableRequest` | `interface` | `export interface CallerTableRequest {` | What a caller may pass. Absent fields are missing inputs, not defaults. |
 | `CallerTableResult` | `type` | `export type CallerTableResult = CallerTableRefusal \| CallerTableHit;` | A caller-table confrontation either refuses or reports a value outcome. |
 | `CandidateGrounding` | `interface` | `export interface CandidateGrounding {` | The epistemic-grounding ledger for one discovery candidate. |
+| `CandidateSubstitution` | `interface` | `export interface CandidateSubstitution {` | One directional substitution into a consuming relation. |
 | `CanonicalDomain` | `type` | `export type CanonicalDomain =` | Physics domain — indexes the registry and (later) the discovery kind filter. |
 | `CanonicalEquation` | `interface` | `export interface CanonicalEquation {` | A canonical (textbook) physics equation. |
 | `CanonicalForms` | `interface` | `export interface CanonicalForms {` | Disambiguators for forms that share a dimensional signature (finding F3). |
@@ -788,6 +789,7 @@ K = R_{ρσμν} R^{ρσμν} is the canonical curvature invariant; scalar (rank
 | `SourcedPrefactor` | `interface` | `export interface SourcedPrefactor {` | One sourced prefactor: the exact dimensionless factor and the verbatim text it is read from. |
 | `StatisticsAxis` | `type` | `export type StatisticsAxis = 'bosonic' \| 'fermionic' \| 'anyonic' \| 'parastatistic';` | Quantum statistics (the 7th axis — orthogonal to the other six). |
 | `StressEnergyTensorNode` | `interface` | `export interface StressEnergyTensorNode {` | The symmetric stress-energy tensor T, with its indices and component dimension. |
+| `SubstitutionScenario` | `interface` | `export interface SubstitutionScenario {` | One coherent, sourced operating point for a relation. Values are in SI. |
 | `Symmetry` | `type` | `export type Symmetry =` | Symmetry types. |
 | `SymmetryAxes` | `type` | `export type SymmetryAxes = { readonly [K in Symmetry]: UniversalIndex<'symmetry'> };` | The symmetry namespace of {@link AxesRegistry}: one index per `Symmetry`. |
 | `SymmetryAxis` | `type` | `export type SymmetryAxis = 'poincare' \| 'gauge' \| 'conformal' \| 'susy' \| 'emergent';` | Symmetry class. |

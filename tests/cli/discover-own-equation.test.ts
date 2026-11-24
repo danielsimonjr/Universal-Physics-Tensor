@@ -34,7 +34,7 @@ describe('upt discover --source=canonical: the Hubble rows are magnitude clashes
       return hit;
     };
     expect(line('hubble-distance ≟ bohr-radius')).toMatch(/~36\.4 orders apart/);
-    expect(line('compton-wavelength ≟ hubble-distance')).toMatch(/~37\.7 orders apart/);
+    expect(line('compton-wavelength ≟ hubble-distance')).toMatch(/~38\.5 orders apart/);
     expect(line('hubble-distance ≟ peak-wavelength')).toMatch(/~21\.5 orders apart.*\(anchor-derived\)/);
     // the table states the Hubble distance, so no clash line says "from its own equation"
     expect(lines.join('\n')).not.toMatch(/from its own equation/);

@@ -14,7 +14,7 @@ import type { ParsedArgs } from '../args.js';
 import type { CommandCtx } from '../command.js';
 import { CliError, UsageError } from '../errors.js';
 import { realFlag } from '../numeric-flag.js';
-import type { DiscoveryOptions } from '../../composition/discovery.js';
+import type { DiscoveryOptions, VettedCandidate } from '../../composition/discovery.js';
 import type { Dimension } from '../../dimensional/types.js';
 
 /** Read the `--max-orders` and `--anchor` flags into discovery options. A bad value throws. */
@@ -110,4 +110,26 @@ export function parseDiscoveryOpts(api: CommandCtx['api'], flags: ParsedArgs['fl
   if (Object.keys(gt).length) opts.groundTruth = gt;
 
   return opts;
+}
+
+/** Render one downstream scenario with its input provenance and evaluation outcome. */
+export function formatSubstitution(check: NonNullable<VettedCandidate['substitutions']>[number]): string {
+  const inputs = Object.entries(check.inputs).map(([name, input]) =>
+    `${name}=${input.value} ${input.unit} (${input.source})`,
+  ).join(', ');
+  const prediction = check.prediction ? ` · prediction ${check.prediction.value} ${check.prediction.unit}` : '';
+  const original = check.baselineInput;
+  const originalValue = original
+    ? ` with ${check.to}=${original.value} ${original.unit} (${original.source})`
+    : '';
+  const baseline = check.baselinePrediction
+    ? ` · baseline ${check.baselinePrediction.value} ${check.baselinePrediction.unit}${originalValue}` : '';
+  return [
+    `substitution ${check.from} → ${check.to} via ${check.edgeId} (${check.target}) · ${check.status}`,
+    check.scenario ? ` · scenario ${check.scenario}` : '',
+    inputs ? ` · inputs ${inputs}` : '',
+    baseline,
+    prediction,
+    check.reason ? ` · ${check.reason}` : '',
+  ].join('');
 }

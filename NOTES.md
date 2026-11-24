@@ -9,6 +9,12 @@ nothing validates prose and the next reader cannot tell.
 
 ---
 
+## As of 2026-11-24 (WKB width sensitivity)
+
+- The catalog provides a BE-26-wkb reference point, with no joint width and height observations or covariance. Evaluating that reference with fixed proton mass and attempt frequency gives 8.715 s⁻¹ at 1 Å and 0.4 eV. Substituting the Bohr radius gives 4.152 × 10⁶ s⁻¹, a factor of about 476,000.
+- An illustrative rectangle with widths 0.9 to 1.1 Å and heights 0.3 to 0.5 eV gives bare rates from 0.0147 to 3,985 s⁻¹. At the fixed Bohr width over the same height range the rates span 7.33 × 10⁵ to 2.97 × 10⁷ s⁻¹. The catalog requires about 0.185 eV at the Bohr width and 0.052 eV at 1 Å. A 0.15 eV control is refused at the Bohr width and accepted at 1 Å. The intervals are sensitivity inputs and carry no measurement confidence level.
+- For fixed mass and attempt frequency, linearizing `ln Γ = ln ν₀ − S` with `S = 2L√(2mΔE)/ℏ` gives `Var(ln Γ) ≈ S²[Var(L)/L² + Var(ΔE)/(4ΔE²) + Cov(L, ΔE)/(LΔE)]`. A joint uncertainty estimate is required to interpret this as a prediction interval. Shared barrier heights must remain correlated when comparing the two rates.
+
 ## As of 2026-11-24 (equation-recovery development controls)
 
 - The UPT probe and dimensional baseline each recovered the small-angle pendulum control and were refuted by the held-out change of regime. Both abstained on the pure-noise control. These controls use the pendulum setup and were designed with known answers. They establish the runner's positive and negative paths. Independent curation for a blind score is tracked in #858.

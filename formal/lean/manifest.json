@@ -375,7 +375,45 @@
         "propext",
         "Classical.choice",
         "Quot.sound"
-      ]
+      ],
+      "halfEfficiency": {
+        "theorem": "PhysJS.Fret.half_iff",
+        "kind": "property",
+        "covers": "for positive Förster radius and positive donor–acceptor separation, the encoded FRET efficiency is one half exactly when the separation equals the Förster radius",
+        "coverage": "covers its statement only",
+        "leanProof": "complete",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      }
+    },
+    {
+      "key": "be-26",
+      "bridgeId": "be-26",
+      "theorem": "PhysJS.Wkb.guard_iff_width",
+      "kind": "property",
+      "covers": "for positive mass, barrier gap, width and reduced Planck constant, the squared guard of be-26 and be-26-wkb is equivalent to L ≥ 5ℏ/√(2mΔE)",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "bareRateBound": {
+        "theorem": "PhysJS.Wkb.bare_rate_bound",
+        "kind": "property",
+        "covers": "under the shared squared guard and with a nonnegative attempt frequency, the bare be-26-wkb rate is at most ν₀ exp(−10)",
+        "coverage": "covers its statement only",
+        "leanProof": "complete",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      }
     },
     {
       "key": "be-19",

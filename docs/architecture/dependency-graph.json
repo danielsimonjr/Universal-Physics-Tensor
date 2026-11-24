@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "18.1.1",
-    "totalFiles": 395,
+    "totalFiles": 396,
     "totalModules": 13,
-    "totalExports": 2884
+    "totalExports": 2890
   },
   "entryPoints": [
     {
@@ -8508,7 +8508,8 @@
           {
             "file": "../../composition/discovery.js",
             "imports": [
-              "DiscoveryOptions"
+              "DiscoveryOptions",
+              "VettedCandidate"
             ],
             "typeOnly": true
           },
@@ -8521,10 +8522,12 @@
           }
         ],
         "exports": [
-          "parseDiscoveryOpts"
+          "parseDiscoveryOpts",
+          "formatSubstitution"
         ],
         "functions": [
-          "parseDiscoveryOpts"
+          "parseDiscoveryOpts",
+          "formatSubstitution"
         ]
       },
       "src/cli/commands/atlas.ts": {
@@ -9117,7 +9120,14 @@
           {
             "file": "./_discovery-opts.js",
             "imports": [
+              "formatSubstitution",
               "parseDiscoveryOpts"
+            ]
+          },
+          {
+            "file": "../errors.js",
+            "imports": [
+              "UsageError"
             ]
           },
           {
@@ -9517,6 +9527,7 @@
           {
             "file": "./_discovery-opts.js",
             "imports": [
+              "formatSubstitution",
               "parseDiscoveryOpts"
             ]
           },
@@ -13784,6 +13795,82 @@
           "buckinghamFilter"
         ]
       },
+      "src/composition/candidate-substitution.ts": {
+        "description": "Counterfactual evaluations of the first equations that consume either",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../bridges/evaluation-errors.js",
+            "imports": [
+              "DomainViolationError"
+            ]
+          },
+          {
+            "file": "../dimensional/algebra.js",
+            "imports": [
+              "equals",
+              "siUnitOf"
+            ]
+          },
+          {
+            "file": "../dimensional/types.js",
+            "imports": [
+              "DIMENSIONLESS",
+              "Dimension"
+            ]
+          },
+          {
+            "file": "../dimensional/unit-convention.js",
+            "imports": [
+              "conventionScaleToSI",
+              "quantityConventionUnit"
+            ]
+          },
+          {
+            "file": "./canonical-prefactors.js",
+            "imports": [
+              "CANONICAL_GROUP_PREFACTORS"
+            ]
+          },
+          {
+            "file": "./edge.js",
+            "imports": [
+              "evaluateEdge",
+              "BridgeEdge"
+            ]
+          },
+          {
+            "file": "./retrodiction.js",
+            "imports": [
+              "evaluationInputs",
+              "refusesThePoint"
+            ]
+          },
+          {
+            "file": "./representative-values.js",
+            "imports": [
+              "REPRESENTATIVE_VALUES",
+              "RepresentativeValue"
+            ]
+          }
+        ],
+        "exports": [
+          "defaultSubstitutionScenarios",
+          "buildSubstitutionContext",
+          "candidateSubstitutions"
+        ],
+        "interfaces": [
+          "SubstitutionScenario",
+          "CandidateSubstitution",
+          "SubstitutionContext"
+        ],
+        "functions": [
+          "defaultSubstitutionScenarios",
+          "buildSubstitutionContext",
+          "candidateSubstitutions"
+        ]
+      },
       "src/composition/canonical-compare.ts": {
         "description": "Compare a user's formula with the canonical (textbook) equation it restates.",
         "externalDependencies": [
@@ -15072,6 +15159,23 @@
             "file": "./own-equation-magnitude.js",
             "imports": [
               "DerivedMagnitudes"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./candidate-substitution.js",
+            "imports": [
+              "buildSubstitutionContext",
+              "candidateSubstitutions",
+              "defaultSubstitutionScenarios"
+            ]
+          },
+          {
+            "file": "./candidate-substitution.js",
+            "imports": [
+              "CandidateSubstitution",
+              "SubstitutionContext",
+              "SubstitutionScenario"
             ],
             "typeOnly": true
           },
@@ -19687,7 +19791,17 @@
         "description": "Order-of-magnitude representative values for the discovery falsifier.",
         "externalDependencies": [],
         "nodeDependencies": [],
-        "internalDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../core/constants.js",
+            "imports": [
+              "C_SI",
+              "H_SI",
+              "HBAR_SI",
+              "M_E_SI"
+            ]
+          }
+        ],
         "exports": [
           "DEFAULT_SIGMA_DECADES",
           "REPRESENTATIVE_VALUES",
@@ -24669,6 +24783,14 @@
             "reExport": true
           },
           {
+            "file": "./composition/candidate-substitution.js",
+            "imports": [
+              "CandidateSubstitution",
+              "SubstitutionScenario"
+            ],
+            "reExport": true
+          },
+          {
             "file": "./bridges/observations/types.js",
             "imports": [
               "residualInSigma",
@@ -25331,6 +25453,8 @@
           "ConsequenceEvidence",
           "CandidateGrounding",
           "VettedCandidate",
+          "CandidateSubstitution",
+          "SubstitutionScenario",
           "ConsistencyComparison",
           "ObservationProvenance",
           "SigmaComponent",
@@ -25804,6 +25928,8 @@
           "CandidateGrounding",
           "rankDiscoveries",
           "VettedCandidate",
+          "CandidateSubstitution",
+          "SubstitutionScenario",
           "residualInSigma",
           "combineInQuadrature",
           "consistencyComparison",
@@ -28779,6 +28905,7 @@
           "src/composition/bridge-analysis.ts",
           "src/composition/bridge-prediction.ts",
           "src/composition/buckingham-filter.ts",
+          "src/composition/candidate-substitution.ts",
           "src/composition/canonical-compare.ts",
           "src/composition/canonical-graph.ts",
           "src/composition/canonical-json.ts",
@@ -29009,18 +29136,18 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 395,
+    "totalTypeScriptFiles": 396,
     "totalModules": 13,
-    "totalLinesOfCode": 91508,
-    "totalExports": 2884,
+    "totalLinesOfCode": 91839,
+    "totalExports": 2890,
     "totalClasses": 86,
-    "totalInterfaces": 523,
-    "totalFunctions": 966,
+    "totalInterfaces": 526,
+    "totalFunctions": 970,
     "totalTypeGuards": 17,
     "totalEnums": 0,
     "totalConstants": 404,
-    "totalReExports": 1419,
-    "totalTypeOnlyImports": 545,
+    "totalReExports": 1421,
+    "totalTypeOnlyImports": 546,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 0,
