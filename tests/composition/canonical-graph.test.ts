@@ -19,10 +19,14 @@ import {
   CANONICAL_CONSTANTS,
 } from '../../src/composition/canonical-graph.js';
 import { rankDiscoveries } from '../../src/composition/discovery.js';
+import { forwardClosure } from '../../src/composition/identifiability.js';
+import { retrodictNode } from '../../src/composition/retrodiction.js';
+import { scopedRelations } from '../../src/composition/scoped-relations.js';
+import { proposeLinkCandidates } from '../../src/composition/bridge-analysis.js';
 import { CANONICAL_EQUATIONS, CANONICAL_BY_ID } from '../../src/canonical/registry.js';
 import type { CanonicalEquation } from '../../src/canonical/canonical-equation.js';
 import { M_SUN_KG } from '../../src/core/constants.js';
-import { G_SI, C_SI, M_E_SI } from '../../src/core/constants.js';
+import { G_SI, C_SI, H_SI, HBAR_SI, M_E_SI } from '../../src/core/constants.js';
 import { representativeValue } from '../../src/composition/representative-values.js';
 import { MASS, LENGTH, DIMENSIONLESS } from '../../src/dimensional/types.js';
 
@@ -190,15 +194,25 @@ describe('canonical-only discovery — regression harness', () => {
     expect(CANONICAL_BY_ID['CE-newton-gravitation'].dimensional.monomial).toBeNull();
   });
 
-  it('treats compton ≟ de-broglie as a DECLARED link, not a fresh candidate', () => {
-    // de-broglie-wavelength is identified to compton-wavelength (the Compton
-    // wavelength is the de Broglie wavelength at the relativistic limit p = mc),
-    // so the canonicalizer folds the two into one node — it is never re-proposed
-    // as a discovery, and `de-broglie-wavelength` disappears as a candidate name.
-    const ranked = rankDiscoveries(CANONICAL_GRAPH);
-    expect(
-      ranked.some((r) => r.a === 'de-broglie-wavelength' || r.b === 'de-broglie-wavelength'),
-    ).toBe(false);
+  it('retrodicts both Compton conventions independently of arbitrary momentum', () => {
+    for (const multiple of [0.5, 1, 2, 2 * Math.PI]) {
+      const p = multiple * (M_E_SI * C_SI);
+      const inputs = { mass: M_E_SI, p };
+      const reduced = retrodictNode(CANONICAL_GRAPH, inputs, 'compton-wavelength');
+      expect(reduced.outcome).not.toBe('inconsistent');
+      expect(reduced.predictions.map(({ edge }) => edge)).toEqual(['CE-compton-wavelength']);
+      expect(reduced.predictions[0]!.value / (HBAR_SI / (M_E_SI * C_SI))).toBeCloseTo(1, 12);
+      const full = retrodictNode(CANONICAL_GRAPH, inputs, 'compton-wavelength-full');
+      expect(full.predictions.map(({ edge }) => edge)).toEqual(['CE-compton-wavelength-full']);
+      expect(full.predictions[0]!.value / (H_SI / (M_E_SI * C_SI))).toBeCloseTo(1, 12);
+      const matter = retrodictNode(CANONICAL_GRAPH, inputs, 'de-broglie-wavelength');
+      expect(matter.predictions.map(({ edge }) => edge)).toEqual(['CE-de-broglie']);
+      expect(matter.predictions[0]!.value / (H_SI / p)).toBeCloseTo(1, 12);
+    }
+    const momentumOnly = forwardClosure(CANONICAL_GRAPH, ['p']);
+    expect(momentumOnly.has('de-broglie-wavelength')).toBe(true);
+    expect(momentumOnly.has('compton-wavelength')).toBe(false);
+    expect(momentumOnly.has('compton-wavelength-full')).toBe(false);
   });
 
   it('keeps the GENUINE planck-length ≟ bohr-radius scale clash', () => {
@@ -212,6 +226,54 @@ describe('canonical-only discovery — regression harness', () => {
     );
     expect(pair).toBeDefined();
     expect(pair!.verdict).toBe('magnitude-clash');
+  });
+});
+
+describe('scoped relations are consequences of their source equations', () => {
+  it('retains the Compton scattering angle and admits equality only at a right angle', () => {
+    const [relation] = scopedRelations(CANONICAL_GRAPH, ['compton-wavelength-full', 'compton-wavelength-shift']);
+    expect(relation).toMatchObject({
+      kind: 'entailed',
+      sourceEquations: ['CE-compton-shift', 'CE-compton-wavelength-full'],
+      ratio: '1 - cos(scattering-angle)',
+      equalityWhen: 'scattering-angle == pi/2',
+    });
+    expect(relation?.assumptions.some((assumption) => assumption.includes('electron initially at rest'))).toBe(true);
+    const controls = relation!.controls;
+    expect(controls.map(({ inputs }) => inputs['scattering-angle'])).toEqual([0, Math.PI / 2, Math.PI]);
+    expect(controls.map(({ equalityConditionMet }) => equalityConditionMet)).toEqual([false, true, false]);
+    for (const [index, control] of controls.entries()) expect(control.ratio).toBeCloseTo(index, 12);
+  });
+
+  it('grounds full de Broglie equality at p=mc and reduced equality at p=2πmc', () => {
+    const [full] = scopedRelations(CANONICAL_GRAPH, ['de-broglie-wavelength', 'compton-wavelength-full']);
+    expect(full?.controls.map(({ equalityConditionMet }) => equalityConditionMet)).toEqual([false, true, false]);
+    for (const [index, control] of full!.controls.entries()) expect(control.ratio).toBeCloseTo([2, 1, 0.5][index]!, 12);
+
+    const [reduced] = scopedRelations(CANONICAL_GRAPH, ['compton-wavelength', 'de-broglie-wavelength']);
+    expect(reduced?.controls.map(({ equalityConditionMet }) => equalityConditionMet)).toEqual([false, false, true]);
+    for (const [index, control] of reduced!.controls.entries()) expect(control.ratio).toBeCloseTo([4 * Math.PI, 2 * Math.PI, 1][index]!, 12);
+  });
+
+  it('excludes exactly the scoped pairs without globally folding their quantities', () => {
+    const candidates = proposeLinkCandidates(CANONICAL_GRAPH);
+    for (const { a, b } of scopedRelations(CANONICAL_GRAPH)) {
+      expect(candidates.some((c) => (c.a === a && c.b === b) || (c.a === b && c.b === a))).toBe(false);
+    }
+    expect(candidates.some((c) => c.a === 'de-broglie-wavelength' || c.b === 'de-broglie-wavelength')).toBe(true);
+  });
+
+  it('requires both original equations and ignores a synthetic edge reusing a canonical id', () => {
+    const shift = byId('CE-compton-shift');
+    const full = byId('CE-compton-wavelength-full');
+    expect(scopedRelations([shift])).toEqual([]);
+    const replacement = { ...full, evaluate: () => 1 };
+    expect(scopedRelations([shift, replacement])).toEqual([]);
+    expect(proposeLinkCandidates([shift, replacement])).toEqual([
+      expect.objectContaining({ a: shift.target.name, b: replacement.target.name }),
+    ]);
+    const reprojected = canonicalToEdges([CANONICAL_BY_ID[shift.id]!, CANONICAL_BY_ID[full.id]!]);
+    expect(scopedRelations(reprojected)).toHaveLength(1);
   });
 });
 

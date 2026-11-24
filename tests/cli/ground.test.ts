@@ -202,3 +202,17 @@ it('keeps an explicit anchor when choosing a compatible alternate scope', async 
   expect(report.result.elsewhere).toEqual(['canonical', 'both']);
   expect(report.result.note).toContain('upt ground --source=both --anchor=parker-sound=1');
 }, FUNNEL_MS);
+
+it('round-trips a scoped Compton comparison with its controls and equations', async () => {
+  const a = 'compton-wavelength-full';
+  const b = 'compton-wavelength-shift';
+  const listed = await json(['discover', '--source=canonical']);
+  const scoped = await json(['ground', a, b, '--source=canonical']);
+  const [relation] = scoped.result.scopedRelations;
+  expect(scoped.result.candidate).toBeNull();
+  expect(relation.kind).toBe('entailed');
+  expect(relation.sourceEquations).toEqual(['CE-compton-shift', 'CE-compton-wavelength-full']);
+  expect(relation.controls.map((c: { equalityConditionMet: boolean }) => c.equalityConditionMet)).toEqual([false, true, false]);
+  expect(listed.scopedRelations).toContainEqual(relation);
+  expect(listed.result.some((r: { a: string; b: string }) => [r.a, r.b].includes(a) && [r.a, r.b].includes(b))).toBe(false);
+});

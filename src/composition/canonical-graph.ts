@@ -471,6 +471,13 @@ function makeEvaluate(
 }
 
 /** Project one canonical equation to a composition-graph edge. */
+const CANONICAL_EDGE_ORIGINS = new WeakMap<BridgeEdge, CanonicalEquation>();
+
+/** The exact canonical record projected into an edge, when its origin is known. @internal */
+export function canonicalEdgeOrigin(edge: BridgeEdge): CanonicalEquation | undefined {
+  return CANONICAL_EDGE_ORIGINS.get(edge);
+}
+
 function toEdge(eq: CanonicalEquation): BridgeEdge {
   const attributes = attributesOf(eq);
   const target: Quantity = {
@@ -491,7 +498,7 @@ function toEdge(eq: CanonicalEquation): BridgeEdge {
   const even = evenInputNames(eq.scalarAst);
   const evenInputs = sources.filter((source) => even.has(source.name)).map((source) => source.name);
   const monomial = eq.dimensional.monomial;
-  return {
+  const edge: BridgeEdge = {
     id: eq.id,
     beId: null,
     kind: 'law',
@@ -508,6 +515,8 @@ function toEdge(eq: CanonicalEquation): BridgeEdge {
     ...(Object.keys(factors).length > 0 ? { formulaFactors: factors } : {}),
     ...(evenInputs.length > 0 ? { evenInputs } : {}),
   };
+  CANONICAL_EDGE_ORIGINS.set(edge, eq);
+  return edge;
 }
 
 /**

@@ -46,7 +46,8 @@ const HELP = `upt ground <quantityA> <quantityB> [--source=catalog|canonical|bot
         Pass the same --source (default catalog), --anchor and --max-orders
         as the \`upt discover\` run that listed the pair.
         Includes downstream substitutions at representative operating points,
-        with their inputs, outcomes and any failed conditions.`;
+        with their inputs, outcomes and any failed conditions. For an encoded
+        scoped relation, shows the equality condition and source equations.`;
 
 const EPISTEMICS =
   '(candidate grounding is a review surface; mechanism/data live in `upt confront`, not candidate space)';
@@ -78,6 +79,26 @@ async function run(ctx: CommandCtx): Promise<number> {
   };
   const keyA = resolveEndpoint(a);
   const keyB = resolveEndpoint(b);
+  const scopedRelations = api.scopedRelations(graph, [keyA, keyB]);
+  if (scopedRelations.length > 0) {
+    if (args.flags.has('json')) {
+      emitJson({
+        command: 'ground',
+        source,
+        anchor: { groundTruth: groundTruthAnchor(api, opts) },
+        options: { ...opts },
+        result: { a: keyA, b: keyB, candidate: null, scopedRelations },
+      }, ctx.write);
+    } else {
+      out(`\n● ${keyA} ≟ ${keyB}  [scoped relation]  [source: ${label}]`);
+      for (const relation of scopedRelations) {
+        out(`  ${relation.a} / ${relation.b} = ${relation.ratio}`);
+        out(`  equal when ${relation.equalityWhen} (${relation.sourceEquations.join(', ')})`);
+        for (const assumption of relation.assumptions) out(`  ${assumption}`);
+      }
+    }
+    return 0;
+  }
   const matches = (c: { a: string; b: string }) =>
     (c.a === keyA && c.b === keyB) || (c.a === keyB && c.b === keyA);
   const proposalIn = (scope: (typeof scopes)[number]) =>

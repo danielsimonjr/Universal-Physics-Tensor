@@ -85,7 +85,8 @@ const HELP = `upt discover [--source=catalog|canonical|both]
         failed (both endpoints have a representative magnitude, and the ratio
         is not fixed by the graph at every anchor); otherwise it is 'promising,
         magnitude unchecked' (promising-unchecked in --json). The two tiers are
-        counted and listed apart and never added.
+        counted and listed apart and never added. Scoped relations already
+        entailed by the equations are listed separately from identity candidates.
         --source=canonical runs the funnel on the standard-physics L-layer
         ALONE (bridges excluded) — new candidates from established physics,
         and a self-consistency check (expect 0 contradictory).
@@ -350,6 +351,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     ...(includeSubstitutions ? { includeSubstitutions: true } : {}),
   };
   const anchor = groundTruthAnchor(api, opts);
+  const scopedRelations = isDerive ? [] : api.scopedRelations(graph);
   const ranked = api.rankDiscoveries(graph, opts);
   const withConsequence: readonly FullyAnnotatedCandidate[] =
     api.annotateConsequences(api.annotateAdjudications(ranked));
@@ -379,6 +381,7 @@ async function run(ctx: CommandCtx): Promise<number> {
       options: { ...opts, ...(requireFalsifier ? { requireFalsifier } : {}), ...(requireEvaluated ? { requireEvaluatedSubstitution: true } : {}) },
       epistemics: isDerive ? DERIVE_EPISTEMICS : EPISTEMICS,
       result,
+      ...(scopedRelations.length > 0 ? { scopedRelations } : {}),
       ...(requireFalsifier && !isDerive ? { encodedFalsifiers: encodedFalsifiers(api) } : {}),
       ...(isDerive
         ? {}
@@ -554,6 +557,12 @@ async function run(ctx: CommandCtx): Promise<number> {
     out(`\n  AXIS-CLASH (stated scale/force labels differ: a regime-label prior, not a physical test):`);
     for (const r of axisClash) {
       out(`    ${(r.a + ' ≟ ' + r.b).padEnd(52)} ${r.axisClashes.join('; ')}`);
+    }
+  }
+  if (scopedRelations.length > 0) {
+    out('\n  SCOPED RELATIONS (entailed by the named equations):');
+    for (const relation of scopedRelations) {
+      out(`    ${relation.a} / ${relation.b} = ${relation.ratio}; equal when ${relation.equalityWhen}`);
     }
   }
   out(
