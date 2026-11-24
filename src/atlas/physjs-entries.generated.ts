@@ -7,7 +7,7 @@
  */
 
 /** The release tag whose `lean/` tree the permalinks name: `v` and the package version. */
-export const LEAN_SOURCE_TAG = "v18.1.1";
+export const LEAN_SOURCE_TAG = "v18.2.0";
 
 /** Lean toolchain the lake project builds with, as the manifest records it. */
 export const LEAN_TOOLCHAIN = "leanprover/lean4:v4.34.1";

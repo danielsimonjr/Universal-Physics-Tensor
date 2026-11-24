@@ -8,6 +8,21 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
+## [18.2.0] - 2026-11-24
+
+Dependency audit found zero vulnerabilities across 139 packages. The release retains the lockfile. In-range updates were available for MathTS autograd, expression and tensor, and fast-check.
+
+### Added
+
+- Observation-only equation recovery can fit bounded, dimensionally homogeneous sums and interaction terms. Candidate selection uses exploratory observations, and held-out tests use the frozen predictor.
+- Discovery and grounding can report downstream substitution evidence, including domain refusals and separate full and reduced Compton wavelength conventions.
+- The repository includes an equation-recovery harness with a dimensional baseline and an optional held-out graph comparison.
+
+### Changed
+
+- Grounding vets the requested candidate directly.
+- Probe studies report undefined withheld predictions as refutations and preserve exploratory fit diagnostics.
+
 ## [18.1.1] - 2026-11-24
 
 ### Changed
