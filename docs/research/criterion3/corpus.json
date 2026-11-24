@@ -6258,8 +6258,136 @@
       "op": "*",
       "args": [
         {
+          "kind": "symbol",
+          "name": "8pi",
+          "dim": {
+            "L": 0,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
           "kind": "op",
-          "op": "*",
+          "op": "/",
+          "args": [
+            {
+              "kind": "op",
+              "op": "*",
+              "args": [
+                {
+                  "kind": "symbol",
+                  "name": "k_B",
+                  "dim": {
+                    "L": 2,
+                    "M": 1,
+                    "T": -2,
+                    "I": 0,
+                    "Theta": -1,
+                    "N": 0,
+                    "J": 0
+                  }
+                },
+                {
+                  "kind": "symbol",
+                  "name": "temperature",
+                  "dim": {
+                    "L": 0,
+                    "M": 0,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 1,
+                    "N": 0,
+                    "J": 0
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "symbol",
+              "name": "c",
+              "dim": {
+                "L": 1,
+                "M": 0,
+                "T": -1,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        },
+        {
+          "kind": "op",
+          "op": "/",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "frequency",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": -1,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "c",
+              "dim": {
+                "L": 1,
+                "M": 0,
+                "T": -1,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        },
+        {
+          "kind": "op",
+          "op": "/",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "frequency",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": -1,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "c",
+              "dim": {
+                "L": 1,
+                "M": 0,
+                "T": -1,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        },
+        {
+          "kind": "op",
+          "op": "+",
           "args": [
             {
               "kind": "op",
@@ -6269,19 +6397,6 @@
                   "kind": "op",
                   "op": "*",
                   "args": [
-                    {
-                      "kind": "symbol",
-                      "name": "4pi",
-                      "dim": {
-                        "L": 0,
-                        "M": 0,
-                        "T": 0,
-                        "I": 0,
-                        "Theta": 0,
-                        "N": 0,
-                        "J": 0
-                      }
-                    },
                     {
                       "kind": "symbol",
                       "name": "h",
@@ -6296,9 +6411,98 @@
                       }
                     },
                     {
+                      "kind": "symbol",
+                      "name": "frequency",
+                      "dim": {
+                        "L": 0,
+                        "M": 0,
+                        "T": -1,
+                        "I": 0,
+                        "Theta": 0,
+                        "N": 0,
+                        "J": 0
+                      }
+                    }
+                  ]
+                },
+                {
+                  "kind": "op",
+                  "op": "*",
+                  "args": [
+                    {
+                      "kind": "symbol",
+                      "name": "2",
+                      "dim": {
+                        "L": 0,
+                        "M": 0,
+                        "T": 0,
+                        "I": 0,
+                        "Theta": 0,
+                        "N": 0,
+                        "J": 0
+                      }
+                    },
+                    {
                       "kind": "op",
-                      "op": "^",
+                      "op": "*",
                       "args": [
+                        {
+                          "kind": "symbol",
+                          "name": "k_B",
+                          "dim": {
+                            "L": 2,
+                            "M": 1,
+                            "T": -2,
+                            "I": 0,
+                            "Theta": -1,
+                            "N": 0,
+                            "J": 0
+                          }
+                        },
+                        {
+                          "kind": "symbol",
+                          "name": "temperature",
+                          "dim": {
+                            "L": 0,
+                            "M": 0,
+                            "T": 0,
+                            "I": 0,
+                            "Theta": 1,
+                            "N": 0,
+                            "J": 0
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "op",
+              "op": "/",
+              "args": [
+                {
+                  "kind": "op",
+                  "op": "/",
+                  "args": [
+                    {
+                      "kind": "op",
+                      "op": "*",
+                      "args": [
+                        {
+                          "kind": "symbol",
+                          "name": "h",
+                          "dim": {
+                            "L": 2,
+                            "M": 1,
+                            "T": -1,
+                            "I": 0,
+                            "Theta": 0,
+                            "N": 0,
+                            "J": 0
+                          }
+                        },
                         {
                           "kind": "symbol",
                           "name": "frequency",
@@ -6311,29 +6515,16 @@
                             "N": 0,
                             "J": 0
                           }
-                        },
-                        {
-                          "kind": "symbol",
-                          "name": "3",
-                          "dim": {
-                            "L": 0,
-                            "M": 0,
-                            "T": 0,
-                            "I": 0,
-                            "Theta": 0,
-                            "N": 0,
-                            "J": 0
-                          }
                         }
                       ]
                     },
                     {
                       "kind": "op",
-                      "op": "+",
+                      "op": "*",
                       "args": [
                         {
                           "kind": "symbol",
-                          "name": "1",
+                          "name": "2",
                           "dim": {
                             "L": 0,
                             "M": 0,
@@ -6346,112 +6537,32 @@
                         },
                         {
                           "kind": "op",
-                          "op": "/",
+                          "op": "*",
                           "args": [
                             {
                               "kind": "symbol",
-                              "name": "1",
+                              "name": "k_B",
                               "dim": {
-                                "L": 0,
-                                "M": 0,
-                                "T": 0,
+                                "L": 2,
+                                "M": 1,
+                                "T": -2,
                                 "I": 0,
-                                "Theta": 0,
+                                "Theta": -1,
                                 "N": 0,
                                 "J": 0
                               }
                             },
                             {
-                              "kind": "transcendental",
-                              "fn": "tanh",
-                              "arg": {
-                                "kind": "op",
-                                "op": "/",
-                                "args": [
-                                  {
-                                    "kind": "op",
-                                    "op": "*",
-                                    "args": [
-                                      {
-                                        "kind": "symbol",
-                                        "name": "h",
-                                        "dim": {
-                                          "L": 2,
-                                          "M": 1,
-                                          "T": -1,
-                                          "I": 0,
-                                          "Theta": 0,
-                                          "N": 0,
-                                          "J": 0
-                                        }
-                                      },
-                                      {
-                                        "kind": "symbol",
-                                        "name": "frequency",
-                                        "dim": {
-                                          "L": 0,
-                                          "M": 0,
-                                          "T": -1,
-                                          "I": 0,
-                                          "Theta": 0,
-                                          "N": 0,
-                                          "J": 0
-                                        }
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "kind": "op",
-                                    "op": "*",
-                                    "args": [
-                                      {
-                                        "kind": "symbol",
-                                        "name": "2",
-                                        "dim": {
-                                          "L": 0,
-                                          "M": 0,
-                                          "T": 0,
-                                          "I": 0,
-                                          "Theta": 0,
-                                          "N": 0,
-                                          "J": 0
-                                        }
-                                      },
-                                      {
-                                        "kind": "op",
-                                        "op": "*",
-                                        "args": [
-                                          {
-                                            "kind": "symbol",
-                                            "name": "k_B",
-                                            "dim": {
-                                              "L": 2,
-                                              "M": 1,
-                                              "T": -2,
-                                              "I": 0,
-                                              "Theta": -1,
-                                              "N": 0,
-                                              "J": 0
-                                            }
-                                          },
-                                          {
-                                            "kind": "symbol",
-                                            "name": "temperature",
-                                            "dim": {
-                                              "L": 0,
-                                              "M": 0,
-                                              "T": 0,
-                                              "I": 0,
-                                              "Theta": 1,
-                                              "N": 0,
-                                              "J": 0
-                                            }
-                                          }
-                                        ]
-                                      }
-                                    ]
-                                  }
-                                ]
+                              "kind": "symbol",
+                              "name": "temperature",
+                              "dim": {
+                                "L": 0,
+                                "M": 0,
+                                "T": 0,
+                                "I": 0,
+                                "Theta": 1,
+                                "N": 0,
+                                "J": 0
                               }
                             }
                           ]
@@ -6461,47 +6572,9 @@
                   ]
                 },
                 {
-                  "kind": "op",
-                  "op": "^",
-                  "args": [
-                    {
-                      "kind": "symbol",
-                      "name": "c",
-                      "dim": {
-                        "L": 1,
-                        "M": 0,
-                        "T": -1,
-                        "I": 0,
-                        "Theta": 0,
-                        "N": 0,
-                        "J": 0
-                      }
-                    },
-                    {
-                      "kind": "symbol",
-                      "name": "3",
-                      "dim": {
-                        "L": 0,
-                        "M": 0,
-                        "T": 0,
-                        "I": 0,
-                        "Theta": 0,
-                        "N": 0,
-                        "J": 0
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "kind": "transcendental",
-              "fn": "exp",
-              "arg": {
-                "kind": "op",
-                "op": "-",
-                "args": [
-                  {
+                  "kind": "transcendental",
+                  "fn": "tanh",
+                  "arg": {
                     "kind": "op",
                     "op": "/",
                     "args": [
@@ -6590,10 +6663,109 @@
                       }
                     ]
                   }
-                ]
-              }
+                }
+              ]
             }
           ]
+        },
+        {
+          "kind": "transcendental",
+          "fn": "exp",
+          "arg": {
+            "kind": "op",
+            "op": "-",
+            "args": [
+              {
+                "kind": "op",
+                "op": "/",
+                "args": [
+                  {
+                    "kind": "op",
+                    "op": "*",
+                    "args": [
+                      {
+                        "kind": "symbol",
+                        "name": "h",
+                        "dim": {
+                          "L": 2,
+                          "M": 1,
+                          "T": -1,
+                          "I": 0,
+                          "Theta": 0,
+                          "N": 0,
+                          "J": 0
+                        }
+                      },
+                      {
+                        "kind": "symbol",
+                        "name": "frequency",
+                        "dim": {
+                          "L": 0,
+                          "M": 0,
+                          "T": -1,
+                          "I": 0,
+                          "Theta": 0,
+                          "N": 0,
+                          "J": 0
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "op",
+                    "op": "*",
+                    "args": [
+                      {
+                        "kind": "symbol",
+                        "name": "2",
+                        "dim": {
+                          "L": 0,
+                          "M": 0,
+                          "T": 0,
+                          "I": 0,
+                          "Theta": 0,
+                          "N": 0,
+                          "J": 0
+                        }
+                      },
+                      {
+                        "kind": "op",
+                        "op": "*",
+                        "args": [
+                          {
+                            "kind": "symbol",
+                            "name": "k_B",
+                            "dim": {
+                              "L": 2,
+                              "M": 1,
+                              "T": -2,
+                              "I": 0,
+                              "Theta": -1,
+                              "N": 0,
+                              "J": 0
+                            }
+                          },
+                          {
+                            "kind": "symbol",
+                            "name": "temperature",
+                            "dim": {
+                              "L": 0,
+                              "M": 0,
+                              "T": 0,
+                              "I": 0,
+                              "Theta": 1,
+                              "N": 0,
+                              "J": 0
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
         },
         {
           "kind": "transcendental",

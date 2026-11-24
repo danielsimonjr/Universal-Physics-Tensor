@@ -9,6 +9,10 @@ nothing validates prose and the next reader cannot tell.
 
 ---
 
+## As of 2026-11-24 (persona sessions 40–50)
+
+- Ran all seven rotation personas plus the applied, theoretical, undergraduate and library API perspectives against npm v18.1.0. The findings reproduced on a second installation and were filed as #851–#853. The next rotation persona is the engineering physicist (position 1).
+
 ## As of 2026-11-23 (persona session 39)
 
 - The [theoretical physicist session](docs/persona-sessions/2026-11-23-theoretical-physicist-bridges-session-39.md) ran against two clean npm installs of `universal-physics-tensor@18.0.0`. The four findings are #845–#848. This round is outside the rotation. The next rotation persona is the condensed-matter physicist (position 2).

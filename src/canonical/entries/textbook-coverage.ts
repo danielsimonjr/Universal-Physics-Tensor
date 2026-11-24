@@ -92,12 +92,16 @@ export const TEXTBOOK_COVERAGE: readonly CanonicalEquation[] = [
     domain: 'thermodynamics',
     formula_latex: String.raw`u_\nu=8\pi h\nu^3/[c^3(\exp(h\nu/(k_BT))-1)]`,
     epistemicStatus: 'fully-quantitative',
-    // Use 1/(exp(x)−1) = exp(−x)(1+coth(x/2))/2 to avoid cancellation.
-    // Distribute exp(−x) across two half-decays after the prefactor.
-    // The prefactor can keep the final value representable even when exp(−x) alone underflows.
-    scalarAst: times(times(over(times(literal('4pi'), h, pow(frequency, '3'),
-      op('+', [literal('1'), over(literal('1'), { kind: 'transcendental', fn: 'tanh', arg: halfPlanckExponent })])),
-    pow(C, '3')), halfPlanckDecay), halfPlanckDecay),
+    // Factor out the Rayleigh–Jeans scale before multiplying by the finite
+    // occupation correction y(1 + coth y) exp(−2y), where y = hν/(2kT).
+    // Apply the exponentials separately to retain representable Wien tails.
+    scalarAst: times(
+      literal('8pi'), over(thermalEnergy, C), over(frequency, C), over(frequency, C),
+      op('+', [halfPlanckExponent, over(halfPlanckExponent, {
+        kind: 'transcendental', fn: 'tanh', arg: halfPlanckExponent,
+      })]),
+      halfPlanckDecay, halfPlanckDecay,
+    ),
     holds: 'frequency > 0 and temperature > 0',
     regime: { scale: 'quantum', force: 'electromagnetic' },
     assumptions: ['thermal equilibrium', 'spectral energy density per volume per cycle frequency', 'two polarizations'],

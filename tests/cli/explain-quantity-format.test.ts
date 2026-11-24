@@ -92,3 +92,9 @@ describe('explain bounds', () => {
     expect(invalid.lines.join('\n')).toContain('T_K = 0 violates T_K > 0');
   });
 });
+
+it('reports the upstream horizon-area refusal for an invalid entropy input', async () => {
+  const result = capture();
+  expect(await runCli(['explain', 'bh-entropy', '--source=canonical', 'mass=-1Msun', '--json'], result.io)).toBe(1);
+  expect(result.lines.join('\n')).toContain('CE-schwarzschild-horizon-area: outside the validity domain');
+});

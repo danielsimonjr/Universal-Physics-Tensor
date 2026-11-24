@@ -8214,7 +8214,7 @@
       "catalogId": 91,
       "kind": "law",
       "label": "Einstein heat capacity of three oscillators",
-      "expression": "3*einstein-atom-count*k_B*(einstein-theta/einstein-solid-temperature)^2*(exp(einstein-theta/einstein-solid-temperature)/(exp(einstein-theta/einstein-solid-temperature) + -1)^2)",
+      "expression": "3*k_B*einstein-atom-count*((((einstein-theta/einstein-solid-temperature)/2)+((einstein-theta/einstein-solid-temperature)/2)/tanh(((einstein-theta/einstein-solid-temperature)/2)))*exp(-((einstein-theta/einstein-solid-temperature)/2)))*((((einstein-theta/einstein-solid-temperature)/2)+((einstein-theta/einstein-solid-temperature)/2)/tanh(((einstein-theta/einstein-solid-temperature)/2)))*exp(-((einstein-theta/einstein-solid-temperature)/2)))",
       "target": "einstein-heat-capacity",
       "sources": [
         "einstein-atom-count",
@@ -8240,7 +8240,7 @@
           "einstein-solid-temperature": 300,
           "einstein-theta": 240
         },
-        "value": 23.654586464248833
+        "value": 23.654586464248837
       }
     },
     {
@@ -10610,7 +10610,7 @@
       "catalogId": 164,
       "kind": "law",
       "label": "u (exp(hν/kT) − 1) c³ = 8 π h ν³",
-      "expression": "((4*pi)*h*planck-frequency^3*(1+1/tanh((h*planck-frequency/(2*k_B*planck-warmth))))/c^3)*exp(-(h*planck-frequency/(2*k_B*planck-warmth)))*exp(-(h*planck-frequency/(2*k_B*planck-warmth)))",
+      "expression": "(8*pi)*(k_B*planck-warmth/c)*(planck-frequency/c)*(planck-frequency/c)*((h*planck-frequency/(2*k_B*planck-warmth))+(h*planck-frequency/(2*k_B*planck-warmth))/tanh((h*planck-frequency/(2*k_B*planck-warmth))))*exp(-(h*planck-frequency/(2*k_B*planck-warmth)))*exp(-(h*planck-frequency/(2*k_B*planck-warmth)))",
       "target": "planck-u",
       "sources": [
         "planck-frequency",

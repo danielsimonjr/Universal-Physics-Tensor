@@ -5382,7 +5382,7 @@ The codebase is organized into the following modules:
 | `./compose.js` | `QuantityIdentification` | Import (type-only) |
 | `./compose.js` | `QUANTITY_IDENTIFICATIONS` | Import |
 | `../dimensional/unit-convention.js` | `conventionFactor` | Import |
-| `./identifiability.js` | `classifyAll` | Import |
+| `./identifiability.js` | `classifyAll, forwardClosure` | Import |
 
 **Exports:**
 - Interfaces: `RetrodictionPrediction`, `RetrodictionOptions`, `RetrodictionRefusal`, `RetrodictionResult`, `RetrodictionReport`
@@ -7895,7 +7895,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 395 |
 | Total Modules | 13 |
-| Total Lines of Code | 91423 |
+| Total Lines of Code | 91466 |
 | Total Exports | 2882 |
 | Total Re-exports | 1418 |
 | Total Classes | 86 |
