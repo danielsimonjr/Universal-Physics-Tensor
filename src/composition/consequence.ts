@@ -190,29 +190,13 @@ export function annotateConsequences<T extends VettedCandidate>(
     readonly evidence: readonly ConsequenceEvidence[];
   };
 })[] {
-  const promising = candidates.filter((c) => isPromisingTier(c.verdict));
-  const proposals = deriveProposedBridges(promising);
-
-  // Group proposals + their classification by the sorted candidate-pair key.
-  const byPair = new Map<string, { signal: ConsequenceSignal; evidence: ConsequenceEvidence[] }>();
-  for (const p of proposals) {
-    const key = [p.derivedFrom.identification.a, p.derivedFrom.identification.b].sort().join('~');
-    const cls = classifyProposal(p);
-    const cur = byPair.get(key);
-    if (!cur) {
-      byPair.set(key, { signal: cls.signal, evidence: [cls.evidence] });
-    } else {
-      cur.evidence.push(cls.evidence);
-      // entailed dominates novel: if ANY consequence re-derives known physics, the pair is entailed.
-      if (cls.signal === 'entailed') cur.signal = 'entailed';
-    }
-  }
-
   return candidates.map((c) => {
     if (!isPromisingTier(c.verdict)) return c;
-    const key = [c.a, c.b].sort().join('~');
-    const hit = byPair.get(key);
-    const signal: ConsequenceSignal = hit ? hit.signal : 'inconclusive';
-    return { ...c, consequence: { signal, evidence: hit?.evidence ?? [] } };
+    // Deduplicate equivalent proposals within this pair. Deduplicating across
+    // pairs would make the evidence depend on which other candidates were listed.
+    const classified = deriveProposedBridges([c]).map((proposal) => classifyProposal(proposal));
+    const signal: ConsequenceSignal = classified.some((p) => p.signal === 'entailed')
+      ? 'entailed' : classified.length > 0 ? 'novel-consequence' : 'inconclusive';
+    return { ...c, consequence: { signal, evidence: classified.map((p) => p.evidence) } };
   });
 }

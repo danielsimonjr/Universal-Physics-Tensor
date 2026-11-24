@@ -86,10 +86,11 @@ it('vets only the requested candidate and does no vetting to answer a miss', asy
   const [candidate] = cliApi.proposeLinkCandidates(cliApi.CATALOG_GRAPH);
   expect(candidate).toBeDefined();
   const vetLinkCandidate = vi.fn(cliApi.vetLinkCandidate);
+  const annotateConsequences = vi.fn(cliApi.annotateConsequences);
   const rankDiscoveries = vi.fn(() => {
     throw new Error('ground must not rank unrelated candidates');
   });
-  const api = { ...cliApi, vetLinkCandidate, rankDiscoveries };
+  const api = { ...cliApi, vetLinkCandidate, rankDiscoveries, annotateConsequences };
   const invoke = (positionals: string[]) => resolveCommand('ground')!.run({
     api,
     args: { flags: new Map(), positionals } as CommandCtx['args'],
@@ -99,10 +100,26 @@ it('vets only the requested candidate and does no vetting to answer a miss', asy
   });
   expect(await invoke(['temperature', 'mass'])).toBe(0);
   expect(vetLinkCandidate).not.toHaveBeenCalled();
+  expect(annotateConsequences).not.toHaveBeenCalled();
   expect(await invoke([candidate!.b, candidate!.a])).toBe(0);
   expect(vetLinkCandidate).toHaveBeenCalledExactlyOnceWith(cliApi.CATALOG_GRAPH, candidate, { includeSubstitutions: true });
+  expect(annotateConsequences).toHaveBeenCalledExactlyOnceWith([vetLinkCandidate.mock.results[0]?.value]);
   expect(rankDiscoveries).not.toHaveBeenCalled();
 });
+
+it('reports the same per-pair consequences as combined discovery', async () => {
+  const report = await json(['discover', '--source=both']);
+  const rows = report.result as { a: string; b: string; consequence?: { signal: string }; grounding: { gaps: string[] } }[];
+  for (const a of ['erasure-energy', 'landauer-erasure-energy']) {
+    const b = 'photon-energy';
+    const listed = rows.find((row) => row.a === a && row.b === b);
+    expect(listed?.consequence?.signal).toBe('novel-consequence');
+    expect(listed?.grounding.gaps).toContain('consequence: novel (unadjudicated)');
+    const grounded = await json(['ground', b, a, '--source=both']);
+    expect(grounded.result.consequence).toEqual(listed?.consequence);
+    expect(grounded.result.grounding).toEqual(listed?.grounding);
+  }
+}, FUNNEL_MS);
 
 it('reports a representative downstream refusal with the catalog condition', async () => {
   const report = await json([

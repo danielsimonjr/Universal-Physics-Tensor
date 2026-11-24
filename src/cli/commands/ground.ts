@@ -110,7 +110,8 @@ async function run(ctx: CommandCtx): Promise<number> {
     return 0;
   }
 
-  const g = api.describeGrounding(cand);
+  const consequence = api.annotateConsequences([cand])[0]?.consequence;
+  const g = api.describeGrounding(cand, consequence?.signal);
   if (args.flags.has('json')) {
     emitJson(
       {
@@ -118,7 +119,11 @@ async function run(ctx: CommandCtx): Promise<number> {
         source,
         anchor: { groundTruth: groundTruthAnchor(api, opts) },
         options: { ...opts },
-        result: { a: cand.a, b: cand.b, verdict: cand.verdict, grounding: g, magnitudeDerived: cand.magnitudeDerived ?? [], substitutions: cand.substitutions ?? [] },
+        result: {
+          a: cand.a, b: cand.b, verdict: cand.verdict, grounding: g,
+          ...(consequence === undefined ? {} : { consequence }),
+          magnitudeDerived: cand.magnitudeDerived ?? [], substitutions: cand.substitutions ?? [],
+        },
       },
       ctx.write,
     );
