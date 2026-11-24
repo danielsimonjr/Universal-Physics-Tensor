@@ -5199,6 +5199,7 @@ The codebase is organized into the following modules:
 | `../../dimensional/algebra.js` | `equals, format` | Import |
 | `../../dimensional/symbolic-constants.js` | `constantRecord, constantScope` | Import |
 | `../../dimensional/units.js` | `convertValue, parseUnit, UnitError` | Import |
+| `../../numerical/formula-contract.js` | `FormulaValueError` | Import |
 | `../../numerical/formula-mathts.js` | `parseFormula` | Import |
 | `../../numerical/formula-dimension.js` | `builtinFormulaDimensionChecker` | Import |
 | `../expr-eval.js` | `evalExpr` | Import |
@@ -7926,7 +7927,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 396 |
 | Total Modules | 13 |
-| Total Lines of Code | 91945 |
+| Total Lines of Code | 91957 |
 | Total Exports | 2891 |
 | Total Re-exports | 1421 |
 | Total Classes | 86 |

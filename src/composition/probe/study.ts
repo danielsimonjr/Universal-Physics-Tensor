@@ -47,6 +47,7 @@ import { convertValue, parseUnit, UnitError } from '../../dimensional/units.js';
  * @internal
  */
 export { DEFAULT_ALPHA, MAX_CORRECTION_TERMS };
+import { FormulaValueError } from '../../numerical/formula-contract.js';
 import { parseFormula } from '../../numerical/formula-mathts.js';
 import { builtinFormulaDimensionChecker } from '../../numerical/formula-dimension.js';
 import { evalExpr } from '../expr-eval.js';
@@ -977,7 +978,13 @@ function testRows(rows: readonly StudyObservation[], predict: Predictor, fitted:
   let maxAbsZ = 0;
   let worstRow: string | null = null;
   for (const r of rows) {
-    const z = (r.observed - predict(r.inputs)) / effectiveSigma(r, predict);
+    let z: number;
+    try {
+      z = (r.observed - predict(r.inputs)) / effectiveSigma(r, predict);
+    } catch (error) {
+      if (!(error instanceof FormulaValueError)) throw error;
+      throw new RangeError(`prediction is not finite on row ${r.id}: ${error.message}`, { cause: error });
+    }
     if (!Number.isFinite(z)) throw new RangeError(`prediction is not finite on row ${r.id}`);
     chi2 += z * z;
     if (Math.abs(z) > maxAbsZ) {
@@ -1852,6 +1859,11 @@ function setLine(name: string, t: SetTest | null): string {
   return `${name}: ${nu}, p = ${fmtP(t.p)}, max |z| = ${t.maxAbsZ.toPrecision(3)}${t.worstRow ? ` at ${t.worstRow}` : ''} — ${verdict}`;
 }
 
+function withheldLine(name: 'holdout' | 'replication', test: ModelTest): string {
+  const error = name === 'holdout' ? test.holdoutError : test.replicationError;
+  return error === undefined ? setLine(name, test[name]) : `${name}: FAIL — ${error}`;
+}
+
 function fmtPoint(point: Readonly<Record<string, number>>, governing: ProbeStudyResult['governing']): string {
   return governing.map((g) => `${g.name}=${Number(point[g.name]!.toPrecision(4))}${g.unit ? ` ${g.unit}` : ''}`).join(', ');
 }
@@ -1924,8 +1936,8 @@ export function formatProbeStudy(r: ProbeStudyResult): string {
     L.push(`    ${setLine('exploratory', c.exploratory)}`);
     L.push(`    ${c.credible ? 'credible' : 'not credible'}: ${c.credibility}`);
     if (c.id === r.selected) {
-      L.push(`    ${c.holdoutError ?? setLine('holdout', c.holdout)}`);
-      L.push(`    ${c.replicationError ?? setLine('replication', c.replication)}`);
+      L.push(`    ${withheldLine('holdout', c)}`);
+      L.push(`    ${withheldLine('replication', c)}`);
     }
   }
   if (r.candidates.length === 0) L.push('  no candidate could be fit.');
@@ -1939,9 +1951,9 @@ export function formatProbeStudy(r: ProbeStudyResult): string {
         L.push(`      not evaluable: ${b.error}`);
         continue;
       }
-      for (const [name, t] of [['exploratory', b.exploratory], ['holdout', b.holdout], ['replication', b.replication]] as const) {
-        L.push(`      ${setLine(name, t)}`);
-      }
+      L.push(`      ${setLine('exploratory', b.exploratory)}`);
+      L.push(`      ${withheldLine('holdout', b)}`);
+      L.push(`      ${withheldLine('replication', b)}`);
     }
   }
   L.push('');

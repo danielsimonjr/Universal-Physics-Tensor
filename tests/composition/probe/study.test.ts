@@ -15,6 +15,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import {
   parseStudy,
+  formatProbeStudy,
   runProbeStudy,
   chiSquareSurvival,
   StudyRefusal,
@@ -340,16 +341,42 @@ describe('observation-only dimensionally homogeneous sums', () => {
     expect(selectedOf(result).holdout?.maxAbsZ).toBeLessThan(1e-6);
   });
 
+  it('recovers a signed interaction at the lowest credible degree', async () => {
+    const raw = polynomialStudy();
+    const row = (x: number, y: number, index: number, role: 'exploratory' | 'holdout') => ({
+      id: `${role}-${index}`, source: role, role,
+      values: { length: x, signed: y }, observed: 1 + 2 * x * y, sigma: 0.005,
+    });
+    const exploratory = [-1.5, -0.5, 0.5, 1.5]
+      .flatMap((x) => [-2, -1, 1, 2].map((y) => [x, y]))
+      .map(([x, y], i) => row(x!, y!, i, 'exploratory'));
+    const result = await run({
+      ...raw,
+      governing: [...raw.governing, { name: 'signed', unit: '1' }],
+      observations: [...exploratory, row(-0.2, 0.8, 0, 'holdout'), row(1.1, -1.1, 1, 'holdout')],
+    });
+    expect(result.verdict).toBe('survives-holdout');
+    expect(result.selected).toBe('pi-polynomial-2');
+    const selected = selectedOf(result);
+    expect(selected.fittedParameters).toBe(6);
+    expect(selected.holdout?.maxAbsZ).toBeLessThan(1e-6);
+  });
+
   it('records a withheld singularity as a refutation without erasing the fit', async () => {
     const raw = polynomialStudy(0, true);
     const boundary = { id: 'zero-scale', role: 'holdout', source: 'holdout',
       values: { scale: 0, length: 1 }, observed: 1, sigma: 0.005 };
-    const result = await run({ ...raw, observations: [...raw.observations, boundary] });
+    const result = await run({
+      ...raw, observations: [...raw.observations, boundary],
+      baselines: [{ name: 'ratio', formula: 'length^2/scale', fitPrefactor: true }],
+    });
     expect(result.verdict).toBe('refuted-on-holdout');
     const selected = selectedOf(result);
     expect(selected.exploratory?.pass).toBe(true);
     expect(selected.holdout).toBeNull();
     expect(selected.holdoutError).toContain('zero-scale');
+    expect(result.baselines[0]?.holdoutError).toContain('zero-scale');
+    expect(formatProbeStudy(result).match(/holdout: FAIL — [^\n]*zero-scale/g)).toHaveLength(2);
   });
 
   it('freezes the chosen model before challenge scoring and abstains on contradictory exploratory replicates', async () => {

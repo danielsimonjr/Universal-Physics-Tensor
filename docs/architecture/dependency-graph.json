@@ -19228,6 +19228,12 @@
             ]
           },
           {
+            "file": "../../numerical/formula-contract.js",
+            "imports": [
+              "FormulaValueError"
+            ]
+          },
+          {
             "file": "../../numerical/formula-mathts.js",
             "imports": [
               "parseFormula"
@@ -29147,7 +29153,7 @@
   "statistics": {
     "totalTypeScriptFiles": 396,
     "totalModules": 13,
-    "totalLinesOfCode": 91945,
+    "totalLinesOfCode": 91957,
     "totalExports": 2891,
     "totalClasses": 86,
     "totalInterfaces": 526,

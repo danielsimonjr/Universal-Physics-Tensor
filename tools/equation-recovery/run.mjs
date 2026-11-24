@@ -71,15 +71,17 @@ async function runCase(raw, fold) {
     baselines: monomial ? [{ name: 'dimensional', formula: monomial, fitPrefactor: true }] : [],
   });
   const selected = result.candidates.find(({ id }) => id === result.selected);
+  const dimensional = result.baselines[0];
   return {
     id,
     engine: outcome(selected),
-    dimensional: result.nullModel.exploratory?.pass === false ? outcome(result.baselines[0]) : 'abstained',
+    dimensional: result.nullModel.exploratory?.pass === false ? outcome(dimensional) : 'abstained',
     selected: selected?.label ?? null,
     prefactor: selected?.prefactor ?? null,
     ...(selected?.coefficients && { coefficients: selected.coefficients }),
     ...(selected?.holdoutError && { holdoutError: selected.holdoutError }),
-    challenge: { engine: selected?.holdout ?? null, dimensional: result.baselines[0]?.holdout ?? null },
+    ...(dimensional?.holdoutError && { dimensionalHoldoutError: dimensional.holdoutError }),
+    challenge: { engine: selected?.holdout ?? null, dimensional: dimensional?.holdout ?? null },
     stopReason: result.search.stopReason,
     ...(graph && {
       graph: result.nullModel.exploratory?.pass === false ? graph.outcome : 'abstained',
