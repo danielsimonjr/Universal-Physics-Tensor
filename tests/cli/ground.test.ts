@@ -86,11 +86,17 @@ it('vets only the requested candidate and does no vetting to answer a miss', asy
   const [candidate] = cliApi.proposeLinkCandidates(cliApi.CATALOG_GRAPH);
   expect(candidate).toBeDefined();
   const vetLinkCandidate = vi.fn(cliApi.vetLinkCandidate);
-  const annotateConsequences = vi.fn(cliApi.annotateConsequences);
+  const annotateConsequences = vi.fn();
   const rankDiscoveries = vi.fn(() => {
     throw new Error('ground must not rank unrelated candidates');
   });
-  const api = { ...cliApi, vetLinkCandidate, rankDiscoveries, annotateConsequences };
+  const api: typeof cliApi = {
+    ...cliApi, vetLinkCandidate, rankDiscoveries,
+    annotateConsequences: (rows) => {
+      annotateConsequences(rows);
+      return cliApi.annotateConsequences(rows);
+    },
+  };
   const invoke = (positionals: string[]) => resolveCommand('ground')!.run({
     api,
     args: { flags: new Map(), positionals } as CommandCtx['args'],
