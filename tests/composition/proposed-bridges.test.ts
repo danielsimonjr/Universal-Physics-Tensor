@@ -54,18 +54,12 @@ describe('deriveProposedBridges — canonical-only pilot', () => {
   const proposals = deriveProposedBridges();
 
   it('emits the Landauer photon first, plus the new fully-quantitative IDs', () => {
-    // The canonical L-layer expansion (Adam+Eve audit) added more
-    // fully-quantitative + determinate laws, so the identity-consequence funnel
-    // surfaced six coincidences, all UNADJUDICATED: the Landauer photon, hν=mc²
-    // (photon-energy↔rest-energy via mass), and four against the Hubble distance
-    // (the Bohr radius, the classical electron radius, the full Compton wavelength,
-    // and c/H≟b/T against the peak wavelength). Once the Hubble distance has a
-    // magnitude (option 2 of the owner's decision of 2026-10-16: the sourced table
-    // row, c/H0), the magnitude gate falsifies all four identifications, so two
-    // remain. The six, and the five before the Bohr radius joined, are the record
-    // from before it. Order is registry-stable (Landauer first).
+    // Hubble proposals remain magnitude-clashes. Unfolding de Broglie restores
+    // distinct momentum-dependent coincidence proposals for two atomic radii.
     expect(proposals).toHaveLength(CENSUS.discovery.proposedBridges);
     expect(proposals.map((p) => p.id).sort()).toEqual([
+      'IC-bohr-radius--de-broglie-wavelength--p',
+      'IC-classical-electron-radius--de-broglie-wavelength--p',
       'IC-erasure-energy--photon-energy--nu',
       'IC-photon-energy--rest-energy--mass',
     ]);
@@ -285,7 +279,7 @@ describe('bridge-source adapter + leaf canonicalization', () => {
 
 describe('proposedBridges() surface (catalog field-shape, separate registry)', () => {
   it('materializes the pilot as an unadjudicated, honest entry', () => {
-    expect(proposedBridges()).toHaveLength(CENSUS.discovery.proposedBridges); // Landauer photon + hν=mc² (6 before the Hubble distance had a magnitude)
+    expect(proposedBridges()).toHaveLength(CENSUS.discovery.proposedBridges);
     const e = proposedBridges().find(
       (b) => b.id === 'IC-erasure-energy--photon-energy--nu',
     )!;
