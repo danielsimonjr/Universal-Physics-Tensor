@@ -1,5 +1,6 @@
 /** Exercise the harness using the existing, answer-known pendulum controls. */
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -49,6 +50,7 @@ try {
   const actual = run(cases);
   assert.equal(actual.status, 0, actual.stderr);
   const report = JSON.parse(actual.stdout);
+  assert.equal(Object.hasOwn(report, 'graphInputSha256'), false);
   const [positive, negative, noise] = report.results;
   for (const method of ['engine', 'dimensional']) {
     assert.equal(positive[method], 'recovered');
@@ -60,6 +62,38 @@ try {
   const contaminated = run([{ ...cases[0], formula: 'answer' }, ...cases.slice(1)]);
   assert.equal(contaminated.status, 1);
   assert.match(contaminated.stderr, /case must have exactly these fields/);
+
+  const linearRow = (x, observed = 2 * x) => ({ inputs: { q1: x }, observed, sigma: 0.125 });
+  const linear = {
+    id: cases[0].id,
+    target: { name: 'y1', unit: 'm' },
+    governing: [{ name: 'q1', unit: 'm' }],
+    exploratory: [1, 2, 3, 4].map((x) => linearRow(x)),
+    challenge: [linearRow(5, 11), linearRow(6), linearRow(7)],
+    synthetic: true,
+  };
+  const linearResult = run([linear, ...cases.slice(1)]);
+  assert.equal(linearResult.status, 0, linearResult.stderr);
+  const [linearScore] = JSON.parse(linearResult.stdout).results;
+  for (const method of ['engine', 'dimensional']) {
+    assert.equal(linearScore[method], 'refuted');
+    assert.equal(linearScore.challenge[method].chi2, 64);
+    assert.equal(linearScore.challenge[method].dof, 3);
+  }
+  for (const [split, repeated] of [
+    ['exploratory', [linear.exploratory[0]]],
+    ['challenge', Array(40).fill(linear.challenge[1])],
+  ]) {
+    const copied = run([{ ...linear, [split]: [...linear[split], ...repeated] }, ...cases.slice(1)]);
+    assert.equal(copied.status, 1);
+    assert.match(copied.stderr, new RegExp(`${split} row \\d+ duplicates ${split} row \\d+`));
+  }
+  const repeated = run([{ ...linear, challenge: [...linear.challenge, linearRow(6, 12.0625)] }, ...cases.slice(1)]);
+  assert.equal(repeated.status, 0, repeated.stderr);
+  const [repeatedScore] = JSON.parse(repeated.stdout).results;
+  assert.equal(repeatedScore.challenge.engine.n, 4);
+  assert.equal(repeatedScore.challenge.engine.chi2, 64.25);
+
   // Exercise graph composition with the publicly known control, including
   // two held-out encodings that could otherwise bypass the intended route.
   const fold = {
@@ -78,6 +112,8 @@ try {
   const graphResult = run(cases, spec);
   assert.equal(graphResult.status, 0, graphResult.stderr);
   const graphReport = JSON.parse(graphResult.stdout);
+  const graphDigest = () => createHash('sha256').update(readFileSync(graphPath)).digest('hex');
+  assert.equal(graphReport.graphInputSha256, graphDigest());
   assert.deepEqual(graphReport.results.map(({ graph }) => graph), ['recovered', 'refuted', 'abstained']);
   assert.deepEqual(graphReport.results[0].graphEvidence.route, ['e1', 'e2']);
 
@@ -90,7 +126,11 @@ try {
   ])) };
   const mutated = run(cases, mutant);
   assert.equal(mutated.status, 0, mutated.stderr);
-  assert.equal(mutated.stdout, graphResult.stdout);
+  const { graphInputSha256: mutatedInputHash, ...mutatedReport } = JSON.parse(mutated.stdout);
+  const { graphInputSha256: originalInputHash, ...originalReport } = graphReport;
+  assert.equal(mutatedInputHash, graphDigest());
+  assert.notEqual(mutatedInputHash, originalInputHash);
+  assert.deepEqual(mutatedReport, originalReport);
   mutant.folds.c1.heldOut = 'f2';
   const leaking = run(cases, mutant);
   assert.equal(leaking.status, 1);

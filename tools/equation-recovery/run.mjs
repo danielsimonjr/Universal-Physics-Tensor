@@ -26,13 +26,19 @@ function project(quantity) {
 }
 
 function observations(rows, role, variables) {
-  if (!Array.isArray(rows) || rows.length < 3) throw new Error(`${role} needs at least three rows`);
+  const split = role === 'holdout' ? 'challenge' : role;
+  if (!Array.isArray(rows) || rows.length < 3) throw new Error(`${split} needs at least three rows`);
+  const firstRow = new Map();
   return rows.map((row, index) => {
-    fields(row, ['inputs', 'observed', 'sigma'], `${role} row`);
-    fields(row.inputs, variables, `${role} row inputs`);
+    fields(row, ['inputs', 'observed', 'sigma'], `${split} row`);
+    fields(row.inputs, variables, `${split} row inputs`);
     if (![...Object.values(row.inputs), row.observed, row.sigma].every(Number.isFinite) || row.sigma <= 0) {
-      throw new Error(`${role} row requires finite values and positive sigma`);
+      throw new Error(`${split} row requires finite values and positive sigma`);
     }
+    const signature = JSON.stringify([...variables.map((name) => row.inputs[name]), row.observed, row.sigma]);
+    const previous = firstRow.get(signature);
+    if (previous !== undefined) throw new Error(`${split} row ${index + 1} duplicates ${split} row ${previous}`);
+    firstRow.set(signature, index + 1);
     return { values: row.inputs, observed: row.observed, sigma: row.sigma, id: `${role}-${index + 1}`, source: role, role };
   });
 }
@@ -95,7 +101,8 @@ if (!packetPath || !keyPath) throw new Error('Usage: node tools/equation-recover
 const packet = readFileSync(packetPath);
 const cases = JSON.parse(packet);
 if (!Array.isArray(cases) || cases.length === 0) throw new Error('expected a nonempty packet');
-const graphInput = graphPath && JSON.parse(readFileSync(graphPath, 'utf8'));
+const graphBytes = graphPath && readFileSync(graphPath);
+const graphInput = graphBytes && JSON.parse(graphBytes);
 if (graphPath) fields(graphInput, ['folds'], 'graph input');
 const methods = graphPath ? ['engine', 'dimensional', 'graph'] : ['engine', 'dimensional'];
 const results = [];
@@ -153,6 +160,7 @@ for (const method of methods) {
 console.log(JSON.stringify({
   packetSha256: createHash('sha256').update(packet).digest('hex'),
   keySha256: createHash('sha256').update(keyBytes).digest('hex'),
+  ...(graphBytes && { graphInputSha256: createHash('sha256').update(graphBytes).digest('hex') }),
   metrics,
   results,
 }, null, 2));
