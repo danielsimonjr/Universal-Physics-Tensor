@@ -8,6 +8,10 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
+## [18.1.0] - 2026-11-24
+
+Dependency health at this release: `bun audit` found zero vulnerabilities across 139 packages. The `bun outdated` snapshot lists in-range updates for MathTS autograd, expression and tensor, and fast-check. Newer MathTS core, functions and matrix releases and Vitest and its V8 coverage provider are outside the current ranges. This release retains the dependency lockfile.
+
 ### Fixed
 
 - Catalog Planck evaluation preserves the Rayleigh–Jeans and representable Wien limits. The input report reads its strict temperature range from the same contract as evaluation.
