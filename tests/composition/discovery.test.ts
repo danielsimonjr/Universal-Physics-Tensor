@@ -27,6 +27,8 @@ import type { BridgeEdge, Quantity } from '../../src/composition/index.js';
 import { DIMENSIONLESS } from '../../src/dimensional/types.js';
 import { CENSUS } from '../helpers/census.js';
 import { validityDomain } from '../../src/composition/edge.js';
+import { evaluateRelation } from '../../src/composition/evaluate-relation.js';
+import malonaldehyde from '../../docs/research/bohr-width-validation/malonaldehyde-input.json';
 
 const q = (name: string): Quantity => ({
   name,
@@ -654,5 +656,83 @@ describe('downstream substitution evidence', () => {
       status: 'abstained',
       reason: 'No coherent operating point is recorded for this relation.',
     })]);
+  });
+});
+
+describe('published operating points for discovery substitutions', () => {
+  const graphs = [...CATALOG_GRAPH, ...CANONICAL_GRAPH];
+  const sourced = (value: number, source: string) => ({ value, source });
+  const fretSource = 'Hellenkamp dissertation, Table 1, https://mediatum.ub.tum.de/doc/1289875/document.pdf';
+  const wkbSource = 'Modified Guo surface, https://doi.org/10.1063/1.5145278';
+  const baseline = malonaldehyde.cases.find(({ id }) => id === 'malonaldehyde-2020-modified-guo-pes')!;
+  const wkb = {
+    'barrier-width': sourced(baseline.actualWidthM!, wkbSource),
+    'barrier-height': sourced(baseline.barrierHeightJ!, wkbSource),
+    'tunneling-mass': sourced(baseline.massKg!, 'CODATA proton reference mass'),
+    'attempt-frequency': sourced(1, 'Unit prefactor for reporting bare transmission'),
+  };
+
+  function substitute(edgeId: string, from: string, to: string, inputs: Record<string, ReturnType<typeof sourced>>) {
+    const report = vetLinkCandidate(graphs, cand(from, to), {
+      includeSubstitutions: true,
+      substitutionScenarios: { [edgeId]: { label: 'Published operating point', inputs } },
+    });
+    const row = report.substitutions?.find(row => row.edgeId === edgeId && row.from === from && row.to === to);
+    expect(row).toBeDefined();
+    return row!;
+  }
+
+  it.each([
+    ['1A', 8.51e-9, 0.15, 0.17],
+    ['1B', 6.00e-9, 0.56, 0.57],
+  ] as const)('separates the two Bohr-radius FRET substitutions at %s', (_sample, distance, observedLow, observedHigh) => {
+    const radius = 6.4e-9;
+    const inputs = {
+      'foerster-radius': sourced(radius, fretSource),
+      'donor-acceptor-distance': sourced(distance, fretSource),
+    };
+    const range = substitute('be-24', 'bohr-radius', 'foerster-radius', inputs);
+    const geometry = substitute('be-24', 'bohr-radius', 'donor-acceptor-distance', inputs);
+    expect(range.status).toBe('evaluated');
+    expect(geometry.status).toBe('evaluated');
+    // Fixed-distance baseline is a proxy for the distribution, so use a broad envelope.
+    const baseline = 1 / (1 + (distance / radius) ** 6);
+    expect(range.baselinePrediction?.value).toBeCloseTo(baseline, 13);
+    expect(geometry.baselinePrediction?.value).toBeCloseTo(baseline, 13);
+    expect(baseline).toBeGreaterThan(observedLow - 0.06);
+    expect(baseline).toBeLessThan(observedHigh + 0.06);
+    expect(range.prediction?.value).toBeLessThan(1e-12);
+    expect(geometry.prediction?.value).toBeGreaterThan(1 - 1e-12);
+  });
+
+  it('reports the Rydberg replacement as evaluable but strongly suppressing transmission', () => {
+    const row = substitute('be-26-wkb', 'rydberg-energy', 'barrier-height', wkb);
+    expect(row.status).toBe('evaluated');
+    expect(Math.log(row.baselinePrediction!.value)).toBeCloseTo(-16.22, 8);
+    expect(Math.log(row.prediction!.value / row.baselinePrediction!.value)).toBeCloseTo(-61.69249, 4);
+  });
+
+  it.each([
+    ['compton-wavelength', 3.86159e-13],
+    ['compton-wavelength-full', 2.42631e-12],
+  ] as const)('preserves the baseline and refuses %s as the WKB width', (from, width) => {
+    const row = substitute('be-26-wkb', from, 'barrier-width', wkb);
+    expect(row.status).toBe('refused');
+    expect(row.reason).toMatch(/>= 100 \* hbar \* hbar/);
+    expect(row.prediction).toBeUndefined();
+    expect(row.inputs['barrier-width']!.value / width).toBeCloseTo(1, 3);
+    expect(Math.log(row.baselinePrediction!.value)).toBeCloseTo(-16.22, 8);
+  });
+
+  it('distinguishes the Landauer heat scale from the measured erasure protocol barrier', () => {
+    // Bérut et al. report barrier heights in kBT at https://doi.org/10.1038/nature10872.
+    const temperature = 300;
+    const thermalEnergy = 1.380649e-23 * temperature;
+    const result = evaluateRelation('be-16', { temperature });
+    expect(result.kind).toBe('value');
+    if (result.kind !== 'value') throw new Error('Expected a scalar Landauer energy');
+    expect(result.value / thermalEnergy).toBeCloseTo(Math.LN2, 14);
+    expect(2.2 * thermalEnergy / result.value).toBeCloseTo(3.173929, 6);
+    expect(8 * thermalEnergy / result.value).toBeGreaterThan(11.54);
   });
 });
