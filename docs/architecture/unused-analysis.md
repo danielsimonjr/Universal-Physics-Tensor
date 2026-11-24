@@ -8,7 +8,7 @@
 ## Summary
 
 - **Potentially unused files**: 0
-- **Potentially unused exports**: 34
+- **Potentially unused exports**: 35
 
 ## Potentially Unused Files
 
@@ -68,6 +68,10 @@ These exports are not imported by any other file in the codebase:
 ### `src/composition/probe/power-law.ts`
 
 - `MAX_EXPONENT_DENOMINATOR` (constant)
+
+### `src/composition/probe/study.ts`
+
+- `scoreStudyPredictions` (function)
 
 ### `src/composition/rational-exponent.ts`
 

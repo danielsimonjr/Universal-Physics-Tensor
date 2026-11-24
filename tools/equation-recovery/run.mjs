@@ -2,6 +2,7 @@
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { parseStudy, runProbeStudy } from '../../dist/composition/probe/study.js';
+import { graphFold, graphPrediction } from './graph.mjs';
 import { piStructure } from '../../dist/composition/probe/power-law.js';
 
 function fields(value, keys, where) {
@@ -42,7 +43,7 @@ function outcome(model) {
   return model.holdout.pass ? 'survived' : 'refuted';
 }
 
-async function runCase(raw) {
+async function runCase(raw, fold) {
   fields(raw, ['id', 'target', 'governing', 'exploratory', 'challenge', 'synthetic'], 'case');
   const id = opaque(raw.id, 'case ID');
   if (typeof raw.synthetic !== 'boolean') throw new Error('synthetic must be boolean');
@@ -59,6 +60,7 @@ async function runCase(raw) {
       ...observations(raw.challenge, 'holdout', variables),
     ],
   }, id);
+  const graph = fold && graphPrediction(study, fold);
   const { base } = piStructure(study.target, study.governing);
   const monomial = base && (Object.entries(base)
     .filter(([, power]) => power !== 0)
@@ -76,21 +78,31 @@ async function runCase(raw) {
     prefactor: selected?.prefactor ?? null,
     challenge: { engine: selected?.holdout ?? null, dimensional: result.baselines[0]?.holdout ?? null },
     stopReason: result.search.stopReason,
+    ...(graph && {
+      graph: result.nullModel.exploratory?.pass === false ? graph.outcome : 'abstained',
+      graphEvidence: graph.evidence,
+    }),
   };
 }
 
-const [packetPath, keyPath] = process.argv.slice(2);
-if (!packetPath || !keyPath) throw new Error('Usage: node tools/equation-recovery/run.mjs PACKET.json KEY.json');
+const [packetPath, keyPath, graphPath] = process.argv.slice(2);
+if (!packetPath || !keyPath) throw new Error('Usage: node tools/equation-recovery/run.mjs PACKET.json KEY.json [GRAPH.json]');
 const packet = readFileSync(packetPath);
 const cases = JSON.parse(packet);
 if (!Array.isArray(cases) || cases.length === 0) throw new Error('expected a nonempty packet');
+const graphInput = graphPath && JSON.parse(readFileSync(graphPath, 'utf8'));
+if (graphPath) fields(graphInput, ['folds'], 'graph input');
+const methods = graphPath ? ['engine', 'dimensional', 'graph'] : ['engine', 'dimensional'];
 const results = [];
 const ids = new Set();
 for (const item of cases) {
   if (ids.has(item.id)) throw new Error(`duplicate case ${item.id}`);
   ids.add(item.id);
-  results.push(await runCase(item));
+  const fold = graphPath && graphFold(graphInput.folds[item.id], fields, opaque);
+  results.push(await runCase(item, fold));
 }
+
+if (graphPath) fields(graphInput.folds, [...ids], 'graph folds');
 
 const keyBytes = readFileSync(keyPath);
 const key = JSON.parse(keyBytes);
@@ -101,12 +113,15 @@ for (const result of results) {
   if (typeof answer.positive !== 'boolean') throw new Error('positive must be boolean');
   result.family = opaque(answer.family, 'family');
   result.positive = answer.positive;
-  for (const method of ['engine', 'dimensional']) {
+  if (graphPath && result.graphEvidence.heldOut !== result.family) {
+    throw new Error(`graph fold for ${result.id} held out the wrong family`);
+  }
+  for (const method of methods) {
     if (result[method] === 'survived') result[method] = answer.positive ? 'recovered' : 'false-positive';
   }
 }
 const metrics = {};
-for (const method of ['engine', 'dimensional']) {
+for (const method of methods) {
   const counts = {};
   for (const status of ['recovered', 'false-positive', 'refuted', 'abstained']) {
     const groups = new Map();

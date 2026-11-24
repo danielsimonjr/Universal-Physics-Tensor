@@ -5,6 +5,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { hashCanonical } from '../../dist/composition/canonical-json.js';
 import { convertValue } from '../../dist/dimensional/units.js';
 
 const cases = [];
@@ -38,9 +39,11 @@ try {
   const keyPath = join(dir, 'key.json');
   writeFileSync(keyPath, JSON.stringify(key));
   const runner = fileURLToPath(new URL('./run.mjs', import.meta.url));
-  function run(packet) {
+  const graphPath = join(dir, 'graph.json');
+  function run(packet, graph) {
     writeFileSync(packetPath, JSON.stringify(packet));
-    return spawnSync(process.execPath, [runner, packetPath, keyPath], { encoding: 'utf8' });
+    if (graph) writeFileSync(graphPath, JSON.stringify(graph));
+    return spawnSync(process.execPath, [runner, packetPath, keyPath, ...(graph ? [graphPath] : [])], { encoding: 'utf8' });
   }
 
   const actual = run(cases);
@@ -57,7 +60,45 @@ try {
   const contaminated = run([{ ...cases[0], formula: 'answer' }, ...cases.slice(1)]);
   assert.equal(contaminated.status, 1);
   assert.match(contaminated.stderr, /case must have exactly these fields/);
-  console.log(JSON.stringify({ ...report, scope: 'answer-known development controls' }, null, 2));
+  // Exercise graph composition with the publicly known control, including
+  // two held-out encodings that could otherwise bypass the intended route.
+  const fold = {
+    heldOut: 'f1',
+    quantities: { q1: 'm', q2: 'm/s^2', q3: 'rad', q4: 's^2', y1: 's' },
+    edges: [
+      { id: 'e1', family: 'f2', sources: ['q1', 'q2'], target: 'q4', formula: 'q1/q2', domain: 'q2 > 0' },
+      { id: 'e2', family: 'f3', sources: ['q4'], target: 'y1', formula: '2*pi*sqrt(q4)', domain: 'q4 >= 0' },
+    ],
+  };
+  const spec = { folds: Object.fromEntries(cases.map(({ id, governing }) => {
+    const quantities = { ...fold.quantities };
+    if (!governing.some(({ name }) => name === 'q3')) delete quantities.q3;
+    return [id, { ...fold, graphSha256: hashCanonical({ quantities, edges: fold.edges }) }];
+  })) };
+  const graphResult = run(cases, spec);
+  assert.equal(graphResult.status, 0, graphResult.stderr);
+  const graphReport = JSON.parse(graphResult.stdout);
+  assert.deepEqual(graphReport.results.map(({ graph }) => graph), ['recovered', 'refuted', 'abstained']);
+  assert.deepEqual(graphReport.results[0].graphEvidence.route, ['e1', 'e2']);
+
+  const hidden = ['e3', 'e4'].map((id) => ({
+    id, family: 'f1', sources: ['q1', 'q2'], target: 'y1',
+    formula: 'this must never compile', domain: 'nor this',
+  }));
+  const mutant = { folds: Object.fromEntries(cases.map(({ id }) => [
+    id, { ...spec.folds[id], edges: [...hidden, ...fold.edges] },
+  ])) };
+  const mutated = run(cases, mutant);
+  assert.equal(mutated.status, 0, mutated.stderr);
+  assert.equal(mutated.stdout, graphResult.stdout);
+  mutant.folds.c1.heldOut = 'f2';
+  const leaking = run(cases, mutant);
+  assert.equal(leaking.status, 1);
+  assert.match(leaking.stderr, /projected graph SHA-256 differs/);
+  assert.deepEqual(graphReport.results[0].graphEvidence.route, graphReport.results[1].graphEvidence.route);
+  assert.deepEqual(graphReport.results[0].graphEvidence.exploratory, graphReport.results[1].graphEvidence.exploratory);
+  assert.equal(graphReport.metrics.graph.recovered.count, 1);
+  console.log(JSON.stringify({ ...graphReport, scope: 'answer-known development controls' }, null, 2));
 } finally {
   rmSync(dir, { recursive: true, force: true });
 }
