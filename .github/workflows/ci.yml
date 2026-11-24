@@ -53,6 +53,8 @@ jobs:
       # --noEmit, and `bun run test` would compile it a third time through `pretest`.
       - run: bun run build
       - run: bun run typecheck:tests
+      - name: Equation recovery regression controls
+        run: node tools/equation-recovery/control.mjs
       # `--coverage` on the ONE suite run is Product B's coverage gate: vitest.config.ts limits
       # the report to src/composition/probe and sets the thresholds (statements/lines/functions
       # 95, branches 85). A separate `test:probe-coverage` step once ran the probe tests a second
