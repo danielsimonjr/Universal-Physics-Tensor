@@ -5,7 +5,7 @@
 
 # universal-physics-tensor - Dependency Graph
 
-**Version**: 18.1.0
+**Version**: 18.1.1
 
 This document provides a comprehensive dependency graph of all files, components, imports, functions, and variables in the codebase.
 
@@ -4155,7 +4155,7 @@ The codebase is organized into the following modules:
 | `./compose.js` | `QUANTITY_IDENTIFICATIONS, effectiveAttributes` | Import |
 | `./axes.js` | `GATE_AXES` | Import |
 | `./quantity.js` | `RegimeAttributes` | Import (type-only) |
-| `./identifiability.js` | `classifyIdentifiability, forwardClosure, propagate` | Import |
+| `./identifiability.js` | `forwardClosure, propagate` | Import |
 | `./retrodiction.js` | `retrodict, retrodictNode, forwardEvaluate` | Import |
 | `./bridge-analysis.js` | `proposeLinkCandidates` | Import |
 | `./bridge-analysis.js` | `LinkCandidate` | Import (type-only) |
@@ -7895,7 +7895,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 395 |
 | Total Modules | 13 |
-| Total Lines of Code | 91466 |
+| Total Lines of Code | 91483 |
 | Total Exports | 2882 |
 | Total Re-exports | 1418 |
 | Total Classes | 86 |
@@ -7909,4 +7909,4 @@ graph TD
 
 ---
 
-*Version*: 18.1.0
+*Version*: 18.1.1

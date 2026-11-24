@@ -1,7 +1,7 @@
 {
   "metadata": {
     "name": "universal-physics-tensor",
-    "version": "18.1.0",
+    "version": "18.1.1",
     "totalFiles": 395,
     "totalModules": 13,
     "totalExports": 2882
@@ -14977,7 +14977,6 @@
           {
             "file": "./identifiability.js",
             "imports": [
-              "classifyIdentifiability",
               "forwardClosure",
               "propagate"
             ]
@@ -29001,7 +29000,7 @@
   "statistics": {
     "totalTypeScriptFiles": 395,
     "totalModules": 13,
-    "totalLinesOfCode": 91466,
+    "totalLinesOfCode": 91483,
     "totalExports": 2882,
     "totalClasses": 86,
     "totalInterfaces": 523,
