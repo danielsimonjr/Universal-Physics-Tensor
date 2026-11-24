@@ -8,6 +8,17 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
+## [18.2.1] - 2026-11-24
+
+The dependency audit found zero vulnerabilities across 139 packages. This release retains the lockfile. In-range updates were available for MathTS autograd, expression and tensor, and fast-check.
+
+### Fixed
+
+- Discovery and grounding share graph-scoped anchor resolution and candidate evidence. Anchor aliases use the same unit conversion, and retry commands preserve spaced values.
+- Discovery keeps downstream evaluations, refusals and abstentions visible. Derived proposals carry evidence from their source candidates.
+- Compton and de Broglie wavelength comparisons express their equality conditions explicitly. The graph no longer registers an unconditional identification between de Broglie and reduced Compton wavelengths.
+- The equation-recovery harness rejects exact duplicate observations within each split and records the raw graph input hash alongside projection digests.
+
 ## [18.2.0] - 2026-11-24
 
 Dependency audit found zero vulnerabilities across 139 packages. The release retains the lockfile. In-range updates were available for MathTS autograd, expression and tensor, and fast-check.
