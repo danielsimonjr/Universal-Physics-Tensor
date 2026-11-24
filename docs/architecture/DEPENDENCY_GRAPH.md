@@ -1941,13 +1941,14 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
+| `../../core/constants.js` | `C_SI, M_E_SI` | Import |
 | `../canonical-equation.js` | `CanonicalEquation` | Import (type-only) |
 | `../../dimensional/ast-builders.js` | `sym` | Import |
 | `../../dimensional/types.js` | `MASS, VELOCITY, ENERGY, LENGTH, AREA, ACTION, CHARGE, FREQUENCY, DIMENSIONLESS, PERMITTIVITY, MOMENTUM` | Import |
 | `./_l1-build.js` | `dim, op, pow, l1` | Import |
 
 **Exports:**
-- Constants: `ATOMIC`
+- Constants: `ATOMIC`, `ATOMIC_SCOPED_RELATIONS`
 
 ---
 
@@ -5431,7 +5432,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../canonical/registry.js` | `canonicalById` | Import |
-| `../core/constants.js` | `C_SI, M_E_SI` | Import |
+| `../canonical/entries/atomic.js` | `ATOMIC_SCOPED_RELATIONS` | Import |
 | `./canonical-graph.js` | `canonicalEdgeOrigin` | Import |
 | `./edge.js` | `evaluateEdge, validityDomain, BridgeEdge` | Import |
 
@@ -7923,6 +7924,7 @@ graph TD
     N14 --> N12
     N14 --> N47
     N14 --> N13
+    N15 --> N41
     N15 --> N12
     N15 --> N47
     N15 --> N14
@@ -7936,7 +7938,6 @@ graph TD
     N21 --> N19
     N21 --> N22
     N22 --> N41
-    N22 --> N9
 ```
 
 ---
@@ -7947,8 +7948,8 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 397 |
 | Total Modules | 13 |
-| Total Lines of Code | 92175 |
-| Total Exports | 2896 |
+| Total Lines of Code | 92185 |
+| Total Exports | 2897 |
 | Total Re-exports | 1423 |
 | Total Classes | 86 |
 | Total Interfaces | 528 |

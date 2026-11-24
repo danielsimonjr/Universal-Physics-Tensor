@@ -4,7 +4,7 @@
     "version": "18.2.0",
     "totalFiles": 397,
     "totalModules": 13,
-    "totalExports": 2896
+    "totalExports": 2897
   },
   "entryPoints": [
     {
@@ -6593,6 +6593,13 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
+            "file": "../../core/constants.js",
+            "imports": [
+              "C_SI",
+              "M_E_SI"
+            ]
+          },
+          {
             "file": "../canonical-equation.js",
             "imports": [
               "CanonicalEquation"
@@ -6632,10 +6639,12 @@
           }
         ],
         "exports": [
-          "ATOMIC"
+          "ATOMIC",
+          "ATOMIC_SCOPED_RELATIONS"
         ],
         "constants": [
-          "ATOMIC"
+          "ATOMIC",
+          "ATOMIC_SCOPED_RELATIONS"
         ]
       },
       "src/canonical/entries/condensed-matter.ts": {
@@ -19978,10 +19987,9 @@
             ]
           },
           {
-            "file": "../core/constants.js",
+            "file": "../canonical/entries/atomic.js",
             "imports": [
-              "C_SI",
-              "M_E_SI"
+              "ATOMIC_SCOPED_RELATIONS"
             ]
           },
           {
@@ -29232,14 +29240,14 @@
   "statistics": {
     "totalTypeScriptFiles": 397,
     "totalModules": 13,
-    "totalLinesOfCode": 92175,
-    "totalExports": 2896,
+    "totalLinesOfCode": 92185,
+    "totalExports": 2897,
     "totalClasses": 86,
     "totalInterfaces": 528,
     "totalFunctions": 974,
     "totalTypeGuards": 17,
     "totalEnums": 0,
-    "totalConstants": 404,
+    "totalConstants": 405,
     "totalReExports": 1423,
     "totalTypeOnlyImports": 545,
     "runtimeCircularDeps": 0,

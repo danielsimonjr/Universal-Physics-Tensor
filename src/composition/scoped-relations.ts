@@ -7,7 +7,7 @@
  */
 
 import { canonicalById } from '../canonical/registry.js';
-import { C_SI, M_E_SI } from '../core/constants.js';
+import { ATOMIC_SCOPED_RELATIONS } from '../canonical/entries/atomic.js';
 import { canonicalEdgeOrigin } from './canonical-graph.js';
 import { evaluateEdge, validityDomain, type BridgeEdge } from './edge.js';
 
@@ -36,52 +36,9 @@ export interface ScopedRelation {
   readonly controls: readonly ScopedRelationControl[];
 }
 
-interface Scope extends Omit<ScopedRelation, 'kind' | 'controls'> {
-  readonly samples: readonly Readonly<Record<string, number>>[];
-}
-
-const electronMomentum = M_E_SI * C_SI;
-
-const SCOPES: readonly Scope[] = [
-  {
-    id: 'compton-scattering-shift',
-    a: 'compton-wavelength-shift',
-    b: 'compton-wavelength-full',
-    ratio: '1 - cos(scattering-angle)',
-    equalityWhen: 'scattering-angle == pi/2',
-    assumptions: [
-      'Compton scattering from a free electron initially at rest',
-      'Use the full Compton wavelength of that electron, with mass = m_e',
-      'Scattering angle is in radians in [0, pi]',
-    ],
-    sourceEquations: ['CE-compton-shift', 'CE-compton-wavelength-full'],
-    samples: [0, Math.PI / 2, Math.PI].map((angle) => ({ mass: M_E_SI, 'scattering-angle': angle })),
-  },
-  {
-    id: 'de-broglie-full-compton',
-    a: 'de-broglie-wavelength',
-    b: 'compton-wavelength-full',
-    ratio: 'mass * c / p',
-    equalityWhen: 'p == mass * c',
-    assumptions: ['Positive momentum magnitude and rest mass of the same particle', 'Both wavelengths use h'],
-    sourceEquations: ['CE-de-broglie', 'CE-compton-wavelength-full'],
-    samples: [0.5, 1, 2].map((factor) => ({ mass: M_E_SI, p: factor * electronMomentum })),
-  },
-  {
-    id: 'de-broglie-reduced-compton',
-    a: 'de-broglie-wavelength',
-    b: 'compton-wavelength',
-    ratio: '2 * pi * mass * c / p',
-    equalityWhen: 'p == (2 * pi) * (mass * c)',
-    assumptions: ['Positive momentum magnitude and rest mass of the same particle', 'The numerator uses h and the denominator uses ℏ'],
-    sourceEquations: ['CE-de-broglie', 'CE-compton-wavelength'],
-    samples: [0.5, 1, Math.PI * 2].map((factor) => ({ mass: M_E_SI, p: factor * electronMomentum })),
-  },
-];
-
 function applicableScopes(edges: readonly BridgeEdge[]) {
   const byId = new Map(edges.map((edge) => [edge.id, edge]));
-  return SCOPES.flatMap((scope) => {
+  return ATOMIC_SCOPED_RELATIONS.flatMap((scope) => {
     const [leftId, rightId] = scope.sourceEquations;
     const left = byId.get(leftId);
     const right = byId.get(rightId);
