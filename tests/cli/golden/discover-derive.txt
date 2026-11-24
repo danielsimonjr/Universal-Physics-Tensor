@@ -26,6 +26,16 @@ Derived identity-consequence PROPOSALS — UNADJUDICATED, math-only  [source: ca
       meaning: mass is the mass of CE-mass-energy (Mass–energy equivalence): the mass for which rest-energy equals photon-energy (CE-planck-einstein) — an equal-[energy] scale; the photon-energy side is not given a mass
       assumptions carried: CE-planck-einstein: none stated; CE-mass-energy: rest energy of a massive body
       canonical match: none — 0 registry equation(s) target mass, 0 with governing {nu}; scope: this registry only, not physics at large
+  IC-classical-electron-radius--de-broglie-wavelength--p
+      p = \frac{4pi \cdot c^{2} \cdot epsilon_0 \cdot h \cdot m_e}{e^{2}}      [L M T^-1]  ≈ 2.35138767911152e-19
+      from: classical-electron-radius ≟ de-broglie-wavelength  (CE-classical-electron-radius = CE-de-broglie); solved for p
+      magnitude: no evidence — the identification is promising, magnitude unchecked (the magnitude falsifier never tested it)
+      evidence gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: novel (unadjudicated)
+      observation: measure classical-electron-radius and de-broglie-wavelength in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.
+      status: conditional identity — holds only if classical-electron-radius ≡ de-broglie-wavelength (unadjudicated); untested
+      meaning: p is the p of CE-de-broglie (de Broglie wavelength): the p for which de-broglie-wavelength equals classical-electron-radius (CE-classical-electron-radius) — an equal-[length] scale; the classical-electron-radius side is not given a p
+      assumptions carried: CE-classical-electron-radius: classical point-charge self-energy scale; CE-de-broglie: none stated
+      canonical match: none — 2 registry equation(s) target p, 0 with governing {}; scope: this registry only, not physics at large
   IC-dark-fermion-mass--erasure-energy--temperature
       temperature = \frac{vacuum-expectation-value \cdot yukawa-coupling}{k_B \cdot ln2}      [temperature]  (no sourced sample value for yukawa-coupling; not evaluated)
       from: dark-fermion-mass ≟ erasure-energy  (BE-18 = CE-landauer); solved for temperature
@@ -47,6 +57,16 @@ Derived identity-consequence PROPOSALS — UNADJUDICATED, math-only  [source: ca
       meaning: mass is the mass of CE-mass-energy (Mass–energy equivalence): the mass for which rest-energy equals dark-fermion-mass (BE-18) — an equal-[energy] scale; the dark-fermion-mass side is not given a mass
       assumptions carried: CE-mass-energy: rest energy of a massive body
       canonical match: none — 0 registry equation(s) target mass, 0 with governing {yukawa-coupling, vacuum-expectation-value}; scope: this registry only, not physics at large
+  IC-bohr-radius--de-broglie-wavelength--p
+      p = \frac{e^{2} \cdot h \cdot m_e}{4pi \cdot epsilon_0 \cdot hbar^{2}}      [L M T^-1]  ≈ 1.25214578745445e-23
+      from: de-broglie-wavelength ≟ bohr-radius  (CE-bohr-radius = CE-de-broglie); solved for p
+      magnitude: no evidence — the identification is promising, magnitude unchecked (the magnitude falsifier never tested it)
+      evidence gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: novel (unadjudicated)
+      observation: measure de-broglie-wavelength and bohr-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.
+      status: conditional identity — holds only if de-broglie-wavelength ≡ bohr-radius (unadjudicated); untested
+      meaning: p is the p of CE-de-broglie (de Broglie wavelength): the p for which de-broglie-wavelength equals bohr-radius (CE-bohr-radius) — an equal-[length] scale; the bohr-radius side is not given a p
+      assumptions carried: CE-bohr-radius: hydrogen-like, non-relativistic; CE-de-broglie: none stated
+      canonical match: none — 2 registry equation(s) target p, 0 with governing {}; scope: this registry only, not physics at large
   IC-parker-radius--peak-wavelength--temperature
       temperature = \frac{2 \cdot b \cdot parker-sound^{2}}{G \cdot parker-mass}      [temperature]  (no sourced sample value for parker-mass, 2, parker-sound; not evaluated)
       from: parker-radius ≟ peak-wavelength  (BE-118 = CE-wien); solved for temperature

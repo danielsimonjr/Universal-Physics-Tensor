@@ -215,7 +215,8 @@ Flags:
         failed (both endpoints have a representative magnitude, and the ratio
         is not fixed by the graph at every anchor); otherwise it is 'promising,
         magnitude unchecked' (promising-unchecked in --json). The two tiers are
-        counted and listed apart and never added.
+        counted and listed apart and never added. Scoped relations already
+        entailed by the equations are listed separately from identity candidates.
         --source=canonical runs the funnel on the standard-physics L-layer
         ALONE (bridges excluded) — new candidates from established physics,
         and a self-consistency check (expect 0 contradictory).
@@ -418,7 +419,8 @@ Flags:
         Pass the same --source (default catalog), --anchor and --max-orders
         as the `upt discover` run that listed the pair.
         Includes downstream substitutions at representative operating points,
-        with their inputs, outcomes and any failed conditions.
+        with their inputs, outcomes and any failed conditions. For an encoded
+        scoped relation, shows the equality condition and source equations.
 Flags:
   --source=VALUE
         Which graph to read: catalog, canonical, or both. Use the same value as the discover run. Default: catalog.

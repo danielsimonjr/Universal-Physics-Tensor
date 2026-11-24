@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 18.2.0
-  totalFiles: 396
+  totalFiles: 397
   totalModules: 13
-  totalExports: 2891
+  totalExports: 2896
 entryPoints:
   - file: src/index.ts
     type: main
@@ -5882,6 +5882,9 @@ modules:
           imports:
             - Dimension
           typeOnly: true
+        - file: ../graphs.js
+          imports:
+            - resolveGraph
       exports:
         - parseDiscoveryOpts
         - formatSubstitution
@@ -6454,8 +6457,8 @@ modules:
       internalDependencies:
         - file: ../args.js
           imports:
+            - shellQuote
             - FlagSpec
-          typeOnly: true
         - file: ../command.js
           imports:
             - registerCommand
@@ -7854,6 +7857,10 @@ modules:
             - proposeLinkCandidates
             - proposeOrphanConnectors
           reExport: true
+        - file: ./composition/quantity-clusters.js
+          imports:
+            - quantityCanonicalizer
+          reExport: true
         - file: ./numerical/formula-registry.js
           imports:
             - getFormulaParser
@@ -7877,6 +7884,10 @@ modules:
           imports:
             - rankDiscoveries
             - ANCHOR_DEFAULT
+          reExport: true
+        - file: ./composition/scoped-relations.js
+          imports:
+            - scopedRelations
           reExport: true
         - file: ./composition/discovery.js
           imports:
@@ -8496,6 +8507,7 @@ modules:
         - linkageMap
         - proposeLinkCandidates
         - proposeOrphanConnectors
+        - quantityCanonicalizer
         - getFormulaParser
         - getFormulaParserKind
         - getFormulaDimensionChecker
@@ -8505,6 +8517,7 @@ modules:
         - formatFrontierAccount
         - rankDiscoveries
         - ANCHOR_DEFAULT
+        - scopedRelations
         - vetLinkCandidate
         - hasMagnitudeEvidence
         - isPromisingTier
@@ -8778,6 +8791,7 @@ modules:
         - linkageMap
         - proposeLinkCandidates
         - proposeOrphanConnectors
+        - quantityCanonicalizer
         - getFormulaParser
         - getFormulaParserKind
         - getFormulaDimensionChecker
@@ -8787,6 +8801,7 @@ modules:
         - formatFrontierAccount
         - rankDiscoveries
         - ANCHOR_DEFAULT
+        - scopedRelations
         - vetLinkCandidate
         - hasMagnitudeEvidence
         - isPromisingTier
@@ -9291,6 +9306,9 @@ modules:
           imports:
             - clusterBySharedKeys
             - quantityCanonicalizer
+        - file: ./scoped-relations.js
+          imports:
+            - scopedRelationPairs
       exports:
         - dimensionalFreedom
         - cleanPrefactorForm
@@ -9597,10 +9615,12 @@ modules:
       exports:
         - CANONICAL_CONSTANTS
         - CANONICAL_GRAPH
+        - canonicalEdgeOrigin
         - canonicalToEdges
       interfaces:
         - ConstantDef
       functions:
+        - canonicalEdgeOrigin
         - canonicalToEdges
       constants:
         - CANONICAL_CONSTANTS
@@ -13484,6 +13504,35 @@ modules:
         - forwardEvaluate
         - retrodictNode
         - retrodict
+    src/composition/scoped-relations.ts:
+      description: Explicit consequences of paired canonical equations under stated restrictions.
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../canonical/registry.js
+          imports:
+            - canonicalById
+        - file: ../core/constants.js
+          imports:
+            - C_SI
+            - M_E_SI
+        - file: ./canonical-graph.js
+          imports:
+            - canonicalEdgeOrigin
+        - file: ./edge.js
+          imports:
+            - evaluateEdge
+            - validityDomain
+            - BridgeEdge
+      exports:
+        - scopedRelationPairs
+        - scopedRelations
+      interfaces:
+        - ScopedRelationControl
+        - ScopedRelation
+      functions:
+        - scopedRelationPairs
+        - scopedRelations
     src/composition/uncertainty.ts:
       description: First-order uncertainty propagation through composition edges
       externalDependencies:
@@ -20049,6 +20098,7 @@ dependencyGraph:
         - src/composition/rational-exponent.ts
         - src/composition/representative-values.ts
         - src/composition/retrodiction.ts
+        - src/composition/scoped-relations.ts
         - src/composition/uncertainty.ts
         - src/composition/user-equation.ts
     - name: Core
@@ -20184,18 +20234,18 @@ dependencyGraph:
         - src/relations/regime.ts
         - src/relations/types.ts
 statistics:
-  totalTypeScriptFiles: 396
+  totalTypeScriptFiles: 397
   totalModules: 13
-  totalLinesOfCode: 91957
-  totalExports: 2891
+  totalLinesOfCode: 92166
+  totalExports: 2896
   totalClasses: 86
-  totalInterfaces: 526
-  totalFunctions: 971
+  totalInterfaces: 528
+  totalFunctions: 974
   totalTypeGuards: 17
   totalEnums: 0
   totalConstants: 404
-  totalReExports: 1421
-  totalTypeOnlyImports: 546
+  totalReExports: 1423
+  totalTypeOnlyImports: 545
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 0

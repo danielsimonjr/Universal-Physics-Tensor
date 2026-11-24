@@ -891,7 +891,7 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         hot-reservoir-temperature ≟ wiedemann-temperature      [[temperature]]  → be-61
     ── CE-compton-shift (isolated):
         compton-wavelength-shift ≟ compton-wavelength          [[length]]  → CE-compton-wavelength
-        compton-wavelength-shift ≟ compton-wavelength-full     [[length]]  → CE-compton-wavelength-full
+        compton-wavelength-shift ≟ de-broglie-wavelength       [[length]]  → CE-de-broglie
         compton-wavelength-shift ≟ optical-wavelength          [[length]]  → CE-double-slit-interference
         compton-wavelength-shift ≟ peak-wavelength             [[length]]  → CE-wien
         compton-wavelength-shift ≟ thermal-wavelength          [[length]]  → CE-thermal-de-broglie
