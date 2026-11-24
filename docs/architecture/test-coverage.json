@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 396,
-    "totalTestFiles": 772,
+    "totalTestFiles": 773,
     "testedCount": 384,
     "directlyTestedCount": 351,
     "untestedCount": 12,
@@ -31981,6 +31981,7 @@
     "tests/tools/test-coverage-columns.test.ts": [],
     "tests/tools/untracked-gate-inputs.test.ts": [],
     "tests/tools/unused-export-consumers.test.ts": [],
-    "tests/tools/vitest-coverage-alignment.test.ts": []
+    "tests/tools/vitest-coverage-alignment.test.ts": [],
+    "tests/tools/wkb-rectangle.test.ts": []
   }
 }

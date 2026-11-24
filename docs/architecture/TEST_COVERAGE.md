@@ -15,7 +15,7 @@ Traced credit through a barrel says the module was LOADED, not that any assertio
 | Metric | Count |
 |--------|-------|
 | Total Source Files | 396 |
-| Total Test Files | 772 |
+| Total Test Files | 773 |
 | Source files imported directly by a test | 351 |
 | Source files reached directly or through a barrel or side-effect import | 384 |
 | Source files no test reaches either way | 12 |
@@ -1227,3 +1227,4 @@ The following 12 source files are reached by no test file, directly or through a
 | `tools/untracked-gate-inputs.test.ts` | 0 files |
 | `tools/unused-export-consumers.test.ts` | 0 files |
 | `tools/vitest-coverage-alignment.test.ts` | 0 files |
+| `tools/wkb-rectangle.test.ts` | 0 files |

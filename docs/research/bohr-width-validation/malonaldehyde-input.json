@@ -1,0 +1,48 @@
+{
+  "cases": [
+    {
+      "id": "malonaldehyde-2008-electronic-pes",
+      "barrierHeightJ": null,
+      "actualWidthM": null,
+      "massKg": null,
+      "attemptFrequencyHz": null,
+      "independentRateHz": null,
+      "reportedSaddleHeightJ": 2.8485551373927034e-20
+    },
+    {
+      "id": "malonaldehyde-2020-modified-guo-pes",
+      "mode": "transmission",
+      "barrierHeightJ": 9.447536496600304e-20,
+      "actualWidthM": 4.8108723742351834e-11,
+      "massKg": 1.67262192369e-27,
+      "attemptFrequencyHz": null,
+      "independentRateHz": null,
+      "samples": [
+        {
+          "barrierHeightJ": 9.446543273671729e-20,
+          "actualWidthM": 4.8081591100701114e-11,
+          "massKg": 1.67262192369e-27,
+          "attemptFrequencyHz": null
+        },
+        {
+          "barrierHeightJ": 9.448529719528878e-20,
+          "actualWidthM": 4.8076536531320455e-11,
+          "massKg": 1.67262192369e-27,
+          "attemptFrequencyHz": null
+        },
+        {
+          "barrierHeightJ": 9.446543273671729e-20,
+          "actualWidthM": 4.814091447035035e-11,
+          "massKg": 1.67262192369e-27,
+          "attemptFrequencyHz": null
+        },
+        {
+          "barrierHeightJ": 9.448529719528878e-20,
+          "actualWidthM": 4.8135853664610185e-11,
+          "massKg": 1.67262192369e-27,
+          "attemptFrequencyHz": null
+        }
+      ]
+    }
+  ]
+}
