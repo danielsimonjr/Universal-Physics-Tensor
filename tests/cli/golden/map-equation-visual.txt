@@ -364,7 +364,8 @@ flowchart LR
     j_CE_thermal_diffusivity --> q_thermal_diffusivity
     j_CE_de_broglie["de Broglie wavelength"]:::law
     q_p --> j_CE_de_broglie
-    j_CE_de_broglie --> q_compton_wavelength
+    q_de_broglie_wavelength(["de-broglie-wavelength"]):::qty
+    j_CE_de_broglie --> q_de_broglie_wavelength
     j_CE_compton_wavelength_full["Compton wavelength"]:::law
     q_mass --> j_CE_compton_wavelength_full
     q_compton_wavelength_full(["compton-wavelength-full"]):::qty
