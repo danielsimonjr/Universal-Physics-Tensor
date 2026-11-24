@@ -109,9 +109,17 @@ async function run(ctx: CommandCtx): Promise<number> {
     const elsewhere = scopes.filter((s) => s.source !== source && proposalIn(s)).map((s) => s.source);
     let sentence = `no discovery candidate pairs '${a}' with '${b}' in any of ${ALL_SOURCES.join(', ')} — ` +
       'they may not share a dimension, or are already connected (not a cross-cluster coincidence).';
-    if (elsewhere.length > 0) {
-      sentence = `'${a}' ≟ '${b}' is not a candidate in the ${source} graph, but it is in ${elsewhere.join(' and ')}`;
-      const retry = elsewhere.find((s) => {
+    const scopedElsewhere = scopes.filter((s) =>
+      s.source !== source && api.scopedRelations(s.graph, [keyA, keyB]).length > 0,
+    ).map((s) => s.source);
+    if (elsewhere.length > 0 || scopedElsewhere.length > 0) {
+      const availability = [
+        ...(elsewhere.length > 0 ? [`a candidate in ${elsewhere.join(' and ')}`] : []),
+        ...(scopedElsewhere.length > 0 ? [`a scoped relation in ${scopedElsewhere.join(' and ')}`] : []),
+      ];
+      const where = scopedElsewhere.length > 0 ? availability.join(' or ') : `in ${elsewhere.join(' and ')}`;
+      sentence = `'${a}' ≟ '${b}' is not a candidate in the ${source} graph, but it is ${where}`;
+      const retry = [...elsewhere, ...scopedElsewhere].find((s) => {
         if (opts.groundTruth === undefined) return true;
         try {
           parseDiscoveryOpts(api, new Map([...args.flags, ['source', [s]]]));
@@ -138,7 +146,8 @@ async function run(ctx: CommandCtx): Promise<number> {
           source,
           anchor: { groundTruth: groundTruthAnchor(api, opts) },
           options: { ...opts },
-          result: { a, b, candidate: null, searched: [...ALL_SOURCES], elsewhere, note: sentence },
+          result: { a, b, candidate: null, searched: [...ALL_SOURCES], elsewhere,
+            ...(scopedElsewhere.length > 0 ? { scopedElsewhere } : {}), note: sentence },
         },
         ctx.write,
       );

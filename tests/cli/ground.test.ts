@@ -214,5 +214,8 @@ it('round-trips a scoped Compton comparison with its controls and equations', as
   expect(relation.sourceEquations).toEqual(['CE-compton-shift', 'CE-compton-wavelength-full']);
   expect(relation.controls.map((c: { equalityConditionMet: boolean }) => c.equalityConditionMet)).toEqual([false, true, false]);
   expect(listed.scopedRelations).toContainEqual(relation);
+  const catalog = await json(['ground', a, b, '--source=catalog']);
+  expect(catalog.result.scopedElsewhere).toEqual(['canonical', 'both']);
+  expect(catalog.result.note).toContain('upt ground --source=canonical');
   expect(listed.result.some((r: { a: string; b: string }) => [r.a, r.b].includes(a) && [r.a, r.b].includes(b))).toBe(false);
 });
