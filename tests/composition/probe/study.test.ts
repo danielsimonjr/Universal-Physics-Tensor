@@ -9,7 +9,7 @@
  * regime-change fixture is the paired check that the same candidate CAN fail,
  * and the pure-noise fixture that the search can come back empty.
  */
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
@@ -20,6 +20,7 @@ import {
   StudyRefusal,
   type ProbeStudyResult,
 } from '../../../src/composition/probe/study.js';
+import * as search from '../../../src/composition/probe/pipeline.js';
 import { buildFixtures, exactPeriod } from '../../fixtures/probe-study/generate.mjs';
 
 const dir = join(dirname(fileURLToPath(import.meta.url)), '../../fixtures/probe-study');
@@ -278,6 +279,33 @@ describe('probe study — synthetic fixtures', () => {
       for (let i = 1; i < n; i++) s += (i % 2 ? 4 : 2) * f(i * h);
       const quad = 4 * Math.sqrt(1.5 / 9.81) * ((s * h) / 3);
       expect(exactPeriod(1.5, 9.81, theta)).toBeCloseTo(quad, 12);
+    }
+  });
+});
+
+describe('study input boundary', () => {
+  it('rejects a gap ID the runner cannot use', () => {
+    const raw = load('pendulum-small-angle');
+    expect(() => parseStudy({ ...raw, gap: { id: 'c1' } })).toThrow(StudyRefusal);
+  });
+
+  it('never derives exploratory search inputs from withheld responses', async () => {
+    const raw = load('pendulum-small-angle');
+    const changed = {
+      ...raw,
+      observations: raw.observations.map((row) => row.role === 'holdout' ? scaleObserved(row, 2) : row),
+    };
+    const spy = vi.spyOn(search, 'runProbeSearch');
+    try {
+      const original = await run(raw);
+      const perturbed = await run(changed);
+      expect(spy.mock.calls).toHaveLength(2);
+      expect(spy.mock.calls[0]).toEqual(spy.mock.calls[1]);
+      expect(perturbed.studyId).not.toBe(original.studyId);
+      expect(perturbed.selected).toBe(original.selected);
+      expect(perturbed.verdict).toBe('refuted-on-holdout');
+    } finally {
+      spy.mockRestore();
     }
   });
 });

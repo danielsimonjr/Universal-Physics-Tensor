@@ -436,6 +436,12 @@ export function parseStudy(raw: unknown, source = 'inline'): ProbeStudy {
     summary: nonEmptyString(gapRaw.summary) ? gapRaw.summary : `study from ${source}`,
   };
   if (!isGapKind(gap.kind)) refuse('gap.kind', `unknown gap kind '${gap.kind}'`);
+  try {
+    makeResidualGap(gap.id, gap.summary, gap.kind);
+  } catch (error) {
+    if (!(error instanceof RangeError)) throw error;
+    refuse('gap', error.message);
+  }
   let alpha = DEFAULT_ALPHA;
   if (raw.criterion !== undefined) {
     if (!isPlainObject(raw.criterion) || typeof raw.criterion.alpha !== 'number') {
@@ -1475,16 +1481,19 @@ export async function runProbeStudy(study: ProbeStudy, opts: ProbeStudyOptions =
   // The search sees the exploratory rows and nothing else.
   const exploratoryRows = sets.exploratory.map((r) => ({ ...r.inputs, [study.target.name]: r.observed }));
   const gap = makeResidualGap(study.gap.id, study.gap.summary, study.gap.kind as Parameters<typeof makeResidualGap>[2]);
+  const target = { name: study.target.name, dim: study.target.dim };
+  const governing = study.governing.map((g) => ({ name: g.name, dim: g.dim }));
+  const searchHash = hashCanonical({ gap, target, governing, exploratoryRows }).slice(0, 12);
   const problem = problemFromResidualGap(
     gap,
-    { name: study.target.name, dim: study.target.dim },
-    study.governing.map((g) => ({ name: g.name, dim: g.dim })),
-    datasetFromRows(exploratoryRows, study.target.name, 'exploratory-fit', `${studyId}#exploratory`),
+    target,
+    governing,
+    datasetFromRows(exploratoryRows, target.name, 'exploratory-fit', `ds-${searchHash}`),
     undefined,
   );
   const search = await runProbeSearch(problem, {
     budget: opts.budget,
-    runId: `dr-${studyId.slice(3)}`,
+    runId: `dr-${searchHash}`,
     now: '1970-01-01T00:00:00.000Z',
   });
 

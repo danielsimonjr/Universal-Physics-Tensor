@@ -9,6 +9,11 @@ nothing validates prose and the next reader cannot tell.
 
 ---
 
+## As of 2026-11-24 (equation-recovery development controls)
+
+- The UPT probe and dimensional baseline each recovered the small-angle pendulum control and were refuted by the held-out change of regime. Both abstained on the pure-noise control. These controls use the pendulum setup and were designed with known answers. They establish the runner's positive and negative paths. Independent curation for a blind score is tracked in #858.
+- Integration found two library defects. Withheld observations changed exploratory search provenance (#856), and the parser accepted gap IDs the runner refused (#857). The paired controls went red before the fixes. The targeted probe and CI workflow suites passed 137 tests afterward.
+
 ## As of 2026-11-24 (persona sessions 40–50)
 
 - Ran all seven rotation personas plus the applied, theoretical, undergraduate and library API perspectives against npm v18.1.0. The findings reproduced on a second installation and were filed as #851–#853. The next rotation persona is the engineering physicist (position 1).
