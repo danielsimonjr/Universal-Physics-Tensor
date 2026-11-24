@@ -3,7 +3,7 @@ metadata:
   version: 18.1.1
   totalFiles: 395
   totalModules: 13
-  totalExports: 2883
+  totalExports: 2884
 entryPoints:
   - file: src/index.ts
     type: main
@@ -7872,6 +7872,10 @@ modules:
           reExport: true
         - file: ./composition/discovery.js
           imports:
+            - vetLinkCandidate
+          reExport: true
+        - file: ./composition/discovery.js
+          imports:
             - hasMagnitudeEvidence
             - isPromisingTier
           reExport: true
@@ -8493,6 +8497,7 @@ modules:
         - formatFrontierAccount
         - rankDiscoveries
         - ANCHOR_DEFAULT
+        - vetLinkCandidate
         - hasMagnitudeEvidence
         - isPromisingTier
         - BRIDGE_EQUATIONS
@@ -8774,6 +8779,7 @@ modules:
         - formatFrontierAccount
         - rankDiscoveries
         - ANCHOR_DEFAULT
+        - vetLinkCandidate
         - hasMagnitudeEvidence
         - isPromisingTier
         - BRIDGE_EQUATIONS
@@ -20089,15 +20095,15 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 395
   totalModules: 13
-  totalLinesOfCode: 91507
-  totalExports: 2883
+  totalLinesOfCode: 91508
+  totalExports: 2884
   totalClasses: 86
   totalInterfaces: 523
   totalFunctions: 966
   totalTypeGuards: 17
   totalEnums: 0
   totalConstants: 404
-  totalReExports: 1418
+  totalReExports: 1419
   totalTypeOnlyImports: 545
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0

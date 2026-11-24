@@ -3464,6 +3464,7 @@ The codebase is organized into the following modules:
 | `./composition/bridge-prediction.js` | `predictMissingBridges` | Re-export |
 | `./composition/frontier-account.js` | `catalogFrontierAccount, formatFrontierAccount` | Re-export |
 | `./composition/discovery.js` | `rankDiscoveries, ANCHOR_DEFAULT` | Re-export |
+| `./composition/discovery.js` | `vetLinkCandidate` | Re-export |
 | `./composition/discovery.js` | `hasMagnitudeEvidence, isPromisingTier` | Re-export |
 | `./bridges/index.js` | `BRIDGE_EQUATIONS` | Re-export |
 | `./composition/audit-coverage.js` | `auditCoverage` | Re-export |
@@ -3589,11 +3590,11 @@ The codebase is organized into the following modules:
   attemptDerivation, dimensionalFreedom, linkageMap, proposeLinkCandidates, proposeOrphanConnectors,
   getFormulaParser, getFormulaParserKind, getFormulaDimensionChecker, parseDimensionSpec,
   predictMissingBridges, catalogFrontierAccount, formatFrontierAccount, rankDiscoveries,
-  ANCHOR_DEFAULT, hasMagnitudeEvidence, isPromisingTier, BRIDGE_EQUATIONS, auditCoverage,
-  CONFRONTATIONS, listConfrontations, runConfrontation, confrontationRigor, rigorDistribution,
-  requestCallerTableConfrontation, catalogEntry, catalogIdNumber, parseBridgeId, primaryRelation,
-  catalogEdgeKey, foldName, quantityRecord, demonstrationEdges, ConfrontationEntry, RigorTier,
-  DomainViolationError, consistencyComparison, ConfrontationOutcome, decidingMeasurement,
+  ANCHOR_DEFAULT, vetLinkCandidate, hasMagnitudeEvidence, isPromisingTier, BRIDGE_EQUATIONS,
+  auditCoverage, CONFRONTATIONS, listConfrontations, runConfrontation, confrontationRigor,
+  rigorDistribution, requestCallerTableConfrontation, catalogEntry, catalogIdNumber, parseBridgeId,
+  primaryRelation, catalogEdgeKey, foldName, quantityRecord, demonstrationEdges, ConfrontationEntry,
+  RigorTier, DomainViolationError, consistencyComparison, ConfrontationOutcome, decidingMeasurement,
   BRIDGE_EVALUATORS, evaluateBridge, DuplicateInputError, InputTypeError, isInputContractError,
   MissingInputError, NonFiniteInputError, UnknownInputError, EvaluatorSpec, EvaluatorParameter,
   resolveEvaluatorInputs, APPLIED_CASES, runAppliedCase, CASE_CONTRACTS, slotForSpelling, AppliedCase,
@@ -7895,9 +7896,9 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 395 |
 | Total Modules | 13 |
-| Total Lines of Code | 91507 |
-| Total Exports | 2883 |
-| Total Re-exports | 1418 |
+| Total Lines of Code | 91508 |
+| Total Exports | 2884 |
+| Total Re-exports | 1419 |
 | Total Classes | 86 |
 | Total Interfaces | 523 |
 | Total Functions | 966 |

@@ -4,8 +4,8 @@
  * and the honest permanent ceiling (no mechanism test, no data test). Lets you
  * interrogate one candidate directly instead of scanning all of `upt discover`.
  *
- * It runs the same funnel as `upt discover` over the same `--source` graph and
- * `--anchor`/`--max-orders` options, so a pair `discover` printed can be
+ * It uses the same proposal and vetting rules as `upt discover` for the requested pair,
+ * with the same `--source` graph and `--anchor`/`--max-orders` options, so a pair can be
  * grounded by repeating those flags. A pair missing from the selected graph is
  * looked up in the others, and a hit is named: a candidate of another scope
  * must not be reported as though it never existed.
@@ -61,8 +61,6 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
 
   const pairs = (c: { a: string; b: string }) => (c.a === a && c.b === b) || (c.a === b && c.b === a);
-  // A graph's funnel runs only when both names are quantities of that graph: a
-  // name no graph carries is answered without running three funnels.
   const quantities = (edges: readonly { target: { name: string }; sources: readonly { name: string }[] }[]): Set<string> =>
     new Set(edges.flatMap((e) => [e.target.name, ...e.sources.map((q) => q.name)]));
   const bothNamed = (edges: Parameters<typeof quantities>[0]): boolean => {
@@ -77,11 +75,12 @@ async function run(ctx: CommandCtx): Promise<number> {
   for (const name of [a, b]) {
     if (!held.has(name)) throw new CliError(`upt ground: '${name}' is not a quantity of any graph (${ALL_SOURCES.join(', ')})`);
   }
-  const cand = bothNamed(graph) ? api.rankDiscoveries(graph, opts).find(pairs) : undefined;
+  const proposal = bothNamed(graph) ? api.proposeLinkCandidates(graph).find(pairs) : undefined;
+  const cand = proposal && api.vetLinkCandidate(graph, proposal, opts);
   if (!cand) {
     const elsewhere = ALL_SOURCES.filter((s) => s !== source).filter((s) => {
       const other = graphs[ALL_SOURCES.indexOf(s)]!;
-      return bothNamed(other) && api.rankDiscoveries(other, opts).some(pairs);
+      return bothNamed(other) && api.proposeLinkCandidates(other).some(pairs);
     });
     const anchorFlags = (args.flags.get('anchor') ?? []).map((v) => ` --anchor=${v}`).join('');
     const ordersFlag = args.flags.has('max-orders') ? ` --max-orders=${args.flags.get('max-orders')!.at(-1)}` : '';

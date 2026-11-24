@@ -60,6 +60,8 @@ export { parseDimensionSpec } from './dimensional/dimension-spec.js';
 export { predictMissingBridges } from './composition/bridge-prediction.js';
 export { catalogFrontierAccount, formatFrontierAccount } from './composition/frontier-account.js';
 export { rankDiscoveries, ANCHOR_DEFAULT } from './composition/discovery.js';
+/** Apply the discovery funnel's vetting rules to one proposed quantity pair. */
+export { vetLinkCandidate } from './composition/discovery.js';
 /** The one magnitude-evidence predicate behind the two promising tiers, and the selector of both tiers. */
 export { hasMagnitudeEvidence, isPromisingTier } from './composition/discovery.js';
 export { BRIDGE_EQUATIONS } from './bridges/index.js';
