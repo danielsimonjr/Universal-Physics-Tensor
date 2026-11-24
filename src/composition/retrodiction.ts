@@ -39,7 +39,7 @@ import { meanOf } from '../numerical/statistics.js';
 import type { QuantityIdentification } from './compose.js';
 import { QUANTITY_IDENTIFICATIONS } from './compose.js';
 import { conventionFactor } from '../dimensional/unit-convention.js';
-import { classifyAll } from './identifiability.js';
+import { classifyAll, forwardClosure } from './identifiability.js';
 
 /**
  * Source values, plus a dimensionless group the edge multiplies when the
@@ -199,6 +199,7 @@ export function forwardEvaluate(
   groundTruth: Readonly<Record<string, number>>,
   idents: readonly QuantityIdentification[],
   producers?: Map<string, RecoveryStep>,
+  refusedEdges?: Map<string, RetrodictionRefusal>,
 ): Map<string, number> {
   // Finite-seed guard (matches the computed-value guard below and the
   // library-wide finiteness discipline): a NaN/∞ seed would propagate silently
@@ -240,7 +241,9 @@ export function forwardEvaluate(
         // that has no finite value there) or an unset coefficient is "the edge does not
         // fire". Anything else (an alias conflict, a TypeError in an evaluator) is a
         // different fact and is not hidden as a non-derivation (9.0.0 audit §4 C6).
-        if (!refusesThePoint(err)) throw err;
+        const kind = refusalKind(err);
+        if (kind === undefined) throw err;
+        refusedEdges?.set(e.id, { edge: e.id, kind, reason: (err as Error).message });
         continue;
       }
       if (Number.isFinite(v)) {
@@ -251,6 +254,38 @@ export function forwardEvaluate(
     }
   }
   return values;
+}
+
+/** Find recorded refusals on structurally reachable routes blocked by missing values. */
+function upstreamRefusals(
+  edges: readonly BridgeEdge[],
+  idents: readonly QuantityIdentification[],
+  seeds: readonly string[],
+  values: ReadonlyMap<string, number>,
+  target: string,
+  refusedEdges: ReadonlyMap<string, RetrodictionRefusal>,
+): RetrodictionRefusal[] {
+  const reachable = forwardClosure(
+    edges.filter((edge) => edge.target.name !== target), seeds,
+    idents.filter((id) => id.to !== target),
+  );
+  const visited = new Set<string>();
+  const refusals = new Map<string, RetrodictionRefusal>();
+  const visit = (name: string): void => {
+    if (values.has(name) || visited.has(name)) return;
+    visited.add(name);
+    for (const edge of edges) {
+      if (edge.target.name !== name || !edge.sources.every((source) => reachable.has(source.name))) continue;
+      const refusal = refusedEdges.get(edge.id);
+      if (refusal !== undefined) refusals.set(edge.id, refusal);
+      else for (const source of edge.sources) visit(source.name);
+    }
+    for (const id of idents) {
+      if (id.to === name && reachable.has(id.from)) visit(id.from);
+    }
+  };
+  visit(target);
+  return [...refusals.values()];
 }
 
 /**
@@ -273,7 +308,8 @@ export function retrodictNode(
   const edgesMinusIntoTarget = edges.filter((e) => e.target.name !== target);
   const producers = opts.includeRoutes === true ? new Map<string, RecoveryStep>() : undefined;
   const seeds = Object.fromEntries(Object.entries(groundTruth).filter(([name]) => name !== target));
-  const values = forwardEvaluate(edgesMinusIntoTarget, seeds, idents.filter((id) => id.to !== target), producers);
+  const refusedEdges = new Map<string, RetrodictionRefusal>();
+  const values = forwardEvaluate(edgesMinusIntoTarget, seeds, idents.filter((id) => id.to !== target), producers, refusedEdges);
 
   const predictions: RetrodictionPrediction[] = [];
   const refusals: RetrodictionRefusal[] = [];
@@ -318,6 +354,10 @@ export function retrodictNode(
       value,
       ...(route === undefined ? {} : { route }),
     });
+  }
+
+  if (predictions.length === 0 && refusedEdges.size > 0) {
+    refusals.push(...upstreamRefusals(edges, idents, Object.keys(seeds), values, target, refusedEdges));
   }
 
   let relativeSpread = 0;

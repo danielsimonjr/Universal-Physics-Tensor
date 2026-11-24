@@ -94,3 +94,19 @@ describe('textbook coverage', () => {
     expect(() => evaluate('CE-tolman-oppenheimer-volkoff', { ...input, 'areal-radius': 1e3 })).toThrow();
   });
 });
+
+it('retains the physical scale across the thermal limits', () => {
+  const frequency = 1e-100;
+  const temperature = 300;
+  const planck = CATALOG_GRAPH.find((edge) => edge.id === 'be-164')!;
+  const einstein = CATALOG_GRAPH.find((edge) => edge.id === 'be-91')!;
+  const expected = 8 * Math.PI * K_B_SI * temperature * (frequency / C_SI) ** 2 / C_SI;
+  expect(evaluate('CE-planck-blackbody-spectrum', { frequency, temperature }) / expected).toBeCloseTo(1, 12);
+  expect(evaluateEdge(planck, { 'planck-frequency': frequency, 'planck-warmth': temperature }) / expected).toBeCloseTo(1, 12);
+  const capacity = (T: number, theta: number) => evaluateEdge(einstein, {
+    'einstein-atom-count': 1, 'einstein-solid-temperature': T, 'einstein-theta': theta,
+  });
+  expect(capacity(300, 1e-15) / (3 * K_B_SI)).toBeCloseTo(1, 14);
+  expect(capacity(1, 700)).toBe(2.001e-321);
+  expect(capacity(1, 1000)).toBe(0);
+});

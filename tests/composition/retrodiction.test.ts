@@ -296,6 +296,22 @@ describe('an evaluator error keeps its kind (9.0.0 audit §4 C6)', () => {
     expect(values.has('z')).toBe(false);
   });
 
+  it('retains only upstream refusals that prevent recovery', () => {
+    const blocked = mk('outside', ['x'], 'y', (i) => i.x, { domain: validityDomain('x < 0') });
+    const unrelated = mk('unrelated', ['x'], 'u', (i) => i.x, { domain: validityDomain('x < 0') });
+    const terminal = mk('terminal', ['y'], 't', (i) => i.y);
+    const edges = [blocked, unrelated, terminal];
+    const seeds = { x: 1 };
+    const opts = { identifications: [] };
+    expect(retrodictNode(edges, seeds, 't', opts).refusals).toEqual([
+      expect.objectContaining({ edge: 'outside', kind: 'domain' }),
+    ]);
+    const alternate = mk('alternate', ['x'], 'y', (i) => i.x);
+    const recovered = retrodictNode([...edges, alternate], seeds, 't', opts);
+    expect(recovered.predictions).toEqual([{ edge: 'terminal', value: 1 }]);
+    expect(recovered.refusals).toBeUndefined();
+  });
+
   it('retrodictNode records a carrier-sign rejection and a formula refusal as refusals of their own kind', () => {
     const edges = [
       mk('a', ['x'], 't', (i) => i['x']),

@@ -712,10 +712,9 @@ export function explainQuantity(
   // finite value there) is a bad value and is named with the edge's own reason. An unset
   // coefficient is not: `unsetSentence` already says it in words (AGENTS law 4).
   const domainRefusals = (refusals ?? []).filter((r) => r.kind !== 'coefficient-unset');
-  const refusalSentence =
-    domainRefusals.length === 0 || recoveredValue !== undefined
-      ? ''
-      : ` No recovered value: ${domainRefusals.map((r) => r.reason).join('; ')}.`;
+  const refusalSummary = domainRefusals.length === 0 || recoveredValue !== undefined
+    ? undefined
+    : `No recovered value for '${target}': ${domainRefusals.map((r) => r.reason).join('; ')}.`;
 
   const grades = derivations.flatMap((d) => d.confidence === undefined ? [] : [d.confidence]);
   const confidence = recoveredValue === undefined || grades.length === 0
@@ -733,6 +732,6 @@ export function explainQuantity(
     ...(dimensional ? { dimensional } : {}),
     ...(refusals !== undefined ? { refusals } : {}),
     blockingFrontier: identifiability.blockingFrontier,
-    summary: summary + refusalSentence,
+    summary: refusalSummary ?? summary,
   };
 }

@@ -19768,7 +19768,8 @@
           {
             "file": "./identifiability.js",
             "imports": [
-              "classifyAll"
+              "classifyAll",
+              "forwardClosure"
             ]
           }
         ],
@@ -29000,7 +29001,7 @@
   "statistics": {
     "totalTypeScriptFiles": 395,
     "totalModules": 13,
-    "totalLinesOfCode": 91423,
+    "totalLinesOfCode": 91466,
     "totalExports": 2882,
     "totalClasses": 86,
     "totalInterfaces": 523,
