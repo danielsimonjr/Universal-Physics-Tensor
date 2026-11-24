@@ -986,6 +986,21 @@ function testRows(rows: readonly StudyObservation[], predict: Predictor, fitted:
   return { n: rows.length, chi2, dof, p, maxAbsZ, worstRow, pass: p === null ? null : p >= alpha };
 }
 
+/** Score a frozen predictor without fitting parameters. A missing prediction leaves the whole partition unscored. @internal */
+export function scoreStudyPredictions(
+  rows: readonly StudyObservation[],
+  predict: (inputs: StudyObservation['inputs']) => number | undefined,
+  alpha: number,
+): SetTest | null {
+  const values = new Map<StudyObservation['inputs'], number>();
+  for (const row of rows) {
+    const value = predict(row.inputs);
+    if (value === undefined) return null;
+    values.set(row.inputs, value);
+  }
+  return testRows(rows, (inputs) => values.get(inputs) ?? predict(inputs) ?? NaN, 0, alpha);
+}
+
 const combine = (basis: readonly Predictor[], coef: readonly number[]): Predictor =>
   (x) => basis.reduce((s, b, j) => s + coef[j]! * b(x), 0);
 

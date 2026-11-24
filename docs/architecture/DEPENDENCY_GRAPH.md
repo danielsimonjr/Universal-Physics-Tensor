@@ -5202,8 +5202,8 @@ The codebase is organized into the following modules:
 
   ```text
   parseStudy, loadStudyFromJson, loadStudyFile, attachReplication, replicationIndependence,
-  studyCsvToRaw, chiSquareSurvival, chiSquareCdf, fSurvival, effectiveSigma, runProbeStudy,
-  formatProbeStudy
+  studyCsvToRaw, chiSquareSurvival, chiSquareCdf, fSurvival, effectiveSigma, scoreStudyPredictions,
+  runProbeStudy, formatProbeStudy
   ```
 
 
@@ -7895,12 +7895,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 395 |
 | Total Modules | 13 |
-| Total Lines of Code | 91492 |
-| Total Exports | 2882 |
+| Total Lines of Code | 91507 |
+| Total Exports | 2883 |
 | Total Re-exports | 1418 |
 | Total Classes | 86 |
 | Total Interfaces | 523 |
-| Total Functions | 965 |
+| Total Functions | 966 |
 | Total Type Guards | 17 |
 | Total Enums | 0 |
 | Type-only Imports | 545 |

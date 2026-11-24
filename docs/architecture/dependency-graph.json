@@ -4,7 +4,7 @@
     "version": "18.1.1",
     "totalFiles": 395,
     "totalModules": 13,
-    "totalExports": 2882
+    "totalExports": 2883
   },
   "entryPoints": [
     {
@@ -19197,6 +19197,7 @@
           "chiSquareCdf",
           "fSurvival",
           "effectiveSigma",
+          "scoreStudyPredictions",
           "runProbeStudy",
           "formatProbeStudy",
           "StudyRefusal"
@@ -19234,6 +19235,7 @@
           "chiSquareCdf",
           "fSurvival",
           "effectiveSigma",
+          "scoreStudyPredictions",
           "runProbeStudy",
           "formatProbeStudy"
         ]
@@ -29000,11 +29002,11 @@
   "statistics": {
     "totalTypeScriptFiles": 395,
     "totalModules": 13,
-    "totalLinesOfCode": 91492,
-    "totalExports": 2882,
+    "totalLinesOfCode": 91507,
+    "totalExports": 2883,
     "totalClasses": 86,
     "totalInterfaces": 523,
-    "totalFunctions": 965,
+    "totalFunctions": 966,
     "totalTypeGuards": 17,
     "totalEnums": 0,
     "totalConstants": 404,
@@ -29013,6 +29015,6 @@
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 0,
-    "unusedExportsCount": 34
+    "unusedExportsCount": 35
   }
 }

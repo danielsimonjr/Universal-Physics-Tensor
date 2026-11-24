@@ -3,7 +3,7 @@ metadata:
   version: 18.1.1
   totalFiles: 395
   totalModules: 13
-  totalExports: 2882
+  totalExports: 2883
 entryPoints:
   - file: src/index.ts
     type: main
@@ -12997,6 +12997,7 @@ modules:
         - chiSquareCdf
         - fSurvival
         - effectiveSigma
+        - scoreStudyPredictions
         - runProbeStudy
         - formatProbeStudy
         - StudyRefusal
@@ -13031,6 +13032,7 @@ modules:
         - chiSquareCdf
         - fSurvival
         - effectiveSigma
+        - scoreStudyPredictions
         - runProbeStudy
         - formatProbeStudy
     src/composition/probe/t-tail.ts:
@@ -20087,11 +20089,11 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 395
   totalModules: 13
-  totalLinesOfCode: 91492
-  totalExports: 2882
+  totalLinesOfCode: 91507
+  totalExports: 2883
   totalClasses: 86
   totalInterfaces: 523
-  totalFunctions: 965
+  totalFunctions: 966
   totalTypeGuards: 17
   totalEnums: 0
   totalConstants: 404
@@ -20100,4 +20102,4 @@ statistics:
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 0
-  unusedExportsCount: 34
+  unusedExportsCount: 35
