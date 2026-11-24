@@ -39,7 +39,7 @@ import type { QuantityIdentification } from './compose.js';
 import { QUANTITY_IDENTIFICATIONS, effectiveAttributes } from './compose.js';
 import { GATE_AXES } from './axes.js';
 import type { RegimeAttributes } from './quantity.js';
-import { classifyIdentifiability, forwardClosure, propagate } from './identifiability.js';
+import { forwardClosure, propagate } from './identifiability.js';
 import { retrodict, retrodictNode, forwardEvaluate } from './retrodiction.js';
 import { proposeLinkCandidates } from './bridge-analysis.js';
 import type { LinkCandidate } from './bridge-analysis.js';
@@ -444,6 +444,8 @@ export interface DiscoveryContext {
    * so that candidate's numeric report is this one.
    */
   readonly baseInconsistentNodes: readonly string[];
+  /** Targets with enough incoming equations to become over-determined. */
+  readonly incomingAlternatives: ReadonlyMap<string, readonly (readonly string[])[]>;
 }
 
 /** Resolve options and compute the candidate-invariant discovery state once.
@@ -458,6 +460,15 @@ export function buildDiscoveryContext(
   const baseReport = retrodict(edges, groundTruth, { identifications: baseIdents });
   const repVals = opts.representativeValues ?? REPRESENTATIVE_VALUES;
   const constantValues = forwardEvaluate(edges, {}, baseIdents);
+  const incoming = new Map<string, string[][]>();
+  for (const edge of edges) {
+    const target = edge.target.name;
+    const previous = incoming.get(target);
+    const sources = edge.sources.map((source) => source.name);
+    if (previous === undefined) incoming.set(target, [sources]);
+    else previous.push(sources);
+  }
+  const incomingAlternatives = new Map([...incoming].filter(([, routes]) => routes.length >= 2));
   return {
     baseIdents,
     groundTruth,
@@ -483,6 +494,7 @@ export function buildDiscoveryContext(
     ),
     comps: quantityComponents(edges, baseIdents),
     closureBase: forwardClosure(edges, anchor, baseIdents),
+    incomingAlternatives,
     baseInconsistentNodes: baseReport.results
       .filter((r) => r.outcome === 'inconsistent')
       .map((r) => r.target)
@@ -516,18 +528,25 @@ export function dependents(
  */
 function newInconsistencies(
   edges: readonly BridgeEdge[],
-  groundTruth: Readonly<Record<string, number>>,
-  anchor: readonly string[],
   candidate: LinkCandidate,
   withHyp: readonly QuantityIdentification[],
-  baseInconsistentNodes: readonly string[],
+  closure: ReadonlySet<string>,
+  ctx: DiscoveryContext,
 ): string[] {
+  const { groundTruth, anchor, baseInconsistentNodes, incomingAlternatives } = ctx;
   const base = new Set(baseInconsistentNodes);
   const nodes: string[] = [];
   for (const target of [...dependents(edges, [candidate.a, candidate.b], withHyp)].sort()) {
-    if (base.has(target)) continue;
-    const classified = classifyIdentifiability(edges, anchor, target, { identifications: withHyp });
-    if (classified.verdict !== 'over-determined') continue;
+    if (base.has(target) || anchor.includes(target)) continue;
+    const incoming = incomingAlternatives.get(target);
+    if (incoming === undefined) continue;
+    const reachable = incoming.filter((sources) => sources.every((source) => closure.has(source)));
+    if (reachable.length < 2) continue;
+    // The full classifier can label a rank-only target determined, but it
+    // cannot call it over-determined without two forward derivations.
+    // Recheck the viable routes after removing their own target producers.
+    const masked = forwardClosure(edges.filter((edge) => edge.target.name !== target), anchor, withHyp);
+    if (reachable.filter((sources) => sources.every((source) => masked.has(source))).length < 2) continue;
     const result = retrodictNode(edges, groundTruth, target, { identifications: withHyp });
     if (result.outcome === 'inconsistent') nodes.push(target);
   }
@@ -679,13 +698,11 @@ export function vetInContext(
 ): VettedCandidate {
   const {
     baseIdents,
-    groundTruth,
     anchor,
     anchorValuesProbe,
     comps,
     closureBase,
     attributesByName,
-    baseInconsistentNodes,
   } = ctx;
 
   // Magnitude gate: an INDEPENDENT falsifier the single-anchor graph can't make
@@ -795,7 +812,7 @@ export function vetInContext(
   // every other target's retrodiction is the base one, so only those targets
   // are retrodicted (§4 C9).
   const inconsistentNodes = touchesClosure
-    ? newInconsistencies(edges, groundTruth, anchor, candidate, withHyp, baseInconsistentNodes)
+    ? newInconsistencies(edges, candidate, withHyp, closureHyp, ctx)
     : [];
   const numericallyConsistent = inconsistentNodes.length === 0;
 

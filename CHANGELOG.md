@@ -8,6 +8,12 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
+## [18.1.1] - 2026-11-24
+
+### Changed
+
+- Graph discovery uses indexed incoming equations and checks for independent derivations before running numerical retrodiction. The combined catalog and canonical discovery CLI had a median runtime of 1.94 s versus 6.54 s on the previous default branch (3.38× faster across five paired invocations with Node.js 24).
+
 ### Fixed
 
 - Planck spectral density and Einstein-solid heat capacity preserve representable results across the reported low- and high-argument limits.
