@@ -87,7 +87,7 @@ Regenerate: `repo-tools map . --out=<dir>` · Check: `repo-tools check . --docs=
 
 | Claim | Value | Source |
 |---|---|---|
-| totalSourceFiles | 1280 | `dependency-graph.json` `statistics.totalSourceFiles` |
+| totalSourceFiles | 1283 | `dependency-graph.json` `statistics.totalSourceFiles` |
 | totalExports | 3964 | `dependency-graph.json` `statistics.totalExports` |
 | runtimeCircularDeps | 0 | `dependency-graph.json` `statistics.runtimeCircularDeps` |
 | typeOnlyCircularDeps | 0 | `dependency-graph.json` `statistics.typeOnlyCircularDeps` |

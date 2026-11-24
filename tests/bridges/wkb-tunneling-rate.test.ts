@@ -9,6 +9,8 @@
  * refuses it.
  */
 import '../helpers/dist.js';
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { catalogRelations } from '../../src/bridges/catalog-load.js';
 import { evaluateFormula } from '../../src/bridges/expr-parse.js';
@@ -95,5 +97,58 @@ describe('be-26-wkb: the bare WKB tunneling rate', () => {
     });
     expect(code).toBe(2);
     expect(err.join('\n')).toMatch(/'be-26-wkb' is not a bridge id/);
+  });
+});
+
+
+describe('paired Bohr-width review', () => {
+  it('handles missing source values and runs both paired widths through the same guard', () => {
+    const point = { massKg: PROTON, actualWidthM: L, barrierHeightJ: V, attemptFrequencyHz: 1e13 };
+    const run = spawnSync(process.execPath, [fileURLToPath(new URL('../../tools/bohr-width-review.mjs', import.meta.url))], {
+      input: JSON.stringify({ cases: [
+        { id: 'unresolved-source', actualWidthM: null, barrierHeightJ: null, reportedSaddleHeightJ: V },
+        { id: 'synthetic', ...point, samples: [point, { ...point, barrierHeightJ: 1e-20 }] },
+      ] }),
+      encoding: 'utf8',
+    });
+    expect(run.status, run.stderr).toBe(0);
+    const [unresolved, synthetic] = JSON.parse(run.stdout).cases;
+    expect(unresolved).toMatchObject({
+      reportedSaddleHeightJ: V,
+      nominal: { actual: { status: 'unresolved' }, comparison: { status: 'unresolved' } },
+      independentRate: { status: 'unresolved' },
+    });
+    expect(synthetic.nominal.actual.rateHz).toBeCloseTo(gamma(REFERENCE), 10);
+    expect(synthetic.nominal.bohr.rateHz).toBeCloseTo(gamma({
+      ...REFERENCE, 'barrier-width': synthetic.nominal.bohr.widthM,
+    }), 5);
+    expect(synthetic.nominal.comparison.rateRatio).toBeCloseTo(
+      synthetic.nominal.bohr.rateHz / synthetic.nominal.actual.rateHz, 4,
+    );
+    expect(synthetic.uncertainty).toMatchObject({ sampleCount: 2, comparedCount: 1, comparedFraction: 0.5 });
+    expect(synthetic.uncertainty.samples[1]).toMatchObject({
+      actual: { status: 'admitted' },
+      bohr: { status: 'refused' },
+      comparison: { status: 'refused' },
+    });
+    expect(synthetic.uncertainty.samples[1].comparison).not.toHaveProperty('logRateRatio');
+    expect(synthetic.uncertainty.samples[1].actual.logRate).toBeGreaterThan(0);
+  });
+
+  it('normalizes transmission with no kinetic prefactor, including joint samples', () => {
+    const point = { massKg: PROTON, actualWidthM: L, barrierHeightJ: V };
+    const run = spawnSync(process.execPath, [fileURLToPath(new URL('../../tools/bohr-width-review.mjs', import.meta.url))], {
+      input: JSON.stringify({ cases: [{ id: 'transmission', mode: 'transmission', ...point, samples: [point] }] }),
+      encoding: 'utf8',
+    });
+    expect(run.status, run.stderr).toBe(0);
+    const [result] = JSON.parse(run.stdout).cases;
+    expect(result.mode).toBe('transmission');
+    expect(result.nominal.inputs.attemptFrequencyHz).toBeNull();
+    expect(result.nominal.actual.transmission).toBeCloseTo(gamma({ ...REFERENCE, 'attempt-frequency': 1 }), 20);
+    expect(result.nominal.actual.logTransmission).toBeCloseTo(-2 * kappaL(PROTON, L), 10);
+    expect(result.nominal.actual).not.toHaveProperty('rateHz');
+    expect(result.nominal.comparison.transmissionRatio).toBeGreaterThan(1);
+    expect(result.uncertainty.comparedCount).toBe(1);
   });
 });
