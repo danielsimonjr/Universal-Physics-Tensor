@@ -4,14 +4,28 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
 ⚠ a REVIEW SURFACE: `promising` means "worth a physicist's minute", not "true".
   Each candidate hypothesises an identification a≡b and tests its consequences.
 
-  funnel:  830 candidates  →  0 promising  ·  223 promising, magnitude unchecked  ·  582 inert  ·  24 magnitude-clash  ·  0 contradictory (numerically falsified)  ·  1 axis-clash
+  funnel:  848 candidates  →  0 promising  ·  225 promising, magnitude unchecked  ·  598 inert  ·  24 magnitude-clash  ·  0 contradictory (numerically falsified)  ·  1 axis-clash
   readiness of the 0 promising: 0 mechanism-tested · 0 data-tested · 0 without magnitude evidence · 0 with axis unresolved · 0 with an entailed consequence
-  readiness of the 223 promising, magnitude unchecked: 0 mechanism-tested · 0 data-tested · 223 without magnitude evidence · 223 with axis unresolved · 0 with an entailed consequence
+  readiness of the 225 promising, magnitude unchecked: 0 mechanism-tested · 0 data-tested · 225 without magnitude evidence · 225 with axis unresolved · 0 with an entailed consequence
   promising ≠ evidence: promotion to a bridge needs a mechanism and a falsifiable prediction.
 
   no candidate is `promising` (with magnitude evidence) from the anchor above.
 
   PROMISING, MAGNITUDE UNCHECKED (the same structure; the magnitude falsifier abstained or its pass is fixed by the graph at every anchor, so it never tested the row):
+    classical-electron-radius ≟ de-broglie-wavelength    [[length]]  score 6
+        unlocks: de-broglie-wavelength
+        [consequence: novel-consequence]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: novel (unadjudicated) · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: classical-electron-radius and de-broglie-wavelength are the same physical quantity, not only both [length] · needs a representative magnitude for: de-broglie-wavelength · needs a stated scale regime for: classical-electron-radius, de-broglie-wavelength · needs a stated force regime for: classical-electron-radius, de-broglie-wavelength · needs a consequence that re-derives a known law]
+        [observation: measure classical-electron-radius and de-broglie-wavelength in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    de-broglie-wavelength ≟ bohr-radius                  [[length]]  score 6
+        unlocks: de-broglie-wavelength
+        [consequence: novel-consequence]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: novel (unadjudicated) · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: de-broglie-wavelength and bohr-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: de-broglie-wavelength · needs a stated scale regime for: de-broglie-wavelength, bohr-radius · needs a stated force regime for: de-broglie-wavelength, bohr-radius · needs a consequence that re-derives a known law]
+        [observation: measure de-broglie-wavelength and bohr-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     erasure-energy ≟ mean-energy-above-ground            [[energy]]  score 8
         unlocks: mean-energy-above-ground, orthogonalization-time-lower-bound
         [consequence: inconclusive]
@@ -131,13 +145,6 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: compton-wavelength and optical-wavelength are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: optical-wavelength · needs a stated scale regime for: compton-wavelength, optical-wavelength · needs a stated force regime for: compton-wavelength, optical-wavelength · needs a consequence that re-derives a known law]
         [observation: measure compton-wavelength and optical-wavelength in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
-    compton-wavelength-full ≟ compton-wavelength-shift   [[length]]  score 7
-        unlocks: compton-wavelength-shift
-        [consequence: inconclusive]
-        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
-        [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
-        [to make it testable — premise: compton-wavelength-full and compton-wavelength-shift are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: compton-wavelength-shift · needs a stated scale regime for: compton-wavelength-full, compton-wavelength-shift · needs a stated force regime for: compton-wavelength-full, compton-wavelength-shift · needs a consequence that re-derives a known law]
-        [observation: measure compton-wavelength-full and compton-wavelength-shift in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     compton-wavelength-full ≟ optical-wavelength         [[length]]  score 7
         unlocks: optical-wavelength
         [consequence: inconclusive]
@@ -1083,6 +1090,13 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: planck-length and compton-wavelength-shift are the same physical quantity, not only both [length] · needs a representative magnitude for: compton-wavelength-shift · needs a stated scale regime for: compton-wavelength-shift · needs a stated force regime for: compton-wavelength-shift · needs a consequence that re-derives a known law]
         [observation: measure planck-length and compton-wavelength-shift in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    planck-length ≟ de-broglie-wavelength                [[length]]  score 6
+        unlocks: de-broglie-wavelength
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: planck-length and de-broglie-wavelength are the same physical quantity, not only both [length] · needs a representative magnitude for: de-broglie-wavelength · needs a stated scale regime for: de-broglie-wavelength · needs a stated force regime for: de-broglie-wavelength · needs a consequence that re-derives a known law]
+        [observation: measure planck-length and de-broglie-wavelength in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     planck-length ≟ deviation-from-mean                  [[length]]  score 6
         unlocks: deviation-from-mean
         [consequence: inconclusive]
@@ -1559,7 +1573,7 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: work and rydberg-energy are the same physical quantity, not only both [energy] · needs a representative magnitude for: work · needs a stated scale regime for: work, rydberg-energy · needs a stated force regime for: work, rydberg-energy · needs a consequence that re-derives a known law]
         [observation: measure work and rydberg-energy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
-  adjudicated: 2 of the 223 promising, magnitude unchecked carry recorded verdicts (1 decoy, 1 entailed) — folded; --show-adjudicated to list
+  adjudicated: 2 of the 225 promising, magnitude unchecked carry recorded verdicts (1 decoy, 1 entailed) — folded; --show-adjudicated to list
 
   MAGNITUDE-CLASH (representative values differ by > N orders — a falsifier; p is the falsifier's strength at the values' stated σ, 2Φ(−orders/√(σa²+σb²)), not a credibility score):
     A ≟ thomson-cross-section                            ~36.2 orders apart, p = 1.2e-144  (anchor-derived)
@@ -1624,6 +1638,11 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
 
   AXIS-CLASH (stated scale/force labels differ: a regime-label prior, not a physical test):
     semi-major-axis ≟ planck-length                      scale: classical ≠ quantum
+
+  SCOPED RELATIONS (entailed by the named equations):
+    compton-wavelength-shift / compton-wavelength-full = 1 - cos(scattering-angle); equal when scattering-angle == pi/2
+    de-broglie-wavelength / compton-wavelength-full = mass * c / p; equal when p == mass * c
+    de-broglie-wavelength / compton-wavelength = 2 * pi * mass * c / p; equal when p == (2 * pi) * (mass * c)
 
   (magnitude gate abstains where a representative value is unknown, and such a row is at most 'promising, magnitude unchecked'; weak priors on dimension.)
   (inspect one candidate: upt ground --source=canonical <a> <b>, with the same --anchor/--max-orders)

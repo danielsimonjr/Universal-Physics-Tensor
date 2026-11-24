@@ -565,7 +565,8 @@ digraph PhysicsMap {
     j_CE_thermal_diffusivity -> q_thermal_diffusivity;
     j_CE_de_broglie [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="de Broglie wavelength"];
     q_p -> j_CE_de_broglie;
-    j_CE_de_broglie -> q_compton_wavelength;
+    q_de_broglie_wavelength [shape=ellipse,label="de-broglie-wavelength"];
+    j_CE_de_broglie -> q_de_broglie_wavelength;
     j_CE_compton_wavelength_full [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Compton wavelength"];
     q_mass -> j_CE_compton_wavelength_full;
     q_compton_wavelength_full [shape=ellipse,label="compton-wavelength-full"];

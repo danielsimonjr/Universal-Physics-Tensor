@@ -148,11 +148,11 @@ describe('the live graphs, pinned once', () => {
 
   it('layout communities of the canonical and both graphs', () => {
     const canonical = communitiesOf(CANONICAL_GRAPH);
-    expect(canonical.componentSize).toBe(133);
-    expect(canonical.communities.map((c) => c.size)).toEqual([30, 22, 16, 15, 14, 12, 10, 8, 6]);
+    expect(canonical.componentSize).toBe(134);
+    expect(canonical.communities.map((c) => c.size)).toEqual([31, 22, 16, 15, 14, 12, 10, 8, 6]);
     const both = communitiesOf([...CATALOG_GRAPH, ...CANONICAL_GRAPH]);
-    expect(both.componentSize).toBe(193);
-    expect(both.communities.map((c) => c.size)).toEqual([43, 29, 27, 21, 19, 18, 11, 9, 7, 5, 4]);
+    expect(both.componentSize).toBe(194);
+    expect(both.communities.map((c) => c.size)).toEqual([44, 29, 27, 21, 19, 18, 11, 9, 7, 5, 4]);
   });
 
   it('hubs by betweenness on the catalog graph: temperature, then mass', async () => {

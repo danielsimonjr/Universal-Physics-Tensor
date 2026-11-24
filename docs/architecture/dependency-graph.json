@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "18.2.0",
-    "totalFiles": 396,
+    "totalFiles": 397,
     "totalModules": 13,
-    "totalExports": 2891
+    "totalExports": 2897
   },
   "entryPoints": [
     {
@@ -6593,6 +6593,13 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
+            "file": "../../core/constants.js",
+            "imports": [
+              "C_SI",
+              "M_E_SI"
+            ]
+          },
+          {
             "file": "../canonical-equation.js",
             "imports": [
               "CanonicalEquation"
@@ -6632,10 +6639,12 @@
           }
         ],
         "exports": [
-          "ATOMIC"
+          "ATOMIC",
+          "ATOMIC_SCOPED_RELATIONS"
         ],
         "constants": [
-          "ATOMIC"
+          "ATOMIC",
+          "ATOMIC_SCOPED_RELATIONS"
         ]
       },
       "src/canonical/entries/condensed-matter.ts": {
@@ -8519,6 +8528,12 @@
               "Dimension"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "../graphs.js",
+            "imports": [
+              "resolveGraph"
+            ]
           }
         ],
         "exports": [
@@ -9482,9 +9497,9 @@
           {
             "file": "../args.js",
             "imports": [
+              "shellQuote",
               "FlagSpec"
-            ],
-            "typeOnly": true
+            ]
           },
           {
             "file": "../command.js",
@@ -11714,6 +11729,13 @@
             "reExport": true
           },
           {
+            "file": "./composition/quantity-clusters.js",
+            "imports": [
+              "quantityCanonicalizer"
+            ],
+            "reExport": true
+          },
+          {
             "file": "./numerical/formula-registry.js",
             "imports": [
               "getFormulaParser",
@@ -11749,6 +11771,13 @@
             "imports": [
               "rankDiscoveries",
               "ANCHOR_DEFAULT"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./composition/scoped-relations.js",
+            "imports": [
+              "scopedRelations"
             ],
             "reExport": true
           },
@@ -12716,6 +12745,7 @@
           "linkageMap",
           "proposeLinkCandidates",
           "proposeOrphanConnectors",
+          "quantityCanonicalizer",
           "getFormulaParser",
           "getFormulaParserKind",
           "getFormulaDimensionChecker",
@@ -12725,6 +12755,7 @@
           "formatFrontierAccount",
           "rankDiscoveries",
           "ANCHOR_DEFAULT",
+          "scopedRelations",
           "vetLinkCandidate",
           "hasMagnitudeEvidence",
           "isPromisingTier",
@@ -12999,6 +13030,7 @@
           "linkageMap",
           "proposeLinkCandidates",
           "proposeOrphanConnectors",
+          "quantityCanonicalizer",
           "getFormulaParser",
           "getFormulaParserKind",
           "getFormulaDimensionChecker",
@@ -13008,6 +13040,7 @@
           "formatFrontierAccount",
           "rankDiscoveries",
           "ANCHOR_DEFAULT",
+          "scopedRelations",
           "vetLinkCandidate",
           "hasMagnitudeEvidence",
           "isPromisingTier",
@@ -13673,6 +13706,12 @@
               "clusterBySharedKeys",
               "quantityCanonicalizer"
             ]
+          },
+          {
+            "file": "./scoped-relations.js",
+            "imports": [
+              "scopedRelationPairs"
+            ]
           }
         ],
         "exports": [
@@ -14171,12 +14210,14 @@
         "exports": [
           "CANONICAL_CONSTANTS",
           "CANONICAL_GRAPH",
+          "canonicalEdgeOrigin",
           "canonicalToEdges"
         ],
         "interfaces": [
           "ConstantDef"
         ],
         "functions": [
+          "canonicalEdgeOrigin",
           "canonicalToEdges"
         ],
         "constants": [
@@ -19932,6 +19973,51 @@
           "forwardEvaluate",
           "retrodictNode",
           "retrodict"
+        ]
+      },
+      "src/composition/scoped-relations.ts": {
+        "description": "Explicit consequences of paired canonical equations under stated restrictions.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../canonical/registry.js",
+            "imports": [
+              "canonicalById"
+            ]
+          },
+          {
+            "file": "../canonical/entries/atomic.js",
+            "imports": [
+              "ATOMIC_SCOPED_RELATIONS"
+            ]
+          },
+          {
+            "file": "./canonical-graph.js",
+            "imports": [
+              "canonicalEdgeOrigin"
+            ]
+          },
+          {
+            "file": "./edge.js",
+            "imports": [
+              "evaluateEdge",
+              "validityDomain",
+              "BridgeEdge"
+            ]
+          }
+        ],
+        "exports": [
+          "scopedRelationPairs",
+          "scopedRelations"
+        ],
+        "interfaces": [
+          "ScopedRelationControl",
+          "ScopedRelation"
+        ],
+        "functions": [
+          "scopedRelationPairs",
+          "scopedRelations"
         ]
       },
       "src/composition/uncertainty.ts": {
@@ -28994,6 +29080,7 @@
           "src/composition/rational-exponent.ts",
           "src/composition/representative-values.ts",
           "src/composition/retrodiction.ts",
+          "src/composition/scoped-relations.ts",
           "src/composition/uncertainty.ts",
           "src/composition/user-equation.ts"
         ]
@@ -29151,18 +29238,18 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 396,
+    "totalTypeScriptFiles": 397,
     "totalModules": 13,
-    "totalLinesOfCode": 91957,
-    "totalExports": 2891,
+    "totalLinesOfCode": 92185,
+    "totalExports": 2897,
     "totalClasses": 86,
-    "totalInterfaces": 526,
-    "totalFunctions": 971,
+    "totalInterfaces": 528,
+    "totalFunctions": 974,
     "totalTypeGuards": 17,
     "totalEnums": 0,
-    "totalConstants": 404,
-    "totalReExports": 1421,
-    "totalTypeOnlyImports": 546,
+    "totalConstants": 405,
+    "totalReExports": 1423,
+    "totalTypeOnlyImports": 545,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 0,

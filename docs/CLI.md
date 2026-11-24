@@ -364,9 +364,10 @@ upt discover [--source=catalog|canonical|both]
 | `--max-orders=VALUE` | `=` value | 3 | Magnitude-clash threshold. A larger value keeps more pairs promising. |
 | `--anchor=VALUE (repeatable)` | `=` value, repeatable | mass=M_sun | Override a numeric anchor as k=v or k=v,k2=v2. |
 | `--derive` | no |  | For each promising identification (either tier), print the one algebraic relation it implies, and say when the identification had no magnitude evidence. That relation is not a bridge. |
-| `--show-adjudicated` | no |  | List candidates a physicist has already adjudicated, with the recorded verdict. |
+| `--show-adjudicated` | no |  | List candidates a physicist has already adjudicated, with the recorded verdict in text. JSON always retains adjudicated rows unless an evidence filter hides them. |
 | `--require-falsifier` | no |  | Hide promising rows (either tier) that no independent falsifier ran on and survived, counted per tier. |
-| `--substitutions` | no |  | Include downstream evaluation, domain refusals and abstentions for representative inputs. |
+| `--substitutions` | no |  | Include downstream evaluation, domain refusals and abstentions for representative inputs. Cannot be combined with --derive. |
+| `--require-evaluated-substitution` | no |  | Hide promising candidates without an evaluated downstream substitution. Implies --substitutions and cannot be combined with --derive. |
 | `--json` | no |  | Write a JSON envelope to stdout instead of the text report. |
 
 ```

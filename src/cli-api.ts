@@ -49,6 +49,8 @@ export {
   proposeLinkCandidates,
   proposeOrphanConnectors,
 } from './composition/bridge-analysis.js';
+/** Fold registered identification names when looking up discovery proposals. */
+export { quantityCanonicalizer } from './composition/quantity-clusters.js';
 
 // Other internal modules the CLI drives.
 export {
@@ -60,6 +62,8 @@ export { parseDimensionSpec } from './dimensional/dimension-spec.js';
 export { predictMissingBridges } from './composition/bridge-prediction.js';
 export { catalogFrontierAccount, formatFrontierAccount } from './composition/frontier-account.js';
 export { rankDiscoveries, ANCHOR_DEFAULT } from './composition/discovery.js';
+/** List source-derived relations whose equality holds only in a stated scope. */
+export { scopedRelations } from './composition/scoped-relations.js';
 /** Apply the discovery funnel's vetting rules to one proposed quantity pair. */
 export { vetLinkCandidate } from './composition/discovery.js';
 /** The one magnitude-evidence predicate behind the two promising tiers, and the selector of both tiers. */

@@ -1,5 +1,7 @@
 /** `upt ground` verifies ledger content, computed absence and graph scope. */
 import '../helpers/dist.js';
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it, vi } from 'vitest';
 import '../../dist/cli/commands/ground.js';
 import { resolveCommand, type CommandCtx } from '../../dist/cli/command.js';
@@ -86,10 +88,17 @@ it('vets only the requested candidate and does no vetting to answer a miss', asy
   const [candidate] = cliApi.proposeLinkCandidates(cliApi.CATALOG_GRAPH);
   expect(candidate).toBeDefined();
   const vetLinkCandidate = vi.fn(cliApi.vetLinkCandidate);
+  const annotateConsequences = vi.fn();
   const rankDiscoveries = vi.fn(() => {
     throw new Error('ground must not rank unrelated candidates');
   });
-  const api = { ...cliApi, vetLinkCandidate, rankDiscoveries };
+  const api: typeof cliApi = {
+    ...cliApi, vetLinkCandidate, rankDiscoveries,
+    annotateConsequences: (rows) => {
+      annotateConsequences(rows);
+      return cliApi.annotateConsequences(rows);
+    },
+  };
   const invoke = (positionals: string[]) => resolveCommand('ground')!.run({
     api,
     args: { flags: new Map(), positionals } as CommandCtx['args'],
@@ -99,10 +108,26 @@ it('vets only the requested candidate and does no vetting to answer a miss', asy
   });
   expect(await invoke(['temperature', 'mass'])).toBe(0);
   expect(vetLinkCandidate).not.toHaveBeenCalled();
+  expect(annotateConsequences).not.toHaveBeenCalled();
   expect(await invoke([candidate!.b, candidate!.a])).toBe(0);
   expect(vetLinkCandidate).toHaveBeenCalledExactlyOnceWith(cliApi.CATALOG_GRAPH, candidate, { includeSubstitutions: true });
+  expect(annotateConsequences).toHaveBeenCalledExactlyOnceWith([vetLinkCandidate.mock.results[0]?.value]);
   expect(rankDiscoveries).not.toHaveBeenCalled();
 });
+
+it('reports the same per-pair consequences as combined discovery', async () => {
+  const report = await json(['discover', '--source=both']);
+  const rows = report.result as { a: string; b: string; consequence?: { signal: string }; grounding: { gaps: string[] } }[];
+  for (const a of ['erasure-energy', 'landauer-erasure-energy']) {
+    const b = 'photon-energy';
+    const listed = rows.find((row) => row.a === a && row.b === b);
+    expect(listed?.consequence?.signal).toBe('novel-consequence');
+    expect(listed?.grounding.gaps).toContain('consequence: novel (unadjudicated)');
+    const grounded = await json(['ground', b, a, '--source=both']);
+    expect(grounded.result.consequence).toEqual(listed?.consequence);
+    expect(grounded.result.grounding).toEqual(listed?.grounding);
+  }
+}, FUNNEL_MS);
 
 it('reports a representative downstream refusal with the catalog condition', async () => {
   const report = await json([
@@ -141,3 +166,56 @@ it('includes substitution evidence in discovery JSON only when requested', async
     expect.objectContaining({ edgeId: 'be-26-wkb', status: 'refused' }),
   ]));
 }, FUNNEL_MS);
+
+
+it('grounds a catalog discovery pair under its emitted and raw alias names', async () => {
+  const report = await json(['discover', '--source=catalog']);
+  const pair = (report.result as { a: string; b: string; verdict: string }[])
+    .find(({ a, b }) => a === 'thermal-wavelength' && b === 'biot-length');
+  expect(pair).toBeDefined();
+  for (const name of ['thermal-wavelength', 'thermal-de-broglie-wavelength']) {
+    const grounded = await json(['ground', '--source=catalog', name, 'biot-length']);
+    expect(grounded.result).toMatchObject({ a: pair!.a, b: pair!.b, verdict: pair!.verdict });
+  }
+}, FUNNEL_MS);
+
+it('emits a pasteable alternate-source command for unit-bearing spaced anchors', async () => {
+  const args = ['ground', '--anchor=mass=1 kg', 'compton-wavelength', 'hubble-distance'];
+  const text = await runText(args);
+  const report = await json(args);
+  const retry = report.result.note.split(': ').at(-1);
+  expect(retry).toBe("upt ground --source=canonical '--anchor=mass=1 kg' compton-wavelength hubble-distance");
+  expect(text.text).toContain(retry);
+
+  const cli = fileURLToPath(new URL('../../bin/upt.mjs', import.meta.url));
+  const executed = spawnSync('bash', ['-c', `upt() { "$UPT_TEST_NODE" "$UPT_TEST_CLI" "$@"; }; ${retry}`], {
+    env: { ...process.env, UPT_TEST_NODE: process.execPath, UPT_TEST_CLI: cli },
+    encoding: 'utf8',
+  });
+  if (executed.error && 'code' in executed.error && executed.error.code === 'ENOENT') return;
+  expect(executed.status, executed.stderr).toBe(0);
+  expect(executed.stdout).toMatch(/compton-wavelength ≟ hubble-distance.*\[source: canonical/);
+}, FUNNEL_MS);
+
+it('keeps an explicit anchor when choosing a compatible alternate scope', async () => {
+  const report = await json(['ground', '--anchor=parker-sound=1', 'compton-wavelength', 'hubble-distance']);
+  expect(report.result.elsewhere).toEqual(['canonical', 'both']);
+  expect(report.result.note).toContain('upt ground --source=both --anchor=parker-sound=1');
+}, FUNNEL_MS);
+
+it('round-trips a scoped Compton comparison with its controls and equations', async () => {
+  const a = 'compton-wavelength-full';
+  const b = 'compton-wavelength-shift';
+  const listed = await json(['discover', '--source=canonical']);
+  const scoped = await json(['ground', a, b, '--source=canonical']);
+  const [relation] = scoped.result.scopedRelations;
+  expect(scoped.result.candidate).toBeNull();
+  expect(relation.kind).toBe('entailed');
+  expect(relation.sourceEquations).toEqual(['CE-compton-shift', 'CE-compton-wavelength-full']);
+  expect(relation.controls.map((c: { equalityConditionMet: boolean }) => c.equalityConditionMet)).toEqual([false, true, false]);
+  expect(listed.scopedRelations).toContainEqual(relation);
+  const catalog = await json(['ground', a, b, '--source=catalog']);
+  expect(catalog.result.scopedElsewhere).toEqual(['canonical', 'both']);
+  expect(catalog.result.note).toContain('upt ground --source=canonical');
+  expect(listed.result.some((r: { a: string; b: string }) => [r.a, r.b].includes(a) && [r.a, r.b].includes(b))).toBe(false);
+});

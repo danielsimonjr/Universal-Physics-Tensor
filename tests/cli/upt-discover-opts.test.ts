@@ -11,6 +11,7 @@ import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 import { runCli } from '../../dist/cli/main.js';
+import { json, runText } from '../helpers/cli-run.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const cli = resolve(here, '../../bin/upt.mjs');
@@ -94,5 +95,88 @@ describe('upt discover — axis-clash is labelled a regime-label prior, not a fa
     expect(text).toMatch(/AXIS-CLASH \(stated scale\/force labels differ: a regime-label prior, not a physical test\)/);
     expect(text).toMatch(/\d+ contradictory \(numerically falsified\)/);
     expect(text).not.toMatch(/identification falsified/);
+  });
+});
+
+describe('discovery output contracts', () => {
+  async function json(args: string[]) {
+    const invocation = captureMerged();
+    expect(await runCli(['discover', ...args, '--json'], invocation.io)).toBe(0);
+    return JSON.parse(invocation.lines.join(''));
+  }
+
+  it('documents mutually exclusive modes and the JSON adjudication inventory', () => {
+    const help = execFileSync('node', [cli, 'discover', '--help'], { encoding: 'utf8' });
+    expect(help).toContain('Cannot be combined with --derive');
+    expect(help).toContain('JSON always retains adjudicated rows');
+    expect(run(['discover', '--derive', '--substitutions']).status).toBe(2);
+  });
+
+  it('applies a downstream evaluation filter without reclassifying domain refusals', async () => {
+    const all = await json(['--source=both', '--substitutions']);
+    const only = await json(['--source=both', '--require-evaluated-substitution']);
+    const find = (rows: typeof all.result, from: string, to: string) =>
+      rows.find((r: { a: string; b: string }) => r.a === from && r.b === to);
+    const refused = find(all.result, 'barrier-width', 'compton-wavelength-full');
+    expect(refused.substitutionSummary.refused).toBeGreaterThan(0);
+    expect(refused.substitutionSummary.evaluated).toBe(0);
+    expect(find(only.result, 'barrier-width', 'compton-wavelength-full')).toBeUndefined();
+    const evaluated = find(only.result, 'foerster-radius', 'bohr-radius');
+    expect(evaluated.substitutionSummary.evaluated).toBeGreaterThan(0);
+    expect(all.result.some((r: { substitutionSummary: { abstained: number } }) =>
+      r.substitutionSummary.abstained > 0)).toBe(true);
+  });
+
+  it('carries source evidence and applies the falsifier filter before deriving', async () => {
+    const all = await json(['--source=both', '--derive']);
+    const filtered = await json(['--source=both', '--derive', '--require-falsifier']);
+    expect(all.result.length).toBeGreaterThan(0);
+    for (const row of all.result) {
+      expect(row.evidence.readiness.observation).toEqual(expect.any(String));
+      expect(row.evidence.grounding.gaps).toEqual(expect.any(Array));
+    }
+    for (const row of filtered.result) expect(row.evidence.readiness.falsifiers.survived.length).toBeGreaterThan(0);
+    expect(filtered.result.length).toBeLessThan(all.result.length);
+  });
+
+  it('keeps the full adjudication inventory in JSON', async () => {
+    const all = await json(['--source=canonical']);
+    const explicit = await json(['--source=canonical', '--show-adjudicated']);
+    expect(all.adjudicationSummary.total).toBeGreaterThan(0);
+    expect(explicit).toEqual(all);
+  });
+});
+
+describe('selected discovery anchor vocabulary', () => {
+  it.each([
+    ['discover', 'canonical', 'parker-sound=1'],
+    ['discover', 'catalog', 'compton-wavelength-full=1m'],
+    ['ground', 'canonical', 'parker-sound=1'],
+  ])('refuses %s anchors unavailable in the %s graph', async (command, source, anchor) => {
+    const pair = command === 'ground' ? ['compton-wavelength', 'hubble-distance'] : [];
+    const report = await runText([command, `--source=${source}`, `--anchor=${anchor}`, ...pair]);
+    expect(report.code).toBe(1);
+    expect(report.text).toContain(`is not a quantity in the selected ${source} graph`);
+  });
+
+  it('accepts a catalog anchor when catalog or both is selected', async () => {
+    for (const source of ['catalog', 'both']) {
+      const report = await json(['discover', `--source=${source}`, '--anchor=parker-sound=1']);
+      expect(report.anchor.groundTruth.values).toEqual({ 'parker-sound': 1 });
+    }
+  });
+
+  it('reads alias and canonical anchor spellings in the same evaluator unit', async () => {
+    const args = ['ground', '--source=both', 'compton-wavelength-full', 'schwarzschild-radius'];
+    const named = await json([...args, '--anchor=vacuum-expectation-value=1J']);
+    const aliased = await json([...args, '--anchor=vacuum_expectation_value=1J']);
+    expect(named.anchor.groundTruth.values['vacuum-expectation-value']).toBeGreaterThan(6e9);
+    expect(aliased.anchor).toEqual(named.anchor);
+
+    const conflicting = await runText([
+      ...args, '--anchor=vacuum-expectation-value=1J,vacuum_expectation_value=1GeV',
+    ]);
+    expect(conflicting.code).toBe(1);
+    expect(conflicting.text).toContain("resolves to 'vacuum-expectation-value', which is already bound");
   });
 });

@@ -66,9 +66,9 @@
     "canonical": {
       "axisClash": 1,
       "promisingNovelConsequence": 0,
-      "promisingUncheckedNovelConsequence": 2
+      "promisingUncheckedNovelConsequence": 4
     },
-    "proposedBridges": 2
+    "proposedBridges": 4
   },
   "evidence": {
     "formallyProved": 118,

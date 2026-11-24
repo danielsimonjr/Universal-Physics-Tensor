@@ -40,6 +40,7 @@ import { BRIDGE_EQUATIONS } from '../bridges/index.js';
 import { enumerateCompositions } from './enumerate.js';
 import { DATA_CONFRONTED_IDS } from '../bridges/confrontation-coverage.js';
 import { clusterBySharedKeys, quantityCanonicalizer } from './quantity-clusters.js';
+import { scopedRelationPairs } from './scoped-relations.js';
 
 /** A fundamental constant the derivation search may add (with SI value). */
 interface NamedConstant {
@@ -625,7 +626,8 @@ function sharedNameToken(a: string, b: string): string | null {
 /**
  * Propose candidate cross-cluster identifications from the linkage map:
  * every pair of quantities in different clusters that share a
- * non-dimensionless dimension. ⚠ This is a coincidence-heavy REVIEW SURFACE
+ * non-dimensionless dimension. Pairs with a source-derived scoped relation
+ * are accounted for separately. ⚠ This is a coincidence-heavy REVIEW SURFACE
  * (same dimension is a weak signal — see the dimensional audit's decoy
  * finding), NOT a list of discovered bridges. Ranked: core-touching first,
  * then same-kind. The output's only path is human adjudication
@@ -636,6 +638,7 @@ function sharedNameToken(a: string, b: string): string | null {
 export function proposeLinkCandidates(edges: readonly BridgeEdge[]): LinkCandidate[] {
   const m = clusterMap(edges); // clusters only — skips the O(E²) composition count
   const canon = quantityCanonicalizer();
+  const scopedPairs = scopedRelationPairs(edges);
   const edgeCluster = new Map<string, number>();
   m.clusters.forEach((c, ci) => c.edges.forEach((id) => edgeCluster.set(id, ci)));
 
@@ -663,6 +666,7 @@ export function proposeLinkCandidates(edges: readonly BridgeEdge[]): LinkCandida
       const da = qDim.get(a)!;
       if (equals(da, DIMENSIONLESS)) continue; // dimensionless = too generic
       if (!equals(da, qDim.get(b)!)) continue;
+      if (scopedPairs.some((pair) => (pair.a === a && pair.b === b) || (pair.a === b && pair.b === a))) continue;
       const token = sharedNameToken(a, b);
       out.push({
         a,

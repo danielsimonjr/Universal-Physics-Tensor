@@ -4,7 +4,7 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
 ⚠ a coincidence-heavy REVIEW SURFACE, NOT discovered bridges. Same dimension is a
   weak signal; each needs a physicist to accept or (far more often) reject.
 
-  funnel:  7745 total  →  7730 touch the anchored core  →  1774 also same-kind
+  funnel:  7796 total  →  7781 touch the anchored core  →  1775 also same-kind
 
   same-kind + core-touching (the least-implausible set):
     accretor-mass ≟ enclosed-mass                            [mass]
@@ -291,7 +291,6 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     column-length ≟ upper-critical-length                    [length]
     compton-wavelength ≟ compton-wavelength-shift            [length]
     compton-wavelength ≟ optical-wavelength                  [length]
-    compton-wavelength-full ≟ compton-wavelength-shift       [length]
     compton-wavelength-full ≟ optical-wavelength             [length]
     compton-wavelength-shift ≟ optical-wavelength            [length]
     cosmological-constant-curvature ≟ efe-curvature          [L^-2]
@@ -356,6 +355,8 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     dark-species-density ≟ sackur-density                    [L^-3]
     dark-species-density ≟ sommerfeld-density                [L^-3]
     dark-species-density ≟ upper-hybrid-density              [L^-3]
+    de-broglie-wavelength ≟ compton-wavelength-shift         [length]
+    de-broglie-wavelength ≟ optical-wavelength               [length]
     debye-atom-density ≟ curie-density                       [L^-3]
     debye-atom-density ≟ debye-sphere-density                [L^-3]
     debye-atom-density ≟ mass-action-density                 [L^-3]
@@ -1782,7 +1783,7 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     wormhole-entanglement-entropy ≟ entropy-change           [entropy]
     wormhole-entanglement-entropy ≟ sackur-entropy           [entropy]
 
-  adjudicated: 5 of 1774 carry a recorded verdict; the rest are unadjudicated.
+  adjudicated: 5 of 1775 carry a recorded verdict; the rest are unadjudicated.
   A shared dimension is a coincidence until a physicist records otherwise. The ledger's sources:
     https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/docs/research/proposed-equations-adjudication.md
     https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/docs/research/orphan-connector-adjudication.md

@@ -4,8 +4,8 @@
  * quantity. This file pins the component ids and their order BEFORE the move
  * (`tests/fixtures/quantity-clusters-pin.json`, captured from the union-find implementations
  * at `0c3c67b` by a twenty-line script over the built `dist/` of that commit, recorded in the
- * batch report of the change that added this file) and tests the shared helper on a hand-built
- * set, so the migration can be proved to change nothing.
+ * batch report of the change that added this file). The pin tracks the separation of de Broglie
+ * and Compton names. The shared helper is also tested with a hand-built set.
  *
  * @module tests/composition/quantity-clusters
  */
@@ -49,7 +49,7 @@ const GRAPHS = {
   both: [...CATALOG_GRAPH, ...CANONICAL_GRAPH],
 } as const;
 
-describe('component ids and order are unchanged by the move to one owner (pinned before it)', () => {
+describe('component ids and order match the live graph pin', () => {
   for (const name of ['catalog', 'canonical', 'both'] as const) {
     it(`linkageMap on the ${name} graph: every cluster, in order, with its anchoring and hubs`, () => {
       const m = linkageMap(GRAPHS[name]);

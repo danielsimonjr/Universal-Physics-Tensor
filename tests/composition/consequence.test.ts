@@ -35,10 +35,8 @@ describe('annotateConsequences', () => {
     const annotated = annotateConsequences(rankDiscoveries(CANONICAL_GRAPH));
     const promising = annotated.filter((c) => c.verdict === 'promising' || c.verdict === 'promising-unchecked');
     expect(promising.filter((c) => c.consequence?.signal === 'entailed').length).toBe(0);
-    // Landauer photon, hν=mc², Wien/Hubble, Compton-full against Hubble distance, the classical
-    // electron radius against that distance once 1/(4π) is in the value, and the Bohr radius
-    // against it once a source-less target is a component member: every one of them is in the
-    // unchecked tier (the census counts each tier).
+    // Count hypothetical consequences and magnitude evidence by tier. Scoped
+    // consequences of the canonical wavelength equations are a separate surface.
     const novel = (v: string) => annotated.filter((c) => c.verdict === v && c.consequence?.signal === 'novel-consequence').length;
     expect(novel('promising')).toBe(CENSUS.discovery.canonical.promisingNovelConsequence);
     expect(novel('promising-unchecked')).toBe(CENSUS.discovery.canonical.promisingUncheckedNovelConsequence);
