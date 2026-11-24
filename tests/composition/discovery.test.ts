@@ -551,3 +551,108 @@ describe('a value computed from registered constants alone is not anchor-derived
     expect(r?.verdict).toBe('promising');
   }, 180_000);
 });
+
+describe('downstream substitution evidence', () => {
+  const opts = { includeSubstitutions: true } as const;
+  const graphs = [...CATALOG_GRAPH, ...CANONICAL_GRAPH];
+
+  function wkbResult(a: string, b: string) {
+    const candidate = vetLinkCandidate(graphs, cand(a, b), opts);
+    const result = candidate.substitutions?.find((row) => row.edgeId === 'be-26-wkb' && row.to === a);
+    expect(result).toBeDefined();
+    return result!;
+  }
+
+  it('runs the unmodified WKB evaluator for Bohr width and reports the baseline separately', () => {
+    const result = wkbResult('barrier-width', 'bohr-radius');
+    expect(result.status).toBe('evaluated');
+    expect(result.from).toBe('bohr-radius');
+    expect(result.inputs['barrier-width']).toMatchObject({ value: 5.292e-11, unit: 'm' });
+    expect(result.inputs['barrier-height']?.value).toBe(3.2e-20);
+    expect(result.prediction?.value).toBeCloseTo(3.08886242e8, -1);
+    expect(result.baselinePrediction?.value).toBeLessThan(result.prediction!.value);
+    expect(result.baselineInput).toMatchObject({ value: 1e-10, unit: 'm', source: expect.stringMatching(/illustrative/i) });
+  });
+
+  it.each([
+    ['barrier-width', 'compton-wavelength'],
+    ['barrier-width', 'compton-wavelength-full'],
+    ['barrier-height', 'landauer-erasure-energy'],
+  ])('preserves the WKB domain refusal for %s ← %s', (a, b) => {
+    const result = wkbResult(a, b);
+    expect(result.status).toBe('refused');
+    expect(result.reason).toMatch(/violat.*>= 100 \* hbar \* hbar/s);
+    expect(result.prediction).toBeUndefined();
+    expect(result.baselinePrediction).toBeDefined();
+    expect(result.baselineInput).toBeDefined();
+  });
+
+  it('reports the model prediction in the appropriate FRET input direction', () => {
+    const candidate = vetLinkCandidate(graphs, cand('foerster-radius', 'bohr-radius'), opts);
+    const result = candidate.substitutions?.find((row) => row.edgeId === 'be-24');
+    expect(result).toMatchObject({
+      status: 'evaluated', from: 'bohr-radius', to: 'foerster-radius',
+      baselinePrediction: { value: 0.5 },
+    });
+    expect(result?.prediction?.value).toBeLessThan(1.5e-12);
+  });
+
+  const toy = [edge('origin', ['x'], 'a', () => 7), edge('consumer', ['b', 'y'], 'output', (i) => i.b! + i.y!)];
+  const value = (n: number) => ({ value: n, source: 'fixture' });
+
+  it('preserves explicitly supplied dimensionless group inputs in both evaluations', () => {
+    const sound = CANONICAL_GRAPH.find(({ id }) => id === 'CE-sound-speed')!;
+    const pressure = sound.sources.find(({ name }) => name === 'pressure')!;
+    const origin: BridgeEdge = { ...edge('origin-pressure', ['x'], 'a', () => 9), target: { ...pressure, name: 'a' } };
+    const scenario = { label: 'sound-speed fixture', inputs: { pressure: value(4), density: value(2), gamma: value(2) } };
+    const candidate = vetLinkCandidate([origin, sound], cand('a', 'pressure'), {
+      ...opts,
+      representativeValues: { a: value(9) },
+      substitutionScenarios: { 'CE-sound-speed': scenario },
+    });
+    const result = candidate.substitutions?.find((row) => row.edgeId === 'CE-sound-speed');
+    expect(result).toMatchObject({
+      status: 'evaluated',
+      inputs: { gamma: { value: 2, unit: '1', source: 'fixture' } },
+      baselineInput: { value: 4, source: 'fixture' },
+    });
+    expect(result?.baselinePrediction?.value).toBeCloseTo(2);
+    expect(result?.prediction?.value).toBeCloseTo(3);
+  });
+
+  it('does not combine unrelated values when the receiving scenario is incomplete', () => {
+    const r = vetLinkCandidate(toy, cand('a', 'b'), {
+      ...opts,
+      representativeValues: { a: value(5), y: value(3) },
+      substitutionScenarios: { consumer: { label: 'incomplete point', inputs: { b: value(4) } } },
+    });
+    expect(r.substitutions).toEqual([expect.objectContaining({
+      status: 'abstained',
+      reason: 'Operating point lacks usable inputs: y.',
+    })]);
+  });
+
+  it('does not treat a generic anchor-derived value as independent evidence', () => {
+    const r = vetLinkCandidate(toy, cand('a', 'b'), {
+      ...opts,
+      groundTruth: { x: 2 },
+      representativeValues: {},
+      substitutionScenarios: { consumer: { label: 'point', inputs: { b: value(4), y: value(3) } } },
+    });
+    expect(r.substitutions).toEqual([expect.objectContaining({
+      status: 'abstained',
+      reason: 'No independently sourced value for a.',
+    })]);
+  });
+
+  it('only adds scenario evidence on request without changing the verdict or score', () => {
+    const ordinary = vetLinkCandidate(toy, cand('a', 'b'));
+    const { substitutions, ...enriched } = vetLinkCandidate(toy, cand('a', 'b'), opts);
+    expect(ordinary).not.toHaveProperty('substitutions');
+    expect(enriched).toEqual(ordinary);
+    expect(substitutions).toEqual([expect.objectContaining({
+      status: 'abstained',
+      reason: 'No coherent operating point is recorded for this relation.',
+    })]);
+  });
+});

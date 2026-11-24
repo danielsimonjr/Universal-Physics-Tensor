@@ -54,6 +54,10 @@ import { CANONICAL_EQUATIONS } from '../canonical/registry.js';
 import { format } from '../dimensional/algebra.js';
 import { deriveOwnEquationMagnitudes } from './own-equation-magnitude.js';
 import type { DerivedMagnitudes } from './own-equation-magnitude.js';
+import {
+  buildSubstitutionContext, candidateSubstitutions, defaultSubstitutionScenarios,
+} from './candidate-substitution.js';
+import type { CandidateSubstitution, SubstitutionContext, SubstitutionScenario } from './candidate-substitution.js';
 
 // ── registry-only attribute lookup (D1 axis gate; Option-A resolution) ─────
 // Built from the centralized `Quantity` nodes ONLY (never canonical
@@ -98,6 +102,8 @@ const CANONICAL_QUANTITY_NAMES: ReadonlySet<string> = (() => {
 
 /** A candidate after vetting against the inference suite. @hypothesis @public */
 export interface VettedCandidate {
+  /** Optional scenario-level evidence. These runs do not change the ranking verdict. */
+  readonly substitutions?: readonly CandidateSubstitution[];
   readonly a: string;
   readonly b: string;
   /** Shared SI dimension (from the proposer). */
@@ -281,6 +287,10 @@ export function isPromisingTier(verdict: VettedCandidate['verdict']): boolean {
 
 /** Options for the discovery loop. @internal */
 export interface DiscoveryOptions {
+  /** Evaluate direct downstream substitutions at coherent operating points. */
+  readonly includeSubstitutions?: boolean;
+  /** Explicit scenarios keyed by edge ID. Replaces the built-in scenarios when supplied. */
+  readonly substitutionScenarios?: Readonly<Record<string, SubstitutionScenario>>;
   /**
    * Numeric anchor for the consistency check (and the closure unlock).
    * Default `{ mass: M_sun }` — the pre-registered retrodiction anchor.
@@ -407,6 +417,8 @@ function nameSubsumes(a: string, b: string): boolean {
  * @internal
  */
 export interface DiscoveryContext {
+  /** Indices for opt-in downstream substitution evidence. */
+  readonly substitutionContext?: SubstitutionContext;
   readonly baseIdents: readonly QuantityIdentification[];
   readonly groundTruth: Readonly<Record<string, number>>;
   /** `Object.keys(groundTruth)` — the anchor known-set names. */
@@ -469,7 +481,11 @@ export function buildDiscoveryContext(
     else previous.push(sources);
   }
   const incomingAlternatives = new Map([...incoming].filter(([, routes]) => routes.length >= 2));
+  const substitutionContext = opts.includeSubstitutions
+    ? buildSubstitutionContext(edges, opts.substitutionScenarios ?? defaultSubstitutionScenarios(edges))
+    : undefined;
   return {
+    substitutionContext,
     baseIdents,
     groundTruth,
     anchor,
@@ -848,7 +864,19 @@ export function vetInContext(
     CANONICAL_QUANTITY_NAMES.has(candidate.a) ||
     CANONICAL_QUANTITY_NAMES.has(candidate.b);
 
+  const substitutions = ctx.substitutionContext &&
+    candidateSubstitutions(edges, candidate.a, candidate.b, ctx.substitutionContext, (name) => {
+      const sourced = ctx.repVals[name];
+      if (sourced !== undefined && Number.isFinite(sourced.value)) return sourced;
+      const fixed = ctx.constantValues.get(name);
+      return fixed === undefined ? undefined : {
+        value: fixed * conventionScaleToSI(name),
+        source: `Graph-derived ${name} from registered constants, without an anchor`,
+      };
+    });
+
   return {
+    ...(substitutions === undefined ? {} : { substitutions }),
     a: candidate.a,
     b: candidate.b,
     dim: candidate.dim,

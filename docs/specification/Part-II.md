@@ -83,7 +83,7 @@ This form (i) recovers the empirical linear-in-T strange-metal resistivity, (ii)
 
 **Bridge Equation 26: DNA Mutation - Quantum Tunneling Rate**
 
-> **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `2e09357f9674bc60b60b378155a1623c27dc7b04`. The missing piece is the WKB mutation-rate integral.
+> **Formal properties.** `PhysJS.Wkb.guard_iff_width` equates the squared catalog guard to the minimum width of a positive rectangular barrier. `PhysJS.Wkb.bare_rate_bound` bounds the encoded bare WKB rate under that guard. Both concern the rectangular-barrier formula. The general mutation-rate integral and biological correction remain open. [Lean source](../../lean/Wkb.lean)
 
 > **AST encoding (Tier 5):** [`data/bridge-catalog.json`](../../data/bridge-catalog.json) (catalog record 26, evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts))
 

@@ -366,6 +366,7 @@ upt discover [--source=catalog|canonical|both]
 | `--derive` | no |  | For each promising identification (either tier), print the one algebraic relation it implies, and say when the identification had no magnitude evidence. That relation is not a bridge. |
 | `--show-adjudicated` | no |  | List candidates a physicist has already adjudicated, with the recorded verdict. |
 | `--require-falsifier` | no |  | Hide promising rows (either tier) that no independent falsifier ran on and survived, counted per tier. |
+| `--substitutions` | no |  | Include downstream evaluation, domain refusals and abstentions for representative inputs. |
 | `--json` | no |  | Write a JSON envelope to stdout instead of the text report. |
 
 ```

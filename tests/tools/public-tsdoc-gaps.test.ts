@@ -132,13 +132,13 @@ describe('public-tsdoc-gaps', () => {
     expect(publicTsdocGaps()).toEqual([]);
   });
 
-  it('pins census bucket sizes against independent authorities (249 root types)', () => {
+  it('pins census bucket sizes against independent authorities (251 root types)', () => {
     const buckets = collectPublicNamesForTest();
     // Runtime: tests/api/__snapshots__/public-surface.test.ts.snap
     expect(buckets.rootRuntime).toHaveLength(233);
     // Types: src/index.ts including mixed `export { value, type T }` specifiers.
-    // Independent authority: docs/architecture/API.md "249 type-only symbols".
-    expect(buckets.rootTypes).toHaveLength(249);
+    // Independent authority: docs/architecture/API.md "251 type-only symbols".
+    expect(buckets.rootTypes).toHaveLength(251);
     expect(buckets.rootTypes).toContain('GeodesicIntegratorInputs');
     expect(buckets.rootTypes).toContain('GeodesicIntegratorResult');
     // Atlas: src/atlas/public.ts named re-exports (the facade is the single list).
@@ -276,7 +276,7 @@ describe('public-tsdoc-gaps', () => {
       });
       expect(publicTsdocGaps().filter((gap) => gap.name === '__InlineRuntime')).toEqual([]);
     });
-    expect(collectPublicNamesForTest().rootTypes).toHaveLength(249);
+    expect(collectPublicNamesForTest().rootTypes).toHaveLength(251);
     expect(publicTsdocGaps()).toEqual([]);
   });
 

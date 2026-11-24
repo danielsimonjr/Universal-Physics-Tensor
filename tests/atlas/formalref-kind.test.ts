@@ -56,7 +56,7 @@ function row(id: number) {
 
 describe('formalRef kind — formally-proved is a bridge only', () => {
   it('the catalog references exist (otherwise the next assertions pass vacuously)', () => {
-    // The counts are the proof-status record at this pin (3 property, 3
+    // The counts are the proof-status record at this pin (4 property, 3
     // cross-check, 16 counted, 119 bridge); the ids come from the manifest.
     expect(PROPERTIES.length).toBe(CENSUS.formalRefs.catalogProperty);
     expect(CROSS_CHECKS.length).toBe(CENSUS.formalRefs.catalogCrossCheck);

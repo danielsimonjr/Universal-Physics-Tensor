@@ -100,6 +100,44 @@ it('vets only the requested candidate and does no vetting to answer a miss', asy
   expect(await invoke(['temperature', 'mass'])).toBe(0);
   expect(vetLinkCandidate).not.toHaveBeenCalled();
   expect(await invoke([candidate!.b, candidate!.a])).toBe(0);
-  expect(vetLinkCandidate).toHaveBeenCalledExactlyOnceWith(cliApi.CATALOG_GRAPH, candidate, {});
+  expect(vetLinkCandidate).toHaveBeenCalledExactlyOnceWith(cliApi.CATALOG_GRAPH, candidate, { includeSubstitutions: true });
   expect(rankDiscoveries).not.toHaveBeenCalled();
 });
+
+it('reports a representative downstream refusal with the catalog condition', async () => {
+  const report = await json([
+    'ground', '--source=both', 'barrier-width', 'compton-wavelength',
+  ]);
+  expect(report.result.substitutions).toEqual(expect.arrayContaining([
+    expect.objectContaining({
+      edgeId: 'be-26-wkb',
+      from: 'compton-wavelength',
+      to: 'barrier-width',
+      status: 'refused',
+      reason: expect.stringContaining('100'),
+      baselineInput: expect.objectContaining({ value: 1e-10, unit: 'm' }),
+    }),
+  ]));
+  const text = await runText(['ground', '--source=both', 'barrier-width', 'compton-wavelength']);
+  expect(text.code).toBe(0);
+  expect(text.text).toMatch(/substitution compton-wavelength → barrier-width via be-26-wkb .*refused/);
+}, FUNNEL_MS);
+
+it('includes substitution evidence in discovery JSON only when requested', async () => {
+  const regular = await json(['discover', '--source=both']);
+  const detailed = await json(['discover', '--source=both', '--substitutions']);
+  const findWidth = (report: typeof regular) => (report.result as {
+    a: string;
+    b: string;
+    verdict: string;
+    substitutions?: unknown;
+  }[]).find((row) => row.a === 'barrier-width' && row.b === 'compton-wavelength');
+  const baseline = findWidth(regular);
+  const withEvidence = findWidth(detailed);
+  expect(baseline).toBeDefined();
+  expect(baseline?.substitutions).toBeUndefined();
+  expect(withEvidence?.verdict).toBe(baseline?.verdict);
+  expect(withEvidence?.substitutions).toEqual(expect.arrayContaining([
+    expect.objectContaining({ edgeId: 'be-26-wkb', status: 'refused' }),
+  ]));
+}, FUNNEL_MS);

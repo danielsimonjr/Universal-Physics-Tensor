@@ -42,7 +42,7 @@ const WITHOUT_HUBBLE_ROW: Readonly<Record<string, RepresentativeValue>> = Object
 /** The three Hubble rows on the canonical graph, with the orders the gate measures (|Δ log10|). */
 const HUBBLE_ROWS = [
   { a: 'bohr-radius', b: 'hubble-distance', orders: 36.41 },
-  { a: 'compton-wavelength', b: 'hubble-distance', orders: 37.75 },
+  { a: 'compton-wavelength', b: 'hubble-distance', orders: 38.55 },
   { a: 'hubble-distance', b: 'peak-wavelength', orders: 21.46 },
 ] as const;
 

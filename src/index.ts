@@ -728,6 +728,8 @@ export type { CandidateGrounding } from './composition/grounding.js';
 // the output type. Required to feed annotateAdjudications from the public API.
 export { rankDiscoveries } from './composition/discovery.js';
 export type { VettedCandidate } from './composition/discovery.js';
+/** Records and operating points for downstream discovery checks. */
+export type { CandidateSubstitution, SubstitutionScenario } from './composition/candidate-substitution.js';
 
 // v0.33.0 — `upt confront` real-data confrontation subsystem: typed
 // observations + a normalized ConfrontationOutcome (discriminated on `kind`)

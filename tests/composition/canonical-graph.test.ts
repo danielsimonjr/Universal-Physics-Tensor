@@ -22,7 +22,8 @@ import { rankDiscoveries } from '../../src/composition/discovery.js';
 import { CANONICAL_EQUATIONS, CANONICAL_BY_ID } from '../../src/canonical/registry.js';
 import type { CanonicalEquation } from '../../src/canonical/canonical-equation.js';
 import { M_SUN_KG } from '../../src/core/constants.js';
-import { G_SI, C_SI } from '../../src/core/constants.js';
+import { G_SI, C_SI, M_E_SI } from '../../src/core/constants.js';
+import { representativeValue } from '../../src/composition/representative-values.js';
 import { MASS, LENGTH, DIMENSIONLESS } from '../../src/dimensional/types.js';
 
 const byId = (id: string) => {
@@ -134,8 +135,18 @@ describe('canonical-only discovery — regression harness', () => {
     expect(contradictory).toEqual([]);
   });
 
+  it('takes separate electron scales from the reduced and full Compton conventions', () => {
+    const reduced = byId('CE-compton-wavelength');
+    const full = byId('CE-compton-wavelength-full');
+    const reducedScale = representativeValue(reduced.target.name)!.value;
+    const fullScale = representativeValue(full.target.name)!.value;
+    expect(reducedScale / reduced.evaluate({ mass: M_E_SI })).toBeCloseTo(1, 12);
+    expect(fullScale / full.evaluate({ mass: M_E_SI })).toBeCloseTo(1, 12);
+    expect(fullScale / reducedScale).toBeCloseTo(2 * Math.PI, 12);
+  });
+
   it('does NOT false-reject compton ≟ bohr as a magnitude-clash', () => {
-    // Both are atomic length scales ~1 order apart (a_0 = λ_C/(2πα)). Without
+    // Both are atomic length scales (a_0 = λ̄_C/α). Without
     // sourced representative values the gate evaluated the Compton wavelength at
     // the {mass: M_sun} anchor → ~10⁻⁷³ m → a spurious ~61-order clash. With
     // sourced values it reads the real magnitudes and the clash disappears.
@@ -148,7 +159,7 @@ describe('canonical-only discovery — regression harness', () => {
     expect(pair).toBeDefined();
     expect(pair!.verdict).not.toBe('magnitude-clash');
     expect(pair!.ordersApart).not.toBeNull();
-    expect(pair!.ordersApart!).toBeLessThan(3);
+    expect(pair!.ordersApart!).toBeCloseTo(2.137, 3);
   });
 
   it('uses no fragmented variable aliases (T, M, m_1, m_2) as node names', () => {

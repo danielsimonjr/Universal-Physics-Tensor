@@ -64,4 +64,28 @@ theorem wrong_dictionary_exponent_four (R0 : ℝ) (hR0 : 0 < R0) :
   field_simp [hR0.ne'] at h
   norm_num at h
 
+/--
+`be-24.halfEfficiency`. Property. The encoded FRET efficiency is one half exactly at
+the Förster radius, for positive radius and separation.
+-/
+theorem half_iff (R0 R : ℝ) (hR0 : 0 < R0) (hR : 0 < R) :
+    eta R0 R = 1 / 2 ↔ R = R0 := by
+  have hhalf : eta R0 R0 = 1 / 2 := by
+    unfold eta
+    have hpow : R0 ^ 6 ≠ 0 := pow_ne_zero 6 hR0.ne'
+    field_simp [hpow]; ring
+  have hmono := (dictionary 1 R0 R (by norm_num) hR0 hR).2.2
+  constructor
+  · intro h
+    rcases lt_trichotomy R R0 with hlt | heq | hgt
+    · have hcontra := hmono R R0 hR hlt
+      rw [hhalf, h] at hcontra
+      exact (lt_irrefl _ hcontra).elim
+    · exact heq
+    · have hcontra := hmono R0 R hR0 hgt
+      rw [hhalf, h] at hcontra
+      exact (lt_irrefl _ hcontra).elim
+  · rintro rfl
+    exact hhalf
+
 end PhysJS.Fret

@@ -733,7 +733,7 @@
         "biological"
       ],
       "status": "speculative",
-      "proofStatus": "pending",
+      "proofStatus": "weak",
       "context": "Proton tunneling in base pair tautomerization (WKB form canonical, biological-relevance bridge framing speculative)",
       "formula_latex": "\\Gamma_{\\text{mutation}} = \\nu_0 \\exp\\left(-\\frac{2}{\\hbar}\\int_{x_1}^{x_2}\\sqrt{2m(V(x)-E)} \\, dx\\right) \\cdot f(T,\\text{pH}, \\text{EM})",
       "source_part": "II",
@@ -754,6 +754,8 @@
       "dependencies": [],
       "dimensional_signature": "[frequency]",
       "notes": "see source | status_text: Established (WKB). The WKB tunneling rate formula is standard quantum mechanics (Gamow 1928; Landau-Lifshitz QM Section 50). The application to DNA base-pair tautomerization via proton tunneling is a ... | Tier-5 AST encoding landed 2026-05-04 (branch tier-5/wave-1, the catalog record (data/bridge-catalog.json)) — RHS encoded as ν_0 · exp_factor · f_correction; the WKB exponent (2/ℏ)·∫√(2m(V−E))dx is exposed as DNA_TUNNELING_WKB_ARG and verified dimensionless via the AST's integral primitive with caret-0.5 for the square root. dimensional_signature [frequency] is exactly format(infer(rhs)). Bracket-check with proton mass / 0.4 eV barrier / 1 Å width gives Γ ~ 10 /s, in the textbook 10^-3 to 10^3 /s range for hydrogen-bond proton transfer. | 2026-05-23 BRIDGE-PHYSICS-AUDIT S3 unknown<->unknown naming applied (per docs/architecture/archive/v0.7-physics-judgment-proposals.md S3): [quantum, biological]. Rationale (HIGH: self-explanatory; biological is the existing freeform label). | be-26-wkb is the bare WKB factor Γ_WKB = ν₀ exp(−2κL), a second relation of this row; be-26 multiplies it by f, and both relations refuse a barrier below the opaque bound 2κL >= 10.",
+      "theorem": "PhysJS.Wkb.guard_iff_width",
+      "formalKey": "be-26",
       "dimension": {
         "L": 0,
         "M": 0,

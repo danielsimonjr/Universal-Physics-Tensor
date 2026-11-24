@@ -18,6 +18,7 @@ import lean.Coarsening
 import lean.KibbleZurek
 import lean.HawkingUnruh
 import lean.Fret
+import lean.Wkb
 import lean.QuantumBounce
 import lean.Landauer
 import lean.Jarzynski

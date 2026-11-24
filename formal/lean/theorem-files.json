@@ -110,6 +110,7 @@
     "PhysJS.FourierConduction.fourier_eq": "lean/FourierConduction.lean",
     "PhysJS.FresnelNormal.reflectance_eq": "lean/FresnelNormal.lean",
     "PhysJS.Fret.dictionary": "lean/Fret.lean",
+    "PhysJS.Fret.half_iff": "lean/Fret.lean",
     "PhysJS.GasMeanFreePath.mean_free_path_eq": "lean/GasMeanFreePath.lean",
     "PhysJS.GaussianBeam.rayleigh_range_eq": "lean/GaussianBeam.lean",
     "PhysJS.GeodeticPrecession.geodetic_eq": "lean/GeodeticPrecession.lean",
@@ -268,6 +269,8 @@
     "PhysJS.WaveDalembert.solution_eq_profiles": "lean/WaveDalembert.lean",
     "PhysJS.WeakLocalization.weak_localization_eq": "lean/WeakLocalization.lean",
     "PhysJS.WienDisplacement.wien_eq": "lean/WienDisplacement.lean",
+    "PhysJS.Wkb.bare_rate_bound": "lean/Wkb.lean",
+    "PhysJS.Wkb.guard_iff_width": "lean/Wkb.lean",
     "PhysJS.YangMills.alphaRun_hasDerivAt": "lean/YangMills.lean",
     "PhysJS.YangMills.b0_pos_iff_nf_le": "lean/YangMills.lean",
     "PhysJS.ZenerDamping.loss_tangent_eq": "lean/ZenerDamping.lean"

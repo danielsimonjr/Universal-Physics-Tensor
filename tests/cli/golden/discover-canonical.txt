@@ -4,7 +4,7 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
 ⚠ a REVIEW SURFACE: `promising` means "worth a physicist's minute", not "true".
   Each candidate hypothesises an identification a≡b and tests its consequences.
 
-  funnel:  830 candidates  →  0 promising  ·  223 promising, magnitude unchecked  ·  580 inert  ·  26 magnitude-clash  ·  0 contradictory (numerically falsified)  ·  1 axis-clash
+  funnel:  830 candidates  →  0 promising  ·  223 promising, magnitude unchecked  ·  582 inert  ·  24 magnitude-clash  ·  0 contradictory (numerically falsified)  ·  1 axis-clash
   readiness of the 0 promising: 0 mechanism-tested · 0 data-tested · 0 without magnitude evidence · 0 with axis unresolved · 0 with an entailed consequence
   readiness of the 223 promising, magnitude unchecked: 0 mechanism-tested · 0 data-tested · 223 without magnitude evidence · 223 with axis unresolved · 0 with an entailed consequence
   promising ≠ evidence: promotion to a bridge needs a mechanism and a falsifiable prediction.
@@ -1563,23 +1563,21 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
 
   MAGNITUDE-CLASH (representative values differ by > N orders — a falsifier; p is the falsifier's strength at the values' stated σ, 2Φ(−orders/√(σa²+σb²)), not a credibility score):
     A ≟ thomson-cross-section                            ~36.2 orders apart, p = 1.2e-144  (anchor-derived)
-    bohr-radius ≟ compton-wavelength-full                ~61.7 orders apart, p < 1e-300  (anchor-derived)
     classical-electron-radius ≟ bohr-radius              ~4.27 orders apart, p = 0.00251
-    classical-electron-radius ≟ compton-wavelength-full  ~57.4 orders apart, p < 1e-300  (anchor-derived)
-    compton-wavelength ≟ hubble-distance                 ~37.7 orders apart, p = 5.68e-157
+    compton-wavelength ≟ hubble-distance                 ~38.5 orders apart, p = 1.36e-163
     erasure-energy ≟ rydberg-energy                      ~12.6 orders apart, p = 6.31e-19  (anchor-derived)
     free-energy-difference ≟ rydberg-energy              ~12.4 orders apart, p = 1.73e-18  (anchor-derived)
     hubble-distance ≟ bohr-radius                        ~36.4 orders apart, p = 3.54e-146
     hubble-distance ≟ classical-electron-radius          ~40.7 orders apart, p = 5.34e-182
-    hubble-distance ≟ compton-wavelength-full            ~98.1 orders apart, p < 1e-300  (anchor-derived)
+    hubble-distance ≟ compton-wavelength-full            ~37.7 orders apart, p = 5.68e-157
     hubble-distance ≟ peak-wavelength                    ~21.5 orders apart, p = 5.07e-52  (anchor-derived)
     mass ≟ planck-mass                                   ~38 orders apart, p = 1.03e-158  (anchor-derived)
     peak-wavelength ≟ bohr-radius                        ~14.9 orders apart, p = 4.1e-26  (anchor-derived)
     peak-wavelength ≟ classical-electron-radius          ~19.2 orders apart, p = 4.47e-42  (anchor-derived)
     planck-length ≟ bohr-radius                          ~24.5 orders apart, p = 2.57e-67
     planck-length ≟ classical-electron-radius            ~20.2 orders apart, p = 1.82e-46
-    planck-length ≟ compton-wavelength                   ~23.2 orders apart, p = 2.32e-60
-    planck-length ≟ compton-wavelength-full              ~37.2 orders apart, p = 3.43e-152  (anchor-derived)
+    planck-length ≟ compton-wavelength                   ~22.4 orders apart, p = 2.13e-56
+    planck-length ≟ compton-wavelength-full              ~23.2 orders apart, p = 2.32e-60
     planck-length ≟ hubble-distance                      ~60.9 orders apart, p < 1e-300
     planck-length ≟ peak-wavelength                      ~39.5 orders apart, p = 2.33e-171  (anchor-derived)
     radius ≟ bohr-radius                                 ~13.7 orders apart, p = 2.47e-22  (anchor-derived)

@@ -233,6 +233,7 @@
   "lean/WaveDalembert.lean",
   "lean/WeakLocalization.lean",
   "lean/WienDisplacement.lean",
+  "lean/Wkb.lean",
   "lean/YangMills.lean",
   "lean/ZenerDamping.lean"
 ]

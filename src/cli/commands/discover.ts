@@ -10,7 +10,8 @@ import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG, sourceFlag } from '../flag-help.js';
 import { resolveGraph, groundTruthAnchor, groundTruthLine } from '../graphs.js';
 import { emitJson } from '../output.js';
-import { parseDiscoveryOpts } from './_discovery-opts.js';
+import { formatSubstitution, parseDiscoveryOpts } from './_discovery-opts.js';
+import { UsageError } from '../errors.js';
 import type { VettedCandidate } from '../../composition/discovery.js';
 import type { AnnotatedCandidate } from '../../composition/adjudication.js';
 import type { AdjudicationVerdict } from '../../bridges/catalog-types.js';
@@ -58,6 +59,11 @@ const FLAGS: FlagSpec[] = [
     name: '--require-falsifier',
     valueStyle: 'none',
     description: 'Hide promising rows (either tier) that no independent falsifier ran on and survived, counted per tier.',
+  },
+  {
+    name: '--substitutions',
+    valueStyle: 'none',
+    description: 'Include downstream evaluation, domain refusals and abstentions for representative inputs.',
   },
   JSON_FLAG,
 ];
@@ -302,10 +308,17 @@ function readinessOf(
 async function run(ctx: CommandCtx): Promise<number> {
   const { args, api, out } = ctx;
   const { graph, label, source } = resolveGraph(api, args.flags);
-  const opts = parseDiscoveryOpts(api, args.flags);
+  const isDerive = args.flags.has('derive');
+  const includeSubstitutions = args.flags.has('substitutions');
+  if (isDerive && includeSubstitutions) {
+    throw new UsageError('upt discover: use --substitutions without --derive to inspect candidate evaluations.');
+  }
+  const opts = {
+    ...parseDiscoveryOpts(api, args.flags),
+    ...(includeSubstitutions ? { includeSubstitutions: true } : {}),
+  };
   const anchor = groundTruthAnchor(api, opts);
   const ranked = api.rankDiscoveries(graph, opts);
-  const isDerive = args.flags.has('derive');
   const annotated = isDerive ? ([] as AnnotatedCandidate[]) : api.annotateAdjudications(ranked);
   const withConsequence: readonly FullyAnnotatedCandidate[] = isDerive
     ? []
@@ -354,6 +367,7 @@ async function run(ctx: CommandCtx): Promise<number> {
 
   if (Object.keys(opts).length) {
     const bits: string[] = [];
+    if (includeSubstitutions) bits.push('substitutions');
     if (opts.maxOrdersOfMagnitude !== undefined) bits.push(`max-orders=${opts.maxOrdersOfMagnitude}`);
     if (opts.groundTruth) {
       bits.push(`anchor={${Object.entries(opts.groundTruth).map(([k, v]) => `${k}=${v}`).join(', ')}}`);
@@ -429,6 +443,7 @@ async function run(ctx: CommandCtx): Promise<number> {
       `        [grounding — passed: ${g.passed.join(', ') || '—'}` +
         ` · gaps: ${g.gaps.join(', ') || '—'} · ceiling: no mechanism/data test]`,
     );
+    for (const check of r.substitutions ?? []) out(`        ${formatSubstitution(check)}`);
     const rd = api.describeReadiness(r, r.consequence?.signal);
     const f = rd.falsifiers;
     out(
