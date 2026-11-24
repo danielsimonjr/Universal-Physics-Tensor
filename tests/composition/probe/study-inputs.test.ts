@@ -341,11 +341,13 @@ describe('probe study — declared correction family', () => {
     expect(Math.abs(c.prefactor! / (2 * Math.PI) - 1)).toBeLessThan(2e-3);
   });
 
-  it('paired check: without the declared family the same rows give no credible candidate', async () => {
+  it('without the declared family a native sum can fit, with independent provenance', async () => {
     const { correction: _c, ...raw } = load('pendulum-large-amplitude');
     const r = await run(raw);
-    expect(r.verdict).toBe('no-credible-candidate');
+    expect(r.verdict).toBe('survives-holdout');
     expect(r.correction).toBeNull();
+    expect(selectedOf(r).coefficients).toBeDefined();
+    expect(selectedOf(r).correction).toBeUndefined();
   });
 
   it('on pure noise the family admits no term and nothing is credible', async () => {

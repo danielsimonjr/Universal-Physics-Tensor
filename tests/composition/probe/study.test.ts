@@ -309,3 +309,56 @@ describe('study input boundary', () => {
     }
   });
 });
+
+describe('observation-only dimensionally homogeneous sums', () => {
+  function polynomialStudy(challengeOffset = 0, dimensional = false, inconsistent = false) {
+    const law = (x: number) => 1 + x + x ** 3;
+    const row = (x: number, index: number, role: 'exploratory' | 'holdout', offset = 0) => {
+      const base = dimensional ? 1 + index / 10 : 1;
+      return {
+        id: `${role}-${index}`, role, source: role,
+        values: dimensional ? { scale: base, length: x * base } : { length: x },
+        observed: base * (law(x) + offset), sigma: 0.005 * base,
+      };
+    };
+    const exploratory = Array.from({ length: 12 }, (_, i) => row(0.1 + i * 0.15, i, 'exploratory'));
+    if (inconsistent) exploratory.push(row(0.1, 12, 'exploratory', 1));
+    const unit = dimensional ? 'm' : '1';
+    return {
+      gap: { id: 'fg-sum', kind: 'unexplained-observation', summary: 'Synthetic sum control' },
+      provenance: { synthetic: true, source: 'analytic' },
+      target: { name: 'response', unit },
+      governing: dimensional ? [{ name: 'scale', unit }, { name: 'length', unit }] : [{ name: 'length', unit }],
+      observations: [...exploratory, ...[0.2, 0.6, 0.9, 1.4, 1.9].map((x, i) => row(x, i, 'holdout', challengeOffset))],
+    };
+  }
+
+  it.each([false, true])('recovers a cubic with a constant and linear term (dimensionful: %s)', async (dimensional) => {
+    const result = await run(polynomialStudy(0, dimensional));
+    expect(result.verdict).toBe('survives-holdout');
+    expect(selectedOf(result).fittedParameters).toBe(4);
+    expect(selectedOf(result).holdout?.maxAbsZ).toBeLessThan(1e-6);
+  });
+
+  it('records a withheld singularity as a refutation without erasing the fit', async () => {
+    const raw = polynomialStudy(0, true);
+    const boundary = { id: 'zero-scale', role: 'holdout', source: 'holdout',
+      values: { scale: 0, length: 1 }, observed: 1, sigma: 0.005 };
+    const result = await run({ ...raw, observations: [...raw.observations, boundary] });
+    expect(result.verdict).toBe('refuted-on-holdout');
+    const selected = selectedOf(result);
+    expect(selected.exploratory?.pass).toBe(true);
+    expect(selected.holdout).toBeNull();
+    expect(selected.holdoutError).toContain('zero-scale');
+  });
+
+  it('freezes the chosen model before challenge scoring and abstains on contradictory exploratory replicates', async () => {
+    const control = await run(polynomialStudy());
+    const shifted = await run(polynomialStudy(1));
+    expect(shifted.selected).toBe(control.selected);
+    expect(selectedOf(shifted).coefficients).toEqual(selectedOf(control).coefficients);
+    expect(selectedOf(shifted).exploratory).toEqual(selectedOf(control).exploratory);
+    expect(shifted.verdict).toBe('refuted-on-holdout');
+    expect((await run(polynomialStudy(0, false, true))).verdict).toBe('no-credible-candidate');
+  });
+});

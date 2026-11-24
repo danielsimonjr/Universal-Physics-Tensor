@@ -39,6 +39,7 @@ function observations(rows, role, variables) {
 
 function outcome(model) {
   if (!model?.exploratory?.pass) return 'abstained';
+  if (model.holdoutError !== undefined) return 'refuted';
   if (!model.holdout) throw new Error('eligible model has no challenge score');
   return model.holdout.pass ? 'survived' : 'refuted';
 }
@@ -76,6 +77,8 @@ async function runCase(raw, fold) {
     dimensional: result.nullModel.exploratory?.pass === false ? outcome(result.baselines[0]) : 'abstained',
     selected: selected?.label ?? null,
     prefactor: selected?.prefactor ?? null,
+    ...(selected?.coefficients && { coefficients: selected.coefficients }),
+    ...(selected?.holdoutError && { holdoutError: selected.holdoutError }),
     challenge: { engine: selected?.holdout ?? null, dimensional: result.baselines[0]?.holdout ?? null },
     stopReason: result.search.stopReason,
     ...(graph && {

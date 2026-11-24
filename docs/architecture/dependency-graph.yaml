@@ -3,7 +3,7 @@ metadata:
   version: 18.1.1
   totalFiles: 396
   totalModules: 13
-  totalExports: 2890
+  totalExports: 2891
 entryPoints:
   - file: src/index.ts
     type: main
@@ -12641,6 +12641,7 @@ modules:
         - rationalCandidates
         - rationalizeExponent
         - piStructure
+        - monomialValue
         - logDesign
         - logDesignRank
         - powerLawDetermination
@@ -12655,6 +12656,7 @@ modules:
         - rationalCandidates
         - rationalizeExponent
         - piStructure
+        - monomialValue
         - logDesign
         - logDesignRank
         - powerLawDetermination
@@ -13049,6 +13051,10 @@ modules:
           imports:
             - NO_HOLDOUT_WORDING
             - runProbeSearch
+        - file: ./power-law.js
+          imports:
+            - monomialValue
+            - piStructure
         - file: ./fingerprint.js
           imports:
             - bodyExpression
@@ -20177,11 +20183,11 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 396
   totalModules: 13
-  totalLinesOfCode: 91839
-  totalExports: 2890
+  totalLinesOfCode: 91945
+  totalExports: 2891
   totalClasses: 86
   totalInterfaces: 526
-  totalFunctions: 970
+  totalFunctions: 971
   totalTypeGuards: 17
   totalEnums: 0
   totalConstants: 404
