@@ -7868,8 +7868,11 @@ modules:
         - file: ./composition/discovery.js
           imports:
             - rankDiscoveries
-            - vetLinkCandidate
             - ANCHOR_DEFAULT
+          reExport: true
+        - file: ./composition/discovery.js
+          imports:
+            - vetLinkCandidate
           reExport: true
         - file: ./composition/discovery.js
           imports:
@@ -8493,8 +8496,8 @@ modules:
         - catalogFrontierAccount
         - formatFrontierAccount
         - rankDiscoveries
-        - vetLinkCandidate
         - ANCHOR_DEFAULT
+        - vetLinkCandidate
         - hasMagnitudeEvidence
         - isPromisingTier
         - BRIDGE_EQUATIONS
@@ -8775,8 +8778,8 @@ modules:
         - catalogFrontierAccount
         - formatFrontierAccount
         - rankDiscoveries
-        - vetLinkCandidate
         - ANCHOR_DEFAULT
+        - vetLinkCandidate
         - hasMagnitudeEvidence
         - isPromisingTier
         - BRIDGE_EQUATIONS
@@ -20092,7 +20095,7 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 395
   totalModules: 13
-  totalLinesOfCode: 91506
+  totalLinesOfCode: 91508
   totalExports: 2884
   totalClasses: 86
   totalInterfaces: 523

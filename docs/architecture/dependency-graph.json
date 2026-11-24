@@ -11737,8 +11737,14 @@
             "file": "./composition/discovery.js",
             "imports": [
               "rankDiscoveries",
-              "vetLinkCandidate",
               "ANCHOR_DEFAULT"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./composition/discovery.js",
+            "imports": [
+              "vetLinkCandidate"
             ],
             "reExport": true
           },
@@ -12707,8 +12713,8 @@
           "catalogFrontierAccount",
           "formatFrontierAccount",
           "rankDiscoveries",
-          "vetLinkCandidate",
           "ANCHOR_DEFAULT",
+          "vetLinkCandidate",
           "hasMagnitudeEvidence",
           "isPromisingTier",
           "BRIDGE_EQUATIONS",
@@ -12990,8 +12996,8 @@
           "catalogFrontierAccount",
           "formatFrontierAccount",
           "rankDiscoveries",
-          "vetLinkCandidate",
           "ANCHOR_DEFAULT",
+          "vetLinkCandidate",
           "hasMagnitudeEvidence",
           "isPromisingTier",
           "BRIDGE_EQUATIONS",
@@ -29005,7 +29011,7 @@
   "statistics": {
     "totalTypeScriptFiles": 395,
     "totalModules": 13,
-    "totalLinesOfCode": 91506,
+    "totalLinesOfCode": 91508,
     "totalExports": 2884,
     "totalClasses": 86,
     "totalInterfaces": 523,

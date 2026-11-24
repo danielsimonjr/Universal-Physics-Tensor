@@ -3463,7 +3463,8 @@ The codebase is organized into the following modules:
 | `./dimensional/dimension-spec.js` | `parseDimensionSpec` | Re-export |
 | `./composition/bridge-prediction.js` | `predictMissingBridges` | Re-export |
 | `./composition/frontier-account.js` | `catalogFrontierAccount, formatFrontierAccount` | Re-export |
-| `./composition/discovery.js` | `rankDiscoveries, vetLinkCandidate, ANCHOR_DEFAULT` | Re-export |
+| `./composition/discovery.js` | `rankDiscoveries, ANCHOR_DEFAULT` | Re-export |
+| `./composition/discovery.js` | `vetLinkCandidate` | Re-export |
 | `./composition/discovery.js` | `hasMagnitudeEvidence, isPromisingTier` | Re-export |
 | `./bridges/index.js` | `BRIDGE_EQUATIONS` | Re-export |
 | `./composition/audit-coverage.js` | `auditCoverage` | Re-export |
@@ -3589,7 +3590,7 @@ The codebase is organized into the following modules:
   attemptDerivation, dimensionalFreedom, linkageMap, proposeLinkCandidates, proposeOrphanConnectors,
   getFormulaParser, getFormulaParserKind, getFormulaDimensionChecker, parseDimensionSpec,
   predictMissingBridges, catalogFrontierAccount, formatFrontierAccount, rankDiscoveries,
-  vetLinkCandidate, ANCHOR_DEFAULT, hasMagnitudeEvidence, isPromisingTier, BRIDGE_EQUATIONS,
+  ANCHOR_DEFAULT, vetLinkCandidate, hasMagnitudeEvidence, isPromisingTier, BRIDGE_EQUATIONS,
   auditCoverage, CONFRONTATIONS, listConfrontations, runConfrontation, confrontationRigor,
   rigorDistribution, requestCallerTableConfrontation, catalogEntry, catalogIdNumber, parseBridgeId,
   primaryRelation, catalogEdgeKey, foldName, quantityRecord, demonstrationEdges, ConfrontationEntry,
@@ -7895,7 +7896,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 395 |
 | Total Modules | 13 |
-| Total Lines of Code | 91506 |
+| Total Lines of Code | 91508 |
 | Total Exports | 2884 |
 | Total Re-exports | 1419 |
 | Total Classes | 86 |
