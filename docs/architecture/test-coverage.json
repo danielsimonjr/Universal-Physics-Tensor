@@ -15983,6 +15983,7 @@
       "tests/cli/evaluate-bridge-42-hint.test.ts",
       "tests/cli/issue-551-extras.test.ts",
       "tests/composition/closed-form-evaluation.test.ts",
+      "tests/composition/discovery.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
       "tests/composition/evaluation-result.test.ts",
       "tests/composition/scalar-prefactor-consistency.test.ts",
