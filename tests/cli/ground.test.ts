@@ -1,15 +1,9 @@
-/**
- * `upt ground` — every case, in one file, through the funnel cache.
- *
- * `ground` re-runs the discovery funnel of the graph it is told to use (and, for a pair the graph
- * does not hold, the other two graphs as well, to name the scope that has it). That is 10–80 s a
- * call. The cases below were spread over `new-commands.test.ts`, `cli-from-src.test.ts` and
- * `source-anchor.test.ts`, and `ground mass mass` ran twice in one of them (78 s + 67 s measured).
- * `tests/helpers/discover-cache.js` memoises each distinct argv on disk under the build's
- * fingerprint, so a repeated call, in this file or another fork, costs a file read.
- */
+/** `upt ground` verifies ledger content, computed absence and graph scope. */
 import '../helpers/dist.js';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+import '../../dist/cli/commands/ground.js';
+import { resolveCommand, type CommandCtx } from '../../dist/cli/command.js';
+import * as cliApi from '../../dist/cli-api.js';
 import { json, run, runText } from '../helpers/cli-run.js';
 
 const FUNNEL_MS = 360_000;
@@ -86,4 +80,26 @@ describe('upt ground', () => {
       expect(j.anchor.groundTruth).toEqual({ values: { mass: 2e30 }, isDefault: false });
     }, FUNNEL_MS);
   });
+});
+
+it('vets only the requested candidate and does no vetting to answer a miss', async () => {
+  const [candidate] = cliApi.proposeLinkCandidates(cliApi.CATALOG_GRAPH);
+  expect(candidate).toBeDefined();
+  const vetLinkCandidate = vi.fn(cliApi.vetLinkCandidate);
+  const rankDiscoveries = vi.fn(() => {
+    throw new Error('ground must not rank unrelated candidates');
+  });
+  const api = { ...cliApi, vetLinkCandidate, rankDiscoveries };
+  const invoke = (positionals: string[]) => resolveCommand('ground')!.run({
+    api,
+    args: { flags: new Map(), positionals } as CommandCtx['args'],
+    out: () => {},
+    err: () => {},
+    write: () => {},
+  });
+  expect(await invoke(['temperature', 'mass'])).toBe(0);
+  expect(vetLinkCandidate).not.toHaveBeenCalled();
+  expect(await invoke([candidate!.b, candidate!.a])).toBe(0);
+  expect(vetLinkCandidate).toHaveBeenCalledExactlyOnceWith(cliApi.CATALOG_GRAPH, candidate, {});
+  expect(rankDiscoveries).not.toHaveBeenCalled();
 });
