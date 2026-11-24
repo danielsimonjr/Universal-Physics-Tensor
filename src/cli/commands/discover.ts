@@ -53,7 +53,7 @@ const FLAGS: FlagSpec[] = [
   {
     name: '--show-adjudicated',
     valueStyle: 'none',
-    description: 'List candidates a physicist has already adjudicated, with the recorded verdict.',
+    description: 'List candidates a physicist has already adjudicated, with the recorded verdict in text. JSON always retains adjudicated rows unless an evidence filter hides them.',
   },
   {
     name: '--require-falsifier',
@@ -63,7 +63,12 @@ const FLAGS: FlagSpec[] = [
   {
     name: '--substitutions',
     valueStyle: 'none',
-    description: 'Include downstream evaluation, domain refusals and abstentions for representative inputs.',
+    description: 'Include downstream evaluation, domain refusals and abstentions for representative inputs. Cannot be combined with --derive.',
+  },
+  {
+    name: '--require-evaluated-substitution',
+    valueStyle: 'none',
+    description: 'Hide promising candidates without an evaluated downstream substitution. Implies --substitutions and cannot be combined with --derive.',
   },
   JSON_FLAG,
 ];
@@ -136,12 +141,11 @@ const GENERIC_SAMPLES: Readonly<Record<string, { value: number; source: string }
 };
 function deriveReport(
   api: CommandCtx['api'],
-  ranked: readonly VettedCandidate[],
+  proposals: ReturnType<typeof derivedWithEvidence>,
   label: string,
   anchorLine: string,
   out: (line?: string) => void
 ): void {
-  const proposals = api.deriveProposedBridges(ranked);
   out(`\nDerived identity-consequence PROPOSALS — UNADJUDICATED, math-only  [source: ${label}]`);
   out(`  ${anchorLine}`);
   out(DERIVE_EPISTEMICS + '\n');
@@ -182,7 +186,9 @@ function deriveReport(
     if (p.alsoDerivableFrom && p.alsoDerivableFrom.length) {
       out(`      also derivable from: ${p.alsoDerivableFrom.join('; ')}`);
     }
-    const c = api.describeDerivedClaim(p);
+    const c = p.claim;
+    out(`      evidence gaps: ${p.evidence.grounding.gaps.join(', ') || 'none recorded'}`);
+    out(`      observation: ${p.evidence.readiness.observation}`);
     out(
       c.relation === 'known-law'
         ? `      status: known law — re-derives ${c.canonicalMatch.id}; the identification ${c.premise} is still unadjudicated`
@@ -200,6 +206,31 @@ function deriveReport(
     );
   }
   out('');
+}
+
+/** Keep the derivation and its source-candidate evidence together for both outputs. */
+function derivedWithEvidence(api: CommandCtx['api'], candidates: readonly FullyAnnotatedCandidate[]) {
+  const key = (a: string, b: string) => [a, b].sort().join('\0');
+  const byPair = new Map(candidates.map((candidate) => [key(candidate.a, candidate.b), candidate]));
+  return api.deriveProposedBridges(candidates).map((proposal) => {
+    const { a, b } = proposal.derivedFrom.identification;
+    const candidate = byPair.get(key(a, b))!;
+    const signal = candidate.consequence?.signal;
+    return {
+      ...proposal,
+      claim: api.describeDerivedClaim(proposal),
+      evidence: {
+        grounding: api.describeGrounding(candidate, signal),
+        readiness: api.describeReadiness(candidate, signal),
+      },
+    };
+  });
+}
+
+function substitutionSummary(row: VettedCandidate) {
+  const summary = { evaluated: 0, refused: 0, abstained: 0 };
+  for (const check of row.substitutions ?? []) summary[check.status]++;
+  return summary;
 }
 
 /** Verdicts that fold a candidate out of the printed PROMISING list by
@@ -309,9 +340,10 @@ async function run(ctx: CommandCtx): Promise<number> {
   const { args, api, out } = ctx;
   const { graph, label, source } = resolveGraph(api, args.flags);
   const isDerive = args.flags.has('derive');
-  const includeSubstitutions = args.flags.has('substitutions');
+  const requireEvaluated = args.flags.has('require-evaluated-substitution');
+  const includeSubstitutions = requireEvaluated || args.flags.has('substitutions');
   if (isDerive && includeSubstitutions) {
-    throw new UsageError('upt discover: use --substitutions without --derive to inspect candidate evaluations.');
+    throw new UsageError('upt discover: --derive cannot be combined with --substitutions or --require-evaluated-substitution.');
   }
   const opts = {
     ...parseDiscoveryOpts(api, args.flags),
@@ -319,35 +351,32 @@ async function run(ctx: CommandCtx): Promise<number> {
   };
   const anchor = groundTruthAnchor(api, opts);
   const ranked = api.rankDiscoveries(graph, opts);
-  const annotated = isDerive ? ([] as AnnotatedCandidate[]) : api.annotateAdjudications(ranked);
-  const withConsequence: readonly FullyAnnotatedCandidate[] = isDerive
-    ? []
-    : api.annotateConsequences(annotated);
+  const withConsequence: readonly FullyAnnotatedCandidate[] =
+    api.annotateConsequences(api.annotateAdjudications(ranked));
   const showAdjudicated = args.flags.has('show-adjudicated');
+  const requireFalsifier = args.flags.has('require-falsifier');
+  const untested = (r: FullyAnnotatedCandidate) =>
+    api.describeReadiness(r, r.consequence?.signal).falsifiers.survived.length === 0;
+  const passesEvidenceFilters = (r: FullyAnnotatedCandidate) =>
+    (!requireFalsifier || !untested(r)) && (!requireEvaluated || substitutionSummary(r).evaluated > 0);
+  const proposals = isDerive
+    ? derivedWithEvidence(api, withConsequence.filter((r) => api.isPromisingTier(r.verdict) && passesEvidenceFilters(r)))
+    : [];
 
   if (args.flags.has('json')) {
-    const requireFalsifier = args.flags.has('require-falsifier');
-    const mapped = isDerive
-      ? api.deriveProposedBridges(ranked).map((p) => ({ ...p, claim: api.describeDerivedClaim(p) }))
-      : withConsequence.map((c) => ({
-          ...c,
-          grounding: api.describeGrounding(c, c.consequence?.signal),
-          readiness: api.describeReadiness(c, c.consequence?.signal),
-        }));
-    const result =
-      requireFalsifier && !isDerive
-        ? mapped.filter(
-            (c) =>
-              !('readiness' in c) ||
-              !api.isPromisingTier(c.verdict) ||
-              c.readiness.falsifiers.survived.length > 0,
-          )
-        : mapped;
+    const result = isDerive ? proposals : withConsequence
+      .filter((c) => !api.isPromisingTier(c.verdict) || passesEvidenceFilters(c))
+      .map((c) => ({
+        ...c,
+        ...(includeSubstitutions ? { substitutionSummary: substitutionSummary(c) } : {}),
+        grounding: api.describeGrounding(c, c.consequence?.signal),
+        readiness: api.describeReadiness(c, c.consequence?.signal),
+      }));
     const envelope = {
       command: 'discover',
       source,
       anchor: { groundTruth: anchor },
-      options: { ...opts },
+      options: { ...opts, ...(requireFalsifier ? { requireFalsifier } : {}), ...(requireEvaluated ? { requireEvaluatedSubstitution: true } : {}) },
       epistemics: isDerive ? DERIVE_EPISTEMICS : EPISTEMICS,
       result,
       ...(requireFalsifier && !isDerive ? { encodedFalsifiers: encodedFalsifiers(api) } : {}),
@@ -376,7 +405,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
 
   if (isDerive) {
-    deriveReport(api, ranked, label, groundTruthLine(anchor), out);
+    deriveReport(api, proposals, label, groundTruthLine(anchor), out);
     return 0;
   }
 
@@ -418,9 +447,9 @@ async function run(ctx: CommandCtx): Promise<number> {
     );
   }
   out('  promising ≠ evidence: promotion to a bridge needs a mechanism and a falsifiable prediction.\n');
-  const requireFalsifier = args.flags.has('require-falsifier');
-  const untested = (r: FullyAnnotatedCandidate) =>
-    api.describeReadiness(r, r.consequence?.signal).falsifiers.survived.length === 0;
+  if (requireEvaluated) {
+    out('  --require-evaluated-substitution: only promising rows with an evaluated downstream scenario are listed.\n');
+  }
   if (requireFalsifier) {
     out(
       `  --require-falsifier: ` +
@@ -443,6 +472,10 @@ async function run(ctx: CommandCtx): Promise<number> {
       `        [grounding — passed: ${g.passed.join(', ') || '—'}` +
         ` · gaps: ${g.gaps.join(', ') || '—'} · ceiling: no mechanism/data test]`,
     );
+    if (includeSubstitutions) {
+      const counts = substitutionSummary(r);
+      out(`        [downstream scenarios: ${counts.evaluated} evaluated · ${counts.refused} refused · ${counts.abstained} abstained]`);
+    }
     for (const check of r.substitutions ?? []) out(`        ${formatSubstitution(check)}`);
     const rd = api.describeReadiness(r, r.consequence?.signal);
     const f = rd.falsifiers;
@@ -476,7 +509,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     out(`  ${t.heading}`);
     for (const r of t.rows) {
       if (r.adjudication && foldsOut(r.adjudication.verdict) && !showAdjudicated) continue;
-      if (requireFalsifier && untested(r)) continue;
+      if (!passesEvidenceFilters(r)) continue;
       printRow(r);
     }
     if (t.rows.some((r) => r.adjudication)) {

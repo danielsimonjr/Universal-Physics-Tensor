@@ -259,11 +259,13 @@ Flags:
   --derive
         For each promising identification (either tier), print the one algebraic relation it implies, and say when the identification had no magnitude evidence. That relation is not a bridge.
   --show-adjudicated
-        List candidates a physicist has already adjudicated, with the recorded verdict.
+        List candidates a physicist has already adjudicated, with the recorded verdict in text. JSON always retains adjudicated rows unless an evidence filter hides them.
   --require-falsifier
         Hide promising rows (either tier) that no independent falsifier ran on and survived, counted per tier.
   --substitutions
-        Include downstream evaluation, domain refusals and abstentions for representative inputs.
+        Include downstream evaluation, domain refusals and abstentions for representative inputs. Cannot be combined with --derive.
+  --require-evaluated-substitution
+        Hide promising candidates without an evaluated downstream substitution. Implies --substitutions and cannot be combined with --derive.
   --json
         Write a JSON envelope to stdout instead of the text report.
 

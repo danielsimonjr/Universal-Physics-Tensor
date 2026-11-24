@@ -10,6 +10,8 @@ Derived identity-consequence PROPOSALS — UNADJUDICATED, math-only  [source: ca
       from: erasure-energy ≟ photon-energy  (CE-landauer = CE-planck-einstein); solved for nu
       magnitude: no evidence — the identification is promising, magnitude unchecked (the magnitude falsifier never tested it)
       also derivable from: landauer-erasure-energy ≡ photon-energy
+      evidence gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: novel (unadjudicated)
+      observation: measure erasure-energy and photon-energy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.
       status: conditional identity — holds only if erasure-energy ≡ photon-energy (unadjudicated); untested
       meaning: nu is the nu of CE-planck-einstein (Planck–Einstein relation): the nu for which photon-energy equals erasure-energy (CE-landauer) — an equal-[energy] scale; the erasure-energy side is not given a nu
       assumptions carried: CE-landauer: isothermal, quasi-static erasure; CE-planck-einstein: none stated
@@ -18,6 +20,8 @@ Derived identity-consequence PROPOSALS — UNADJUDICATED, math-only  [source: ca
       mass = \frac{h \cdot nu}{c^{2}}      [mass]  (no sourced sample value for nu; not evaluated)
       from: rest-energy ≟ photon-energy  (CE-planck-einstein = CE-mass-energy); solved for mass
       magnitude: no evidence — the identification is promising, magnitude unchecked (the magnitude falsifier never tested it)
+      evidence gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: novel (unadjudicated)
+      observation: measure rest-energy and photon-energy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.
       status: conditional identity — holds only if rest-energy ≡ photon-energy (unadjudicated); untested
       meaning: mass is the mass of CE-mass-energy (Mass–energy equivalence): the mass for which rest-energy equals photon-energy (CE-planck-einstein) — an equal-[energy] scale; the photon-energy side is not given a mass
       assumptions carried: CE-planck-einstein: none stated; CE-mass-energy: rest energy of a massive body
@@ -27,6 +31,8 @@ Derived identity-consequence PROPOSALS — UNADJUDICATED, math-only  [source: ca
       from: dark-fermion-mass ≟ erasure-energy  (BE-18 = CE-landauer); solved for temperature
       magnitude: no evidence — the identification is promising, magnitude unchecked (the magnitude falsifier never tested it)
       also derivable from: landauer-erasure-energy ≡ dark-fermion-mass
+      evidence gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: novel (unadjudicated)
+      observation: measure dark-fermion-mass and erasure-energy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.
       status: conditional identity — holds only if dark-fermion-mass ≡ erasure-energy (unadjudicated); untested
       meaning: temperature is the temperature of CE-landauer (Landauer erasure bound): the temperature for which erasure-energy equals dark-fermion-mass (BE-18) — an equal-[energy] scale; the dark-fermion-mass side is not given a temperature
       assumptions carried: CE-landauer: isothermal, quasi-static erasure
@@ -35,6 +41,8 @@ Derived identity-consequence PROPOSALS — UNADJUDICATED, math-only  [source: ca
       mass = \frac{vacuum-expectation-value \cdot yukawa-coupling}{c^{2}}      [mass]  (no sourced sample value for yukawa-coupling; not evaluated)
       from: dark-fermion-mass ≟ rest-energy  (BE-18 = CE-mass-energy); solved for mass
       magnitude: no evidence — the identification is promising, magnitude unchecked (the magnitude falsifier never tested it)
+      evidence gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: novel (unadjudicated)
+      observation: measure dark-fermion-mass and rest-energy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.
       status: conditional identity — holds only if dark-fermion-mass ≡ rest-energy (unadjudicated); untested
       meaning: mass is the mass of CE-mass-energy (Mass–energy equivalence): the mass for which rest-energy equals dark-fermion-mass (BE-18) — an equal-[energy] scale; the dark-fermion-mass side is not given a mass
       assumptions carried: CE-mass-energy: rest energy of a massive body
@@ -43,6 +51,8 @@ Derived identity-consequence PROPOSALS — UNADJUDICATED, math-only  [source: ca
       temperature = \frac{2 \cdot b \cdot parker-sound^{2}}{G \cdot parker-mass}      [temperature]  (no sourced sample value for parker-mass, 2, parker-sound; not evaluated)
       from: parker-radius ≟ peak-wavelength  (BE-118 = CE-wien); solved for temperature
       magnitude: no evidence — the identification is promising, magnitude unchecked (the magnitude falsifier never tested it)
+      evidence gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: novel (unadjudicated)
+      observation: measure parker-radius and peak-wavelength in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.
       status: conditional identity — holds only if parker-radius ≡ peak-wavelength (unadjudicated); untested
       meaning: temperature is the temperature of CE-wien (Wien's displacement law): the temperature for which peak-wavelength equals parker-radius (BE-118) — an equal-[length] scale; the parker-radius side is not given a temperature
       assumptions carried: CE-wien: blackbody, thermal equilibrium

@@ -525,19 +525,20 @@ Every flag a registered command parses, written by `bun scripts/cli-reference.ts
 | `--rank-hubs` | `map` | Also rank quantities by betweenness centrality (normalised). Computed only when asked. |
 | `--relation` | `map` | Keep edges whose recorded relation is TYPE: on the quantity map, the relation that the catalog row records; on --family/--observable, the relation that the atlas bridge records. |
 | `--replication` | `probe` | study: replication rows from a separate JSON or CSV file. |
+| `--require-evaluated-substitution` | `discover` | Hide promising candidates without an evaluated downstream substitution. Implies --substitutions and cannot be combined with --derive. |
 | `--require-falsifier` | `discover` | Hide promising rows (either tier) that no independent falsifier ran on and survived, counted per tier. |
 | `--rigor` | `confront` | Show one rigor tier: stringent, moderate, or loose. |
 | `--route` | `map` | Map the atlas route FROM,TO instead of the equation graph. |
 | `--run` | `atlas`, `map` | atlas: Execute the in-process registered witnesses. Exit 3 if one is refuted. map: Run the shown bridges' in-process witnesses now. Exit 3 if one is refuted. |
 | `--searchable-only` | `probe` | scan: list only Product-B-searchable gaps. This is the default. |
 | `--sensitivity` | `confront` | Rank the prediction's input elasticities. Value-kind records only. |
-| `--show-adjudicated` | `discover` | List candidates a physicist has already adjudicated, with the recorded verdict. |
+| `--show-adjudicated` | `discover` | List candidates a physicist has already adjudicated, with the recorded verdict in text. JSON always retains adjudicated rows unless an evidence filter hides them. |
 | `--show-parser` | `eval` | Print mathts. With no formula, that is the whole output and the exit code is 0. |
 | `--sigma` | `evaluate` | One input uncertainty as key=u, in the input's unit. A temperature uncertainty in degC or degF is a difference. |
 | `--simplify` | `symbolic` | Fold each composed AST with MathTS, then check the fold dimensionally and numerically. |
 | `--source` | `audit`, `candidates`, `connectors`, `discover`, `explain`, `ground`, `map`, `predict`, `priority`, `probe` | audit: Which graph to read: catalog, canonical, or both. candidates: Which graph to read: catalog, canonical, or both. connectors: Which graph to read: catalog, canonical, or both. This command defaults to both. discover: Which graph to read: catalog, canonical, or both. canonical excludes bridges. explain: Which graph to read: catalog, canonical, or both. ground: Which graph to read: catalog, canonical, or both. Use the same value as the discover run. map: Which graph to draw: catalog, canonical, or both. This command defaults to both. predict: Which graph to read: catalog, canonical, or both. priority: Which graph to read: catalog, canonical, or both. probe: Which graph a subverb reads: catalog, canonical, or both. |
 | `--stored` | `atlas`, `map` | atlas: Read witness results from https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/data/atlas/witness-results.json. When the file is absent (a checkout or install without data/), the command names --run. map: Derive evidence from https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/data/atlas/witness-results.json. When the file is absent (a checkout or install without data/), the command names --run. |
-| `--substitutions` | `discover` | Include downstream evaluation, domain refusals and abstentions for representative inputs. |
+| `--substitutions` | `discover` | Include downstream evaluation, domain refusals and abstentions for representative inputs. Cannot be combined with --derive. |
 | `--sweep` | `path` | Sample one coordinate as name=lo:hi:n or name=lo:hi:n:log, with n from 2 to 200. |
 | `--tolerance` | `path` | Judge adequacy against EPS in the bound's norm, or name:EPS through a declared translation. Exit 3 when inadequate. |
 | `--vars` | `canonical` | Also print each entry's target and governing variable names. |

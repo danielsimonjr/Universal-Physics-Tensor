@@ -96,3 +96,52 @@ describe('upt discover — axis-clash is labelled a regime-label prior, not a fa
     expect(text).not.toMatch(/identification falsified/);
   });
 });
+
+describe('discovery output contracts', () => {
+  async function json(args: string[]) {
+    const invocation = captureMerged();
+    expect(await runCli(['discover', ...args, '--json'], invocation.io)).toBe(0);
+    return JSON.parse(invocation.lines.join(''));
+  }
+
+  it('documents mutually exclusive modes and the JSON adjudication inventory', () => {
+    const help = execFileSync('node', [cli, 'discover', '--help'], { encoding: 'utf8' });
+    expect(help).toContain('Cannot be combined with --derive');
+    expect(help).toContain('JSON always retains adjudicated rows');
+    expect(run(['discover', '--derive', '--substitutions']).status).toBe(2);
+  });
+
+  it('applies a downstream evaluation filter without reclassifying domain refusals', async () => {
+    const all = await json(['--source=both', '--substitutions']);
+    const only = await json(['--source=both', '--require-evaluated-substitution']);
+    const find = (rows: typeof all.result, from: string, to: string) =>
+      rows.find((r: { a: string; b: string }) => r.a === from && r.b === to);
+    const refused = find(all.result, 'barrier-width', 'compton-wavelength-full');
+    expect(refused.substitutionSummary.refused).toBeGreaterThan(0);
+    expect(refused.substitutionSummary.evaluated).toBe(0);
+    expect(find(only.result, 'barrier-width', 'compton-wavelength-full')).toBeUndefined();
+    const evaluated = find(only.result, 'foerster-radius', 'bohr-radius');
+    expect(evaluated.substitutionSummary.evaluated).toBeGreaterThan(0);
+    expect(all.result.some((r: { substitutionSummary: { abstained: number } }) =>
+      r.substitutionSummary.abstained > 0)).toBe(true);
+  });
+
+  it('carries source evidence and applies the falsifier filter before deriving', async () => {
+    const all = await json(['--source=both', '--derive']);
+    const filtered = await json(['--source=both', '--derive', '--require-falsifier']);
+    expect(all.result.length).toBeGreaterThan(0);
+    for (const row of all.result) {
+      expect(row.evidence.readiness.observation).toEqual(expect.any(String));
+      expect(row.evidence.grounding.gaps).toEqual(expect.any(Array));
+    }
+    for (const row of filtered.result) expect(row.evidence.readiness.falsifiers.survived.length).toBeGreaterThan(0);
+    expect(filtered.result.length).toBeLessThan(all.result.length);
+  });
+
+  it('keeps the full adjudication inventory in JSON', async () => {
+    const all = await json(['--source=canonical']);
+    const explicit = await json(['--source=canonical', '--show-adjudicated']);
+    expect(all.adjudicationSummary.total).toBeGreaterThan(0);
+    expect(explicit).toEqual(all);
+  });
+});
